@@ -1,0 +1,33 @@
+{
+  "hits": {
+    "total": {"value": 2},
+    "hits": [
+      {
+        "_id": "0001234567-24-000001",
+        "_source": {
+          "accession_no": "0001234567-24-000001",
+          "form_type": "D",
+          "entity_name": "Lighthouse Autism Center LLC",
+          "display_names": ["Lighthouse Autism Center LLC"],
+          "file_date": "2024-03-15",
+          "period_of_report": "2024-03-10",
+          "inc_states": "IN",
+          "biz_states": "IN"
+        }
+      },
+      {
+        "_id": "0009876543-24-000002",
+        "_source": {
+          "accession_no": "0009876543-24-000002",
+          "form_type": "D/A",
+          "entity_name": "Behavior Health Partners Fund III LP",
+          "display_names": ["Behavior Health Partners Fund III LP"],
+          "file_date": "2024-04-01",
+          "period_of_report": "2024-03-28",
+          "inc_states": "DE",
+          "biz_states": "TX"
+        }
+      }
+    ]
+  }
+}
