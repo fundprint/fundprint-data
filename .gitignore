@@ -9,3 +9,5 @@ venv/
 .DS_Store
 dist/
 build/
+supabase/.branches/
+supabase/.temp/

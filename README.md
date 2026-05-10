@@ -17,7 +17,9 @@ cp .env.example .env
 # Edit .env with your DATABASE_URL, ANTHROPIC_API_KEY, etc.
 
 # 4. Apply migrations to a running Postgres instance
-psql "$DATABASE_URL" -f schema/20250510_001_initial_schema.sql
+#    Local dev: `npx supabase db reset` against a Supabase local stack,
+#    or pipe the file directly into psql:
+psql "$DATABASE_URL" -f supabase/migrations/20250510000001_initial_schema.sql
 
 # 5. Run the test suite
 pytest

@@ -51,7 +51,7 @@ Fuzzy matches across embedding versions are not allowed. Resolution always pins 
 
 Forward-only. The conventions:
 
-- Every migration is in `schema/` with a timestamped filename.
+- Every migration is in `supabase/migrations/` with a 14-digit timestamp filename (Supabase CLI convention).
 - Migrations never `DROP COLUMN` on a populated production table without a deprecation period (mark unused, wait one full release, then drop).
 - A migration that changes the meaning of an existing column is two migrations: add the new column with the new meaning, backfill, then deprecate the old one.
 - A migration that affects what counts as PE-backed must reference a methodology repo commit.
