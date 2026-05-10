@@ -96,7 +96,11 @@ class VerificationClaim:
         )
 
 
-def _build_prompt(candidate_a: dict[str, Any], candidate_b: dict[str, Any], supporting_docs: list[str]) -> str:
+def _build_prompt(
+    candidate_a: dict[str, Any],
+    candidate_b: dict[str, Any],
+    supporting_docs: list[str],
+) -> str:
     docs_block = "\n\n---\n\n".join(supporting_docs) if supporting_docs else "(none provided)"
     return (
         "You are verifying whether two entity records refer to the same real-world entity.\n\n"

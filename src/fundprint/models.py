@@ -4,10 +4,9 @@ from __future__ import annotations
 
 import uuid
 from datetime import date, datetime
-from typing import Literal, Optional
+from typing import Literal
 
 from pydantic import BaseModel, Field
-
 
 # Enum literals used across tables
 ConfidenceMethod = Literal[
@@ -29,7 +28,7 @@ class ProvenanceMixin(BaseModel):
     confidence_method: ConfidenceMethod
     resolver_version: str
     extracted_at: datetime
-    superseded_by: Optional[uuid.UUID] = None
+    superseded_by: uuid.UUID | None = None
 
 
 # ------------------------------------------------------------
@@ -42,10 +41,10 @@ class SourceRecord(BaseModel):
 
     id: uuid.UUID = Field(default_factory=uuid.uuid4)
     source_url: str
-    snapshot_id: Optional[str] = None
+    snapshot_id: str | None = None
     source_type: str
     fetched_at: datetime
-    content_hash: Optional[str] = None
+    content_hash: str | None = None
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
 
@@ -60,12 +59,12 @@ class StagingBacbProvider(BaseModel):
     id: uuid.UUID = Field(default_factory=uuid.uuid4)
     source_record_id: uuid.UUID
     raw_name: str
-    address_line1: Optional[str] = None
-    city: Optional[str] = None
-    state: Optional[str] = None
-    zip: Optional[str] = None
-    npi: Optional[str] = None
-    credential_type: Optional[str] = None
+    address_line1: str | None = None
+    city: str | None = None
+    state: str | None = None
+    zip: str | None = None
+    npi: str | None = None
+    credential_type: str | None = None
     ingested_at: datetime = Field(default_factory=datetime.utcnow)
 
 
@@ -76,12 +75,12 @@ class StagingSecFiling(BaseModel):
     source_record_id: uuid.UUID
     accession_number: str
     form_type: str
-    filer_name: Optional[str] = None
-    filing_date: Optional[date] = None
-    issuer_name: Optional[str] = None
-    issuer_state: Optional[str] = None
-    amount_raised: Optional[float] = None
-    raw_json: Optional[dict] = None
+    filer_name: str | None = None
+    filing_date: date | None = None
+    issuer_name: str | None = None
+    issuer_state: str | None = None
+    amount_raised: float | None = None
+    raw_json: dict | None = None
     ingested_at: datetime = Field(default_factory=datetime.utcnow)
 
 
@@ -92,10 +91,10 @@ class StagingPePortfolioListing(BaseModel):
     source_record_id: uuid.UUID
     pe_firm_name: str
     portfolio_name: str
-    portfolio_url: Optional[str] = None
-    description: Optional[str] = None
+    portfolio_url: str | None = None
+    description: str | None = None
     sector_tags: list[str] = Field(default_factory=list)
-    listed_as_of: Optional[date] = None
+    listed_as_of: date | None = None
     ingested_at: datetime = Field(default_factory=datetime.utcnow)
 
 
@@ -109,13 +108,13 @@ class ParentPeFirm(ProvenanceMixin):
 
     id: uuid.UUID = Field(default_factory=uuid.uuid4)
     name: str
-    name_normalized: Optional[str] = None
-    hq_state: Optional[str] = None
-    website: Optional[str] = None
+    name_normalized: str | None = None
+    hq_state: str | None = None
+    website: str | None = None
     # Embeddings are stored in Postgres as vector(1024); here they're plain lists.
     # The model column lets resolution block cross-model cosine comparisons.
-    name_embedding: Optional[list[float]] = None
-    name_embedding_model: Optional[str] = None
+    name_embedding: list[float] | None = None
+    name_embedding_model: str | None = None
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
 
@@ -124,12 +123,12 @@ class OwnerEntity(ProvenanceMixin):
 
     id: uuid.UUID = Field(default_factory=uuid.uuid4)
     name: str
-    name_normalized: Optional[str] = None
-    entity_type: Optional[str] = None
-    state_of_incorporation: Optional[str] = None
-    parent_pe_firm_id: Optional[uuid.UUID] = None
-    name_embedding: Optional[list[float]] = None
-    name_embedding_model: Optional[str] = None
+    name_normalized: str | None = None
+    entity_type: str | None = None
+    state_of_incorporation: str | None = None
+    parent_pe_firm_id: uuid.UUID | None = None
+    name_embedding: list[float] | None = None
+    name_embedding_model: str | None = None
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
 
@@ -138,15 +137,15 @@ class Clinic(ProvenanceMixin):
 
     id: uuid.UUID = Field(default_factory=uuid.uuid4)
     name: str
-    name_normalized: Optional[str] = None
-    address_line1: Optional[str] = None
-    city: Optional[str] = None
-    state: Optional[str] = None
-    zip: Optional[str] = None
-    npi: Optional[str] = None
-    owner_entity_id: Optional[uuid.UUID] = None
-    name_embedding: Optional[list[float]] = None
-    name_embedding_model: Optional[str] = None
+    name_normalized: str | None = None
+    address_line1: str | None = None
+    city: str | None = None
+    state: str | None = None
+    zip: str | None = None
+    npi: str | None = None
+    owner_entity_id: uuid.UUID | None = None
+    name_embedding: list[float] | None = None
+    name_embedding_model: str | None = None
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
 
@@ -157,9 +156,9 @@ class AcquisitionEvent(ProvenanceMixin):
     owner_entity_id: uuid.UUID
     parent_pe_firm_id: uuid.UUID
     event_type: EventType
-    event_date: Optional[date] = None
+    event_date: date | None = None
     event_date_circa: bool = False
-    deal_notes: Optional[str] = None
+    deal_notes: str | None = None
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
 
@@ -176,11 +175,11 @@ class ResolutionClaim(ProvenanceMixin):
 
     id: uuid.UUID = Field(default_factory=uuid.uuid4)
     claim_type: ClaimType
-    clinic_id: Optional[uuid.UUID] = None
-    owner_entity_id: Optional[uuid.UUID] = None
-    parent_pe_firm_id: Optional[uuid.UUID] = None
-    acquisition_event_id: Optional[uuid.UUID] = None
-    supporting_snippets: Optional[dict] = None
+    clinic_id: uuid.UUID | None = None
+    owner_entity_id: uuid.UUID | None = None
+    parent_pe_firm_id: uuid.UUID | None = None
+    acquisition_event_id: uuid.UUID | None = None
+    supporting_snippets: dict | None = None
     llm_flags: list[str] = Field(default_factory=list)
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
@@ -192,15 +191,15 @@ class ValidationRun(BaseModel):
     resolver_version: str
     methodology_version: str
     started_at: datetime
-    finished_at: Optional[datetime] = None
-    claims_evaluated: Optional[int] = None
-    claims_passed: Optional[int] = None
-    claims_failed: Optional[int] = None
-    claims_quarantined: Optional[int] = None
-    hand_validation_sample: Optional[dict] = None
-    gate_passed: Optional[bool] = None
-    gate_passed_at: Optional[datetime] = None
-    notes: Optional[str] = None
+    finished_at: datetime | None = None
+    claims_evaluated: int | None = None
+    claims_passed: int | None = None
+    claims_failed: int | None = None
+    claims_quarantined: int | None = None
+    hand_validation_sample: dict | None = None
+    gate_passed: bool | None = None
+    gate_passed_at: datetime | None = None
+    notes: str | None = None
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
 
@@ -212,6 +211,6 @@ class ValidationRunDecision(BaseModel):
     resolution_claim_id: uuid.UUID
     decision: Decision
     trust_level: TrustLevel
-    deciding_rule: Optional[str] = None
-    reviewer_label: Optional[str] = None
+    deciding_rule: str | None = None
+    reviewer_label: str | None = None
     decided_at: datetime = Field(default_factory=datetime.utcnow)

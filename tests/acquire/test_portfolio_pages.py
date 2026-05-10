@@ -3,10 +3,10 @@
 import pytest
 
 from fundprint.acquire.portfolio_pages import (
-    parse_portfolio_html,
-    PortfolioPageConfig,
     PE_FIRM_CONFIGS,
+    PortfolioPageConfig,
     _configs_by_firm,
+    parse_portfolio_html,
 )
 
 

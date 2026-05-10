@@ -2,11 +2,7 @@
 
 from __future__ import annotations
 
-import json
-from pathlib import Path
 from unittest.mock import MagicMock
-
-import pytest
 
 from fundprint.publish.hf import build_data_card, build_parquet_files
 
@@ -44,7 +40,7 @@ class TestBuildDataCard:
         # YAML front-matter must start and end with ---
         assert card.startswith("---\n")
         lines = card.split("\n")
-        closing_idx = next(i for i, l in enumerate(lines[1:], 1) if l.strip() == "---")
+        closing_idx = next(i for i, line in enumerate(lines[1:], 1) if line.strip() == "---")
         assert closing_idx > 1
 
     def test_data_card_mentions_known_limitations(self):

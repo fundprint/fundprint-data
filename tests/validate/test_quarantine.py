@@ -5,8 +5,6 @@ from __future__ import annotations
 import uuid
 from types import SimpleNamespace
 
-import pytest
-
 from fundprint.validate.quarantine import should_quarantine
 
 

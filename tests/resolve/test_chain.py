@@ -6,7 +6,7 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from fundprint.resolve.chain import Chain, ChainLink, walk_chain
+from fundprint.resolve.chain import walk_chain
 
 
 def _make_conn(c2o_rows: list[tuple], o2p_rows: dict[str, list[tuple]]) -> MagicMock:
@@ -18,7 +18,6 @@ def _make_conn(c2o_rows: list[tuple], o2p_rows: dict[str, list[tuple]]) -> Magic
     """
     conn = MagicMock()
     call_count = 0
-    owner_call_map: dict[str, list[tuple]] = {}
 
     def execute_side_effect(sql, params):
         nonlocal call_count

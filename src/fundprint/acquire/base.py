@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import abc
 import logging
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 
 import tenacity
@@ -79,7 +79,7 @@ class Scraper(abc.ABC):
         content, source_url = self._fetch_with_retry()
 
         snapshot_id, content_hash = self._store.put(content)
-        fetched_at = datetime.now(timezone.utc)
+        fetched_at = datetime.now(UTC)
 
         with db.transaction() as conn:
             existing = _find_existing_source_record(conn, source_url, content_hash)

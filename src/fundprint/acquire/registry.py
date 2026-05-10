@@ -11,10 +11,10 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from fundprint.acquire.base import Scraper
 
-_registry: dict[str, type["Scraper"]] = {}
+_registry: dict[str, type[Scraper]] = {}
 
 
-def register(scraper_cls: type["Scraper"]) -> type["Scraper"]:
+def register(scraper_cls: type[Scraper]) -> type[Scraper]:
     """Decorator that adds scraper_cls to the registry under its source_family."""
     key = scraper_cls.source_family
     if key in _registry:
@@ -23,7 +23,7 @@ def register(scraper_cls: type["Scraper"]) -> type["Scraper"]:
     return scraper_cls
 
 
-def get(source_family: str) -> type["Scraper"]:
+def get(source_family: str) -> type[Scraper]:
     """Return the scraper class registered under source_family."""
     try:
         return _registry[source_family]

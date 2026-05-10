@@ -1,7 +1,7 @@
 """psycopg connection helpers. No ORM; just a connection and a transaction context."""
 
+from collections.abc import Generator
 from contextlib import contextmanager
-from typing import Generator
 
 import psycopg
 

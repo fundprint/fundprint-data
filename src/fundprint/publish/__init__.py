@@ -71,5 +71,7 @@ def build_release(
         release_dir = dist_dir / dataset_version
         upload_to_hf(release_dir, repo_id=hf_repo_id, dataset_version=dataset_version)
 
-    logger.info("Release %s complete. Artifacts at %s/%s", dataset_version, dist_dir, dataset_version)
+    logger.info(
+        "Release %s complete. Artifacts at %s/%s", dataset_version, dist_dir, dataset_version
+    )
     return manifest

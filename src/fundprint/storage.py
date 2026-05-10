@@ -7,7 +7,6 @@ Re-fetching the same bytes returns the same snapshot_id without re-writing.
 from __future__ import annotations
 
 import hashlib
-import os
 from pathlib import Path
 from typing import Protocol
 

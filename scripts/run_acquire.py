@@ -39,9 +39,8 @@ def main() -> int:
 
     # Import scraper modules to trigger @register calls
     import fundprint.acquire.bacb  # noqa: F401
-    import fundprint.acquire.sec_edgar  # noqa: F401
     import fundprint.acquire.portfolio_pages  # noqa: F401
-
+    import fundprint.acquire.sec_edgar  # noqa: F401
     from fundprint.acquire.registry import get
 
     try:

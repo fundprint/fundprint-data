@@ -10,9 +10,7 @@ from __future__ import annotations
 
 import uuid
 from types import SimpleNamespace
-from unittest.mock import MagicMock, call, patch
-
-import pytest
+from unittest.mock import MagicMock
 
 from fundprint.validate.audit import close_run, open_run, record_decision
 
@@ -122,7 +120,9 @@ class TestRunLifecycle:
 
         params = conn.execute.call_args[0][1]
         # deciding_rule is in params; find the one containing the claim type
-        rule_param = next((p for p in params if isinstance(p, str) and "clinic_to_owner" in p), None)
+        rule_param = next(
+            (p for p in params if isinstance(p, str) and "clinic_to_owner" in p), None
+        )
         assert rule_param is not None
 
 

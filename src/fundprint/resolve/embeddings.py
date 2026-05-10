@@ -9,7 +9,6 @@ from __future__ import annotations
 
 import abc
 import logging
-from typing import Protocol
 
 from fundprint.config import settings
 

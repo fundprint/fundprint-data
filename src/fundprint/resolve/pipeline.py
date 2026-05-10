@@ -14,7 +14,7 @@ from __future__ import annotations
 import logging
 import uuid
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 
 import anthropic
@@ -22,7 +22,6 @@ import anthropic
 from fundprint import db
 from fundprint.resolve.candidate import get_candidates
 from fundprint.resolve.chain import Chain, walk_chain
-from fundprint.resolve.embeddings import embed
 from fundprint.resolve.verify import VerificationClaim, verify
 from fundprint.resolve.version import RESOLVER_VERSION
 
@@ -137,7 +136,7 @@ def _write_claim(
             confidence_score,
             confidence_method,
             RESOLVER_VERSION,
-            datetime.now(timezone.utc),
+            datetime.now(UTC),
         ),
     )
     return claim_id

@@ -1,8 +1,7 @@
 """Tests for the BACB HTML parser. No browser, no HTTP - just the parse function."""
 
-import pytest
 
-from fundprint.acquire.bacb import parse_bacb_html, _split_address
+from fundprint.acquire.bacb import _split_address, parse_bacb_html
 
 
 class TestParseBacbHtml:

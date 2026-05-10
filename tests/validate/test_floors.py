@@ -4,8 +4,6 @@ from __future__ import annotations
 
 from types import SimpleNamespace
 
-import pytest
-
 from fundprint.validate.floors import (
     ACQUISITION_DATE_FLOOR,
     CLINIC_TO_OWNER_FLOOR,

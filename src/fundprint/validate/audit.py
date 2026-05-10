@@ -8,11 +8,11 @@ answer from this table without any reconstruction.
 from __future__ import annotations
 
 import uuid
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 
-from fundprint.models import ResolutionClaim, ValidationRun, ValidationRunDecision
-from fundprint.validate.floors import _FLOOR_BY_CLAIM_TYPE, passes_floor
+from fundprint.models import ResolutionClaim
+from fundprint.validate.floors import _FLOOR_BY_CLAIM_TYPE
 
 
 def open_run(
@@ -26,7 +26,7 @@ def open_run(
     The run is open (finished_at is NULL) until close_run() is called.
     """
     run_id = uuid.uuid4()
-    started_at = datetime.now(timezone.utc)
+    started_at = datetime.now(UTC)
 
     conn.execute(
         """
@@ -79,7 +79,7 @@ def record_decision(
             decision,
             trust_level,
             floor_label,
-            datetime.now(timezone.utc),
+            datetime.now(UTC),
         ),
     )
 
@@ -108,9 +108,9 @@ def close_run(
         WHERE id = %s
         """,
         (
-            datetime.now(timezone.utc),
+            datetime.now(UTC),
             passed,
-            datetime.now(timezone.utc) if passed else None,
+            datetime.now(UTC) if passed else None,
             counts.get("evaluated", 0),
             counts.get("passed", 0),
             counts.get("failed", 0),

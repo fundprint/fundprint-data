@@ -5,18 +5,17 @@ from __future__ import annotations
 import json
 from datetime import date
 from pathlib import Path
-from unittest.mock import MagicMock, patch
 
+import httpx
 import pytest
 import respx
-import httpx
 
 from fundprint.acquire.sec_edgar import (
+    EDGAR_SEARCH_URL,
     SecEdgarScraper,
-    parse_edgar_json,
     _extract_filing_row,
     _parse_date,
-    EDGAR_SEARCH_URL,
+    parse_edgar_json,
 )
 
 FIXTURES_DIR = Path(__file__).parent / "fixtures"
@@ -37,7 +36,8 @@ class TestParseEdgarJson:
         rows = parse_edgar_json(edgar_json)
         by_acc = {r["accession_number"]: r for r in rows}
         assert by_acc["0001234567-24-000001"]["issuer_name"] == "Lighthouse Autism Center LLC"
-        assert by_acc["0009876543-24-000002"]["issuer_name"] == "Behavior Health Partners Fund III LP"
+        expected = "Behavior Health Partners Fund III LP"
+        assert by_acc["0009876543-24-000002"]["issuer_name"] == expected
 
     def test_form_types(self, edgar_json):
         rows = parse_edgar_json(edgar_json)

@@ -7,7 +7,7 @@ and the overall orchestration flow.
 from __future__ import annotations
 
 import uuid
-from unittest.mock import MagicMock, call, patch
+from unittest.mock import MagicMock, patch
 
 import pytest
 
@@ -33,11 +33,12 @@ def _make_candidate_rows(table: str, n: int = 1) -> list[tuple]:
     return rows
 
 
-def _make_verify_claim(link: bool = True, confidence: float = 0.80, snippets: list[str] | None = None):
+def _make_verify_claim(
+    link: bool = True, confidence: float = 0.80, snippets: list[str] | None = None
+):
     """Build a stub VerificationClaim."""
-    from fundprint.resolve.verify import VerificationClaim
-    from fundprint.resolve.version import PROMPT_VERSION, RESOLVER_VERSION
-    from fundprint.resolve.verify import RESOLVER_MODEL
+    from fundprint.resolve.verify import RESOLVER_MODEL, VerificationClaim
+    from fundprint.resolve.version import PROMPT_VERSION
 
     return VerificationClaim(
         link=link,
@@ -117,7 +118,9 @@ class TestPipelineHappyPath:
         assert result.staging_rows_processed == 1
         assert result.claims_written == 1
 
-    def test_returns_run_result(self, mock_conn, patch_candidates, patch_verify_linked, patch_chain):
+    def test_returns_run_result(
+        self, mock_conn, patch_candidates, patch_verify_linked, patch_chain
+    ):
         mock_conn.execute.return_value.fetchall.return_value = []
         result = run(conn=mock_conn)
         assert isinstance(result, RunResult)

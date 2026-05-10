@@ -7,7 +7,6 @@ files are always written locally to dist/release/<dataset_version>/.
 
 from __future__ import annotations
 
-import io
 import json
 import logging
 from pathlib import Path
@@ -24,13 +23,6 @@ try:
     _HAS_PYARROW = True
 except ImportError:
     _HAS_PYARROW = False
-
-try:
-    import pandas as pd
-
-    _HAS_PANDAS = True
-except ImportError:
-    _HAS_PANDAS = False
 
 try:
     from huggingface_hub import HfApi
@@ -136,7 +128,7 @@ for every ownership claim so consumers can apply their own threshold.
 | parent_pe_firm_id    | string  | FK to parent_pe_firm.                                       |
 | acquisition_event_id | string  | FK to acquisition_event.                                    |
 | confidence_score     | float   | In [0, 1]. Minimum across the provenance chain.             |
-| confidence_method    | string  | exact_match / fuzzy_high / fuzzy_low / llm_inferred / human_verified. |
+| confidence_method    | string  | One of: exact_match, fuzzy_high, fuzzy_low, llm_inferred. |
 | resolver_version     | string  | Code version that produced this claim.                      |
 | extracted_at         | datetime| When the claim was written.                                 |
 | source_record_ids    | list    | UUIDs of supporting source_record rows.                     |

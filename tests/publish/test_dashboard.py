@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import pytest
-
 from fundprint.publish.dashboard import ALLOWED_COLUMNS, generate_view_sql
 
 

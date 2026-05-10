@@ -2,8 +2,9 @@
 
 from __future__ import annotations
 
+from datetime import UTC
 from typing import Any
-from unittest.mock import MagicMock, call, patch
+from unittest.mock import MagicMock, patch
 
 import pytest
 
@@ -130,7 +131,7 @@ class TestHelperFunctions:
         assert result == "some-uuid"
 
     def test_insert_source_record_returns_id(self):
-        from datetime import datetime, timezone
+        from datetime import datetime
         conn = MagicMock()
         cursor = MagicMock()
         cursor.fetchone.return_value = ("new-uuid",)
@@ -140,7 +141,7 @@ class TestHelperFunctions:
             source_url="https://x.com",
             snapshot_id="sn/abc.html",
             source_type="test",
-            fetched_at=datetime.now(timezone.utc),
+            fetched_at=datetime.now(UTC),
             content_hash="abc123",
             module_version="0.1.0",
         )
@@ -151,6 +152,7 @@ class TestRetryLogic:
     def test_http_5xx_triggers_retry(self, fake_store):
         """5xx errors should be caught by the retry predicate."""
         import httpx
+
         from fundprint.acquire.base import _is_retryable
 
         resp = MagicMock()
@@ -161,6 +163,7 @@ class TestRetryLogic:
     def test_http_4xx_not_retryable(self, fake_store):
         """404 is a permanent error; retrying won't fix it."""
         import httpx
+
         from fundprint.acquire.base import _is_retryable
 
         resp = MagicMock()
@@ -170,6 +173,7 @@ class TestRetryLogic:
 
     def test_429_is_retryable(self):
         import httpx
+
         from fundprint.acquire.base import _is_retryable
 
         resp = MagicMock()
@@ -179,6 +183,7 @@ class TestRetryLogic:
 
     def test_network_error_is_retryable(self):
         import httpx
+
         from fundprint.acquire.base import _is_retryable
 
         exc = httpx.ConnectError("connection refused")

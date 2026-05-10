@@ -12,7 +12,7 @@ change layout every couple of years, and a config update beats a code deploy.
 from __future__ import annotations
 
 import logging
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import date
 from typing import Any
 
@@ -142,7 +142,8 @@ def parse_portfolio_html(
         if not portfolio_name:
             continue
 
-        desc_el = item.select_one(config.description_selector) if config.description_selector else None
+        desc_sel = config.description_selector
+        desc_el = item.select_one(desc_sel) if desc_sel else None
         description = desc_el.get_text(strip=True) if desc_el else None
 
         link_el = item.select_one(config.link_selector)

@@ -179,7 +179,8 @@ def _diff_vs_previous(conn: Any, previous_release_dir: Path | None) -> dict:
             SELECT
                 (SELECT COUNT(*) FROM validation_run_decision
                  WHERE validation_run_id = %s AND decision = 'passed') AS added,
-                (SELECT COUNT(*) FROM resolution_claim WHERE superseded_by IS NOT NULL) AS superseded,
+                (SELECT COUNT(*) FROM resolution_claim
+                 WHERE superseded_by IS NOT NULL) AS superseded,
                 (SELECT COUNT(*) FROM validation_run_decision
                  WHERE validation_run_id = %s AND decision = 'quarantined') AS quarantined
             """,

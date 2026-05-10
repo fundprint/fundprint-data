@@ -5,7 +5,6 @@ from __future__ import annotations
 import json
 import re
 import uuid
-from pathlib import Path
 
 import pytest
 
@@ -101,7 +100,7 @@ class TestImmutability:
 
     def test_third_release_gets_incremented_suffix(self, tmp_path):
         dist = tmp_path / "dist"
-        m1 = pin_release("1.0", "0.1", "v1", dist_dir=dist)
+        pin_release("1.0", "0.1", "v1", dist_dir=dist)
         m2 = pin_release("1.0", "0.1", "v1", dist_dir=dist)
         m3 = pin_release("1.0", "0.1", "v1", dist_dir=dist)
         assert m2.dataset_version.endswith("-2")
