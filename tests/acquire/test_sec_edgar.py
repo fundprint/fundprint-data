@@ -11,6 +11,7 @@ import pytest
 import respx
 
 from fundprint.acquire.sec_edgar import (
+    ABA_KEYWORDS,
     EDGAR_SEARCH_URL,
     SecEdgarScraper,
     _extract_filing_row,
@@ -84,6 +85,27 @@ class TestExtractFilingRow:
         result = _extract_filing_row(source, "")
         assert result["filer_name"] == "First Corp"
 
+    def test_live_edgar_field_shape(self):
+        """Real EDGAR hits use adsh/form and a "(CIK ...)" name suffix."""
+        source = {
+            "adsh": "0001864634-23-000001",
+            "form": "D/A",
+            "file_type": "D/A",
+            "display_names": ["AUTISM IMPACT FUND LP  (CIK 0001864634)"],
+            "file_date": "2023-07-14",
+            "inc_states": ["DE"],
+            "biz_states": ["FL"],
+        }
+        result = _extract_filing_row(source, "0001864634-23-000001:primary_doc.xml")
+        assert result["accession_number"] == "0001864634-23-000001"
+        assert result["form_type"] == "D/A"
+        assert result["filer_name"] == "AUTISM IMPACT FUND LP"  # CIK suffix stripped
+        assert result["issuer_state"] == "DE"
+
+    def test_id_suffix_stripped_when_falling_back(self):
+        result = _extract_filing_row({"form": "D"}, "0001234567-24-000001:primary_doc.xml")
+        assert result["accession_number"] == "0001234567-24-000001"
+
 
 class TestParseDate:
     def test_iso_string(self):
@@ -105,15 +127,27 @@ class TestParseDate:
 
 class TestSecEdgarFetch:
     @respx.mock
-    def test_fetch_calls_edgar_api(self):
-        """fetch() should hit EDGAR_SEARCH_URL and return bytes + URL."""
+    def test_fetch_merges_and_dedupes_keyword_results(self):
+        """fetch() fans out per keyword and unions+dedupes hits into one document."""
         sample = (FIXTURES_DIR / "sec_edgar_sample.json").read_bytes()
-        respx.get(EDGAR_SEARCH_URL).mock(return_value=httpx.Response(200, content=sample))
+        route = respx.get(EDGAR_SEARCH_URL).mock(
+            return_value=httpx.Response(200, content=sample)
+        )
 
         scraper = SecEdgarScraper(date_from=date(2024, 1, 1))
         content, url = scraper.fetch()
 
-        assert content == sample
+        # One exact-phrase request per keyword (each returns <10 hits => no paging)
+        assert route.call_count == len(ABA_KEYWORDS)
+        # Every request used a single quoted phrase, never the broken OR query
+        for call in route.calls:
+            assert " OR " not in call.request.url.params["q"]
+        # The two sample filings appear once each despite N keyword responses
+        rows = parse_edgar_json(content)
+        assert {r["accession_number"] for r in rows} == {
+            "0001234567-24-000001",
+            "0009876543-24-000002",
+        }
         assert EDGAR_SEARCH_URL in url
 
     @respx.mock
