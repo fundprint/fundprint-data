@@ -11,8 +11,10 @@ change layout every couple of years, and a config update beats a code deploy.
 
 from __future__ import annotations
 
+import json
 import logging
-from dataclasses import dataclass
+import time
+from dataclasses import dataclass, field
 from datetime import date
 from typing import Any
 
@@ -26,35 +28,59 @@ logger = logging.getLogger(__name__)
 
 FUNDPRINT_UA = "FundprintBot/0.1 (+mailto:atharva.doke737@gmail.com)"
 
+# Polite pause between paged API requests.
+REQUEST_DELAY_SEC = 0.15
+# Safety cap so a misbehaving paginated API can't loop forever.
+MAX_API_PAGES = 100
+
 
 @dataclass
 class PortfolioPageConfig:
-    """Selector config for one PE firm's portfolio listing page."""
+    """Config for one PE firm's portfolio listing.
+
+    Two modes:
+      * HTML  - set the CSS selectors; fetch() pulls the page and parse() reads
+                the DOM. Works for server-rendered static portfolio pages.
+      * JSON  - set api_url (and any api_params); fetch() paginates the JSON
+                endpoint and parse() reads the result objects. Needed for the
+                JavaScript-rendered sites large PE firms use, whose portfolio
+                data loads from a backing API rather than the initial HTML.
+
+    `url` is always the human-facing portfolio page, recorded as provenance.
+    """
 
     firm_name: str
     url: str
-    # CSS selector that matches the container element for each portfolio company
-    item_selector: str
+    # --- HTML mode ---
+    # CSS selector matching the container element for each portfolio company
+    item_selector: str = ""
     # Within each item, these selectors pull specific fields
-    name_selector: str
+    name_selector: str = ""
     description_selector: str = ""
     link_selector: str = "a"
-    # Optional: a selector for sector/category tags
     sector_selector: str = ""
+    # --- JSON mode (takes precedence over HTML when api_url is set) ---
+    api_url: str = ""
+    api_params: dict[str, str] = field(default_factory=dict)
 
 
-# Real configs. KKR's portfolio page uses a straightforward card layout.
-# Blackstone is added as a second reference point; its selector may need
-# updating after a site redesign.
+# Real configs.
+#
+# KKR's portfolio is a JavaScript app (Adobe Experience Manager); the initial
+# HTML has no company data. It loads from a backing search servlet that returns
+# clean JSON, so we use JSON mode against that endpoint.
+#
+# Blackstone is kept as an HTML reference config; its selectors may need
+# updating after a site redesign (and it, too, may move to JS-only rendering).
 PE_FIRM_CONFIGS: list[PortfolioPageConfig] = [
     PortfolioPageConfig(
         firm_name="KKR",
-        url="https://www.kkr.com/businesses/portfolio",
-        item_selector="div.portfolio-company, article.portfolio-item, .company-card",
-        name_selector=".company-name, h3, h2",
-        description_selector=".description, .company-description, p",
-        link_selector="a",
-        sector_selector=".sector, .category, .tag",
+        url="https://www.kkr.com/invest/portfolio",
+        api_url=(
+            "https://www.kkr.com/content/kkr/sites/global/en/invest/portfolio/"
+            "jcr:content/root/main-par/bioportfoliosearch.bioportfoliosearch.json"
+        ),
+        api_params={"region": "all"},
     ),
     PortfolioPageConfig(
         firm_name="Blackstone",
@@ -89,15 +115,44 @@ class PortfolioPageScraper(Scraper):
         self._config = _configs_by_firm[firm_name]
 
     def fetch(self) -> tuple[bytes, str]:
-        """Fetch the portfolio page HTML. Real HTTP, no JavaScript required."""
+        """Fetch the portfolio listing. JSON API if configured, else page HTML."""
+        if self._config.api_url:
+            return self._fetch_api()
         headers = {"User-Agent": FUNDPRINT_UA}
         with httpx.Client(timeout=30.0, follow_redirects=True) as client:
             resp = client.get(self._config.url, headers=headers)
             resp.raise_for_status()
         return resp.content, str(resp.url)
 
+    def _fetch_api(self) -> tuple[bytes, str]:
+        """Paginate the firm's JSON portfolio endpoint and merge all results.
+
+        Returns the merged results as JSON bytes plus the human portfolio page
+        URL as provenance (not the servlet URL, which is an implementation detail).
+        """
+        headers = {"User-Agent": FUNDPRINT_UA, "Accept": "application/json"}
+        results: list[dict[str, Any]] = []
+        with httpx.Client(timeout=30.0, follow_redirects=True) as client:
+            page = 1
+            total_pages = 1
+            while page <= total_pages and page <= MAX_API_PAGES:
+                params = {**self._config.api_params, "page": str(page)}
+                resp = client.get(self._config.api_url, params=params, headers=headers)
+                resp.raise_for_status()
+                data = resp.json()
+                results.extend(data.get("results", []))
+                total_pages = int(data.get("pages", 1) or 1)
+                page += 1
+                if page <= total_pages:
+                    time.sleep(REQUEST_DELAY_SEC)
+        content = json.dumps({"results": results}).encode()
+        logger.info("%s portfolio API: %d companies", self._config.firm_name, len(results))
+        return content, self._config.url
+
     def parse(self, content: bytes) -> list[dict[str, Any]]:
-        """Parse portfolio page HTML into staging rows using this instance's config."""
+        """Parse the portfolio listing into staging rows using this config."""
+        if self._config.api_url:
+            return parse_portfolio_json(content, self._config)
         return parse_portfolio_html(content, self._config)
 
     def _write_staging(
@@ -160,6 +215,52 @@ def parse_portfolio_html(
                 tag = tag_el.get_text(strip=True)
                 if tag:
                     sector_tags.append(tag)
+
+        rows.append({
+            "pe_firm_name": config.firm_name,
+            "portfolio_name": portfolio_name,
+            "portfolio_url": portfolio_url,
+            "description": description,
+            "sector_tags": sector_tags,
+            "listed_as_of": date.today().isoformat(),
+        })
+
+    return rows
+
+
+def parse_portfolio_json(
+    content: bytes, config: PortfolioPageConfig
+) -> list[dict[str, Any]]:
+    """Parse a firm's portfolio JSON ({"results": [...]}) into staging rows.
+
+    Pure function - no HTTP, no side effects. Tests call this directly.
+    Maps the common KKR-style fields; description HTML is flattened to text and
+    industry/assetClass/region become sector_tags for the resolve layer to use.
+    """
+    data = json.loads(content)
+    rows = []
+
+    for item in data.get("results", []):
+        portfolio_name = (item.get("name") or "").strip()
+        if not portfolio_name:
+            continue
+
+        # Company URLs arrive as bare domains ("www.example.com"); make absolute.
+        portfolio_url = (item.get("url") or "").strip() or None
+        if portfolio_url and not portfolio_url.startswith(("http://", "https://")):
+            portfolio_url = "https://" + portfolio_url.lstrip("/")
+
+        # Descriptions are HTML fragments; flatten to plain text.
+        desc_raw = item.get("description") or ""
+        description = (
+            BeautifulSoup(desc_raw, "html.parser").get_text(" ", strip=True) or None
+        )
+
+        sector_tags = [
+            str(tag).strip()
+            for key in ("industry", "assetClass", "region")
+            if (tag := item.get(key))
+        ]
 
         rows.append({
             "pe_firm_name": config.firm_name,
