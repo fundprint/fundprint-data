@@ -13,7 +13,8 @@ live scraper (Playwright, EDGAR API, etc.) is wired up.
 Usage:
     python scripts/ingest_fixture.py sec_edgar tests/acquire/fixtures/sec_edgar_sample.json
     python scripts/ingest_fixture.py bacb tests/acquire/fixtures/bacb_sample.html
-    python scripts/ingest_fixture.py pe_portfolio tests/acquire/fixtures/portfolio_sample.html --firm KKR
+    python scripts/ingest_fixture.py pe_portfolio \
+        tests/acquire/fixtures/portfolio_sample.html --firm KKR
 
 The rows it writes are real. Re-running with the same fixture is idempotent:
 the content_hash already-staged check short-circuits the second run.
