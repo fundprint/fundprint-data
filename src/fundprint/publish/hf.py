@@ -279,8 +279,20 @@ def _write_parquet(dest: Path, rows: list, columns: list[str]) -> None:
 
 
 def _to_arrow_array(values: list) -> Any:
-    """Convert a column of Python values to an Arrow array."""
-    # Lists (like source_record_ids) become string representation;
-    # proper list<string> would require schema inference which adds complexity.
-    converted = [json.dumps(v) if isinstance(v, (list, dict)) else v for v in values]
+    """Convert a column of Python values to a string Arrow array.
+
+    The column is typed as string, so every scalar must be stringified -- not
+    just lists/dicts. UUID and datetime objects (as returned by psycopg) are
+    not bytes/str and would otherwise raise ArrowTypeError. None is preserved
+    as null; lists/dicts are JSON-encoded with default=str so UUIDs nested in
+    source_record_ids serialize cleanly (e.g. ["f2e3..."], not "[UUID('...')]").
+    """
+    converted = [
+        None
+        if v is None
+        else json.dumps(v, default=str)
+        if isinstance(v, (list, dict))
+        else str(v)
+        for v in values
+    ]
     return pa.array(converted, type=pa.string())

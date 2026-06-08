@@ -1,0 +1,1407 @@
+{
+  "run_id": "8afba254-3e3e-49a2-9f2c-53b2c5a7e7d6",
+  "seed": 42,
+  "total_drawn": 100,
+  "rows": [
+    {
+      "claim_id": "81eab1d8-4c90-430e-b7c5-f4ea1cb34fca",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "aa5d0a6f-6086-4ce1-804c-bd17c9a67186",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "c69b49b4-8b06-4d35-8940-d08384d7abed",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "064894b1-ab3c-4781-be16-ee0ad6f2c935",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "3e6b7994-90a3-4a08-887e-98329ae9cdda",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "ac41f669-ddb5-4ffe-b9ea-41ceefec04db",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "48d5e5e8-81d6-415c-95fa-5557d6f7aa72",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "b0b48544-36a3-4997-bba0-33bff55e0cd8",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "b8f241bb-d351-413d-873a-d0aca9da240d",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "9320ef08-9d1e-4652-bd57-8f2ef29964d1",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "b04218b2-0fdd-4e6b-b669-97593f0f6a4a",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "776c9cd8-a7c8-4dc8-954a-3f2854753fca",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "c185a34a-aadc-4627-a949-d4afd4380e7b",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "8b238797-5c4f-4cfa-822d-5753579a6d21",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "9595ea41-4ee5-48e3-b5c7-667e78858e63",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "2d1f7a03-ba3e-4f01-824f-128027b06465",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "fd3a688a-6456-4847-9659-804ffc479159",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "2854b202-a6c3-48d5-a34d-457adbafabbc",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "8202b9f7-0398-4d46-91ba-742d531e8918",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "9186c5a6-60d9-4952-96ad-77f44312e601",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "3d29ea3f-9f62-4062-baf3-d812e13789f2",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "11226567-6a4a-4609-bbb1-ae0fb68e6810",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "3611ef7b-bfbf-43e1-b32a-216bfa6700e1",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "23fe97ac-6865-4bfc-bf19-8c587b4b7ea3",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "4273bbef-c32e-4ab2-a90f-d4111eb56ab2",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "f61603c6-999d-467c-bc77-8fb58a79b08b",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "29ef2f4c-5ce8-4fd0-8663-0cb6067df3f9",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "690149db-c7fe-42d3-82bd-dbe8c719fffd",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "ce5eb43e-f2f6-47b1-9c61-6ae7197ef535",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "c54f62e5-4652-4aa6-8c6b-aefda9701df8",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "68da2b9c-e1d9-40c3-8459-bb6bf98f6f42",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "51ffa3be-73fb-4836-9c58-27b7e641e2a4",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "2a8c9905-bb83-4db9-a07e-10c0eb9dd53e",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "90f8c19a-b25a-47ec-8b7c-ecc909e555d4",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "bb18f8ac-08ba-4e14-81bf-dfe94b3b8c2a",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "285bd513-55c6-409e-be0d-56e4fe49d002",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "c3c415bf-2006-4be3-a522-1d183c467628",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "b75a00ed-5607-4130-839e-3eeee6d1efbb",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "176dd2fa-8d53-4e00-8336-76ddd928bbb7",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "298cde2e-eb5d-4771-bb8c-8518cdbde138",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "8919e55c-7f8a-42da-bcc1-1ee58fc50811",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "970ac0ad-c4d9-498d-9cd4-5a20d3d2737f",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "3e337dad-dc71-4ac9-805d-4510553cc4c5",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "6a15a129-ad63-4ab6-89d6-b95d498621db",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "746861f0-1c73-4a65-9b60-c184800307fe",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "9475fc7a-e419-47a4-809e-0403c5aaaa03",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "e0964a88-9a70-404b-aae9-3221f42aff2b",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "32b1a578-8608-4b10-a440-d54632f18c74",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "0e435fbc-867b-4521-884d-453929301f48",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "fd1af363-3d26-4dbd-b778-53994084433d",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "bce110c5-d0c4-4eb5-9bd2-c9b10d2c49a8",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "d95f808c-cd72-4d87-9d04-88869531e225",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "6d8ce227-1327-46c7-8833-284ff7d00e62",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "69980a81-a063-4a72-820d-b2137dc2a18b",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "9ee0f06b-d241-4567-908a-0411de638b7e",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "7f94621c-574e-4f98-a2bc-79244042409e",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "d77f63fd-8e1c-4397-8f31-46da7418a971",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "551046fb-91db-4723-af8e-d2bbf93d3038",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "3777d2d4-d3cf-41bf-9681-c0fb64caba55",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "995b4aee-7418-4884-aa8b-6a7fa46fbd79",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "ed698dd5-b734-427e-b71d-78b54663914f",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "982ee987-b22e-4050-9db8-14e96d8ff6fc",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "4f1b497f-f583-403f-9e9f-beafaa86ee7b",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "7e56a912-7cbe-436f-911a-0d6e02dc2a95",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "bdc61424-e4d7-4021-9c71-5e7a0094acce",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "8fc70e40-f649-4f30-a441-4feb1da22e8a",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "b3212225-ff69-44d4-8df9-bd989edfc731",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "25ca1a6e-891c-44e8-acc0-bd572913569d",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "794f1c9f-fceb-43d4-9ca7-b76899f38c7b",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "bf69f25a-c7b5-490c-ab31-990bde7cc892",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "95ba7ef1-12e3-499f-963e-90f43bfb031b",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "f5b097f2-00be-40ff-be52-80aa0f1a2cea",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "9a4f7df2-1b07-4696-bc41-8759ea1a47e7",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "daaebbf2-6f80-41ad-a753-dc8b552b89d2",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "f2dbfecc-bba4-4ec5-8a75-87bcb6b9d53b",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "067806da-f21c-4a26-9f7f-f9cac77a60c1",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "a3435862-6a0f-4a67-a503-212e10156769",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "40a261a2-78de-48e2-b048-19d443958d22",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "6878c826-f3a2-4db6-a0da-e34a90b8ad70",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "9b7a72ae-9373-4edb-b0f5-bb45a10ea6a3",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "5a405dc9-e5c0-462c-9e82-81fc76a98761",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "5dc51d14-8292-40d8-9e63-d2c70bf38230",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "ff5379cc-a7e4-43fd-a712-563080722266",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "08c56e95-898c-4d37-9dbb-ac4d9b2cf395",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "69440d4b-61a4-452b-93bb-530c361fda07",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "d58ca9d7-d11b-4334-92a0-1a1de1cae8af",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "32ca4332-f238-4724-860b-bbdb8ac8a812",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "f2ba9a06-6964-48a1-9c90-5d0022c31b3b",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "b2a4c0bc-a53f-4f5d-a4c9-20f9154673d3",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "e709d4bd-f0bd-49cc-b35b-8bbef7683594",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "39b7c3a8-339e-440e-a8a7-1dbc80d22338",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "8b31f115-bb4c-4926-aa0c-49d3fb744149",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "14c10db9-3cca-477c-a077-39691f48a802",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "e657423f-d8b4-40de-b5cb-5cc644f13d72",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "5b7ad47c-c040-414e-bd61-6a82eacc04b8",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "601e094b-f730-4e31-bce5-dcb674b69f48",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "f38fca9e-fe29-4b65-b5ec-529c30a7aa4b",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "93f9f241-1011-4520-a172-ae821169283b",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "4dd4fb12-a9bc-45eb-84aa-9b9fa764ddc5",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "573b1a84-7d7d-4733-a965-d0429dbc572c",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "2e504150-9f50-4ec8-b223-b55fdb71f354",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "20b31298-6c3a-4b32-8de0-bf3e3eb842ef",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "3a99fd00-5539-4033-b075-d14f392a2cf1",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "9a11cc29-afc7-4434-add1-c3bee68dfc26",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "89dabeff-9759-4926-961d-19bf46ee5bc0",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "67f37384-ad3b-4e53-aee8-f341202b693d",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "dff34408-b84b-431f-bb5b-d7e6fea500fc",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "ab24468e-bc81-4e66-8a91-0889f9926b80",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "8c8948ae-cef3-40ab-8944-8b933a833edb",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "ef0eb06d-949f-4db4-937e-82c49a51e79d",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "2594399e-0ef7-4957-8f0d-728cc0656a97",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "766e8aff-91cc-4e86-8e22-b8028b208448",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "c0b6489c-4496-4991-81f5-e6d56956c441",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "c7e7f06d-446b-4771-9cff-e7acefb2d48f",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "b333c843-960f-44bb-97f2-a038884b0eea",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "d9497212-e1a0-4868-a5eb-3d9641f07271",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "212690f9-9f3d-4825-be61-83197d87dfb7",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "d4280a0d-3e21-46ba-8ea3-a06946adf307",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "01e190c0-74ab-4c58-90d7-af7e9542c26b",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "4d4caba7-bc63-493d-91a5-cfe0984dda18",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "9fefef9e-f001-4a20-bb33-3cb0ac99c53c",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "ae42f8e5-2bb3-40a7-a5ed-5f979016e2b0",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "91b8b9f7-f1c0-45a0-8a0f-677db887cdc8",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "8bb17263-8358-474a-96ee-34cd508d45d3",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "7a357b3e-2eff-4ca3-828e-a9bc8aab154b",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "242187c4-3b0a-4550-b4b6-3b95a1deab25",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "4094248b-85fb-430c-a4f8-11ee5e36233a",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "c7a2cfe1-e529-4f1c-bc02-6ad05c0b8bfe",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "66f9c96f-2191-4948-933d-e3fe6bb4b53b",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "139a57d8-6649-43bc-815b-ac48dfea6d87",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "1f433d89-63ee-44a9-99b0-5ef7f6094b8e",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "8562c471-8895-43b1-957a-29ec6552cf24",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "baf6ac48-8228-49f1-9703-fdbf4f5fad66",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "15019fb5-5abe-423f-bfe6-30a5a34d700d",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "78b59367-271c-4cfb-8c25-9583fe2923d7",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "532e8e23-85f3-4190-a372-26e68c07cbb1",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "ee9c5950-8524-4dbb-8d0b-4c740bb1472a",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "1792f0ab-8d06-4773-9b48-c11083504ccb",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "acdfc988-a817-4f0f-b7bf-4dd48b5dd625",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "77a81e20-17f2-4be8-9cc9-3a3c36b183d3",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "5f1dbd23-8ebf-4fc0-8c93-2a7bad521a82",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "6a2e5713-824c-4fec-8bed-8994a954f1a9",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "0fe3292d-adc5-4a40-a97f-d171ae345764",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "62feb984-a3f2-4463-a1a6-0a6fb37adc7f",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "5f7b4ebb-592a-41bf-8eac-ec4a55f78c28",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "c9387182-5ee9-4525-8dde-dee402be3bcb",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "8ce3e698-abe6-46db-83a7-b1bb9248e41a",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "7ab7d02e-a673-4d22-82d3-44397fd56a41",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "c60d93d3-936e-4bdd-832a-36e0e3d431f7",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "161a5a3c-d1f6-4e08-8521-32aefe36acf5",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "63e4180e-332a-4c07-89d7-63b5d997b520",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "0016cc23-664e-451f-a430-36a710f40dda",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "b5b14757-90c0-4db5-ab6c-cd8d98c613c8",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "0e6d7302-0f28-4137-a8a9-cd2907103215",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "beee7ac4-51cb-4f8a-bc0f-28a2c34eef33",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "c8d92ac2-296d-4856-be02-c8848b513d0b",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "0ff309e2-ed06-4b2c-9cb8-fd4e2bcb56f1",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "3b98cf65-8de4-4b07-86fb-0f0468b70c2b",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "e6d1bbe7-f1bd-460c-9028-70bf82b88c4b",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "733de653-9012-49a5-a193-b6c5a7e98958",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "5c19b114-b30f-4465-b877-5cbc0ce22467",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "f5773406-cfd4-4a65-bf9d-1961294c9eed",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "e8bb9b88-2b17-430a-806b-b176e5e78a70",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "09f02a1a-cd78-4523-9c24-13fc793532ea",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "8d0bd6dc-76e8-4a2f-895c-a77df119b6ff",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "d3c809ad-7175-4190-895f-d03a623c7114",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "97b011a7-7166-4fea-a386-75176e332a4d",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "75fbe2e4-44f7-41c8-927a-4236c2a994a3",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "28d4e959-42a9-48b0-ae58-ca8ad6278711",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "5a8954fd-faf0-46ac-b190-5b8bf409b830",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "949c5749-29c7-42d4-9c2c-d1d9ceeafbdd",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "6bd52e69-3719-4651-9acd-bace7f344b9e",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "338a93d9-637e-4238-8b19-67cbe9e06990",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "28c7a5f5-ebf7-4b26-9843-515a5a0b5b74",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "71e99eb5-87fd-42f2-a791-5f03fbbda184",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "44569fcd-8f61-4797-a595-1ffe07174534",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "00ed4339-8b41-45e0-8e39-0731ccae7228",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "ae5c466b-46af-46e0-aff0-aa1e131743de",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "1cab2dbd-0b02-4135-ad4b-a62d4ae9c843",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "e51c1770-7010-40ab-9b47-3e290cc085f1",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "e32fc3e0-605c-4e63-a869-c76d5047555b",
+      "claim_type": "owner_to_pe_firm",
+      "proposed_link": {
+        "owner_entity_id": "72eb5297-ef9e-40bc-a2d8-d00f33df19c4",
+        "parent_pe_firm_id": "3b7733aa-d997-46e8-887a-39fe1d11ede5"
+      },
+      "source_urls": [
+        "https://www.kkr.com/invest/portfolio"
+      ],
+      "confidence_score": 0.95,
+      "confidence_method": "exact_match",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "3f1a0c3b-669a-430e-8de5-6b47340845b8",
+      "claim_type": "clinic_to_owner",
+      "proposed_link": {
+        "clinic_id": "66469f56-27f2-495c-b142-c07c68f71a9b",
+        "owner_entity_id": "cc2b506a-e84d-4b14-a952-971c861deda7"
+      },
+      "source_urls": [
+        "https://npiregistry.cms.hhs.gov/api/?version=2.1&organization_name=Geode+Health*&enumeration_type=NPI-2&country_code=US"
+      ],
+      "confidence_score": 0.88,
+      "confidence_method": "fuzzy_high",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "d7f02c59-1fe5-49c0-98c4-fdd05a28bb5d",
+      "claim_type": "clinic_to_owner",
+      "proposed_link": {
+        "clinic_id": "9b97315a-6201-449d-afe4-6f0676721705",
+        "owner_entity_id": "d2766d4a-88d8-43e1-b10c-02293497e2b0"
+      },
+      "source_urls": [
+        "https://npiregistry.cms.hhs.gov/api/?version=2.1&organization_name=BlueSprig*&enumeration_type=NPI-2&country_code=US"
+      ],
+      "confidence_score": 0.88,
+      "confidence_method": "fuzzy_high",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "ca6919fd-88c2-46be-8539-8b85b6f96b93",
+      "claim_type": "clinic_to_owner",
+      "proposed_link": {
+        "clinic_id": "c60e5ab7-3744-4229-9207-c76488bc959a",
+        "owner_entity_id": "d2766d4a-88d8-43e1-b10c-02293497e2b0"
+      },
+      "source_urls": [
+        "https://npiregistry.cms.hhs.gov/api/?version=2.1&organization_name=BlueSprig*&enumeration_type=NPI-2&country_code=US"
+      ],
+      "confidence_score": 0.88,
+      "confidence_method": "fuzzy_high",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "b6162a17-0f60-468e-9b24-16eeda90e00d",
+      "claim_type": "clinic_to_owner",
+      "proposed_link": {
+        "clinic_id": "8062cd43-7953-4edb-a53b-2992da6d7ad3",
+        "owner_entity_id": "d2766d4a-88d8-43e1-b10c-02293497e2b0"
+      },
+      "source_urls": [
+        "https://npiregistry.cms.hhs.gov/api/?version=2.1&organization_name=BlueSprig*&enumeration_type=NPI-2&country_code=US"
+      ],
+      "confidence_score": 0.88,
+      "confidence_method": "fuzzy_high",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "5485c65b-ea4e-43e3-bd32-3d1d38272430",
+      "claim_type": "clinic_to_owner",
+      "proposed_link": {
+        "clinic_id": "39ade306-185b-4c48-b806-8aa5cf200457",
+        "owner_entity_id": "d2766d4a-88d8-43e1-b10c-02293497e2b0"
+      },
+      "source_urls": [
+        "https://npiregistry.cms.hhs.gov/api/?version=2.1&organization_name=Blue+Sprig*&enumeration_type=NPI-2&country_code=US"
+      ],
+      "confidence_score": 0.88,
+      "confidence_method": "fuzzy_high",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "566e8c24-bf5d-46e0-b536-47089587c583",
+      "claim_type": "clinic_to_owner",
+      "proposed_link": {
+        "clinic_id": "c40602f1-48a6-4144-8058-5a10055b0eda",
+        "owner_entity_id": "cc2b506a-e84d-4b14-a952-971c861deda7"
+      },
+      "source_urls": [
+        "https://npiregistry.cms.hhs.gov/api/?version=2.1&organization_name=Geode+Health*&enumeration_type=NPI-2&country_code=US"
+      ],
+      "confidence_score": 0.88,
+      "confidence_method": "fuzzy_high",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "e6f051e6-60ad-4c9f-a9b0-0d02de90ddb0",
+      "claim_type": "clinic_to_owner",
+      "proposed_link": {
+        "clinic_id": "74c7cb8c-e2cd-47fc-995b-09a53af40db6",
+        "owner_entity_id": "d2766d4a-88d8-43e1-b10c-02293497e2b0"
+      },
+      "source_urls": [
+        "https://npiregistry.cms.hhs.gov/api/?version=2.1&organization_name=Blue+Sprig&enumeration_type=NPI-2&country_code=US"
+      ],
+      "confidence_score": 0.88,
+      "confidence_method": "fuzzy_high",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "d10e4a61-b3b7-451b-8071-93bc9fce72bb",
+      "claim_type": "clinic_to_owner",
+      "proposed_link": {
+        "clinic_id": "e3f5ca75-186f-4ceb-ba8e-556fa3f2b373",
+        "owner_entity_id": "d2766d4a-88d8-43e1-b10c-02293497e2b0"
+      },
+      "source_urls": [
+        "https://npiregistry.cms.hhs.gov/api/?version=2.1&organization_name=BlueSprig&enumeration_type=NPI-2&country_code=US"
+      ],
+      "confidence_score": 0.88,
+      "confidence_method": "fuzzy_high",
+      "reviewer_label": null
+    },
+    {
+      "claim_id": "544cdd0e-8a7a-4246-be36-b00228aa36a0",
+      "claim_type": "clinic_to_owner",
+      "proposed_link": {
+        "clinic_id": "0abb57a7-4d28-48ef-917c-61a02118aa16",
+        "owner_entity_id": "d2766d4a-88d8-43e1-b10c-02293497e2b0"
+      },
+      "source_urls": [
+        "https://npiregistry.cms.hhs.gov/api/?version=2.1&organization_name=BlueSprig*&enumeration_type=NPI-2&country_code=US"
+      ],
+      "confidence_score": 0.88,
+      "confidence_method": "fuzzy_high",
+      "reviewer_label": null
+    }
+  ]
+}
