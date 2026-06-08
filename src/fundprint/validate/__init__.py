@@ -79,7 +79,8 @@ def _fetch_unvalidated_claims(conn: Any, *, resolver_version: str) -> list[Any]:
     """Return resolution_claim rows not yet covered by any validation_run_decision."""
     return conn.execute(
         """
-        SELECT rc.*
+        SELECT rc.id, rc.claim_type, rc.confidence_score,
+               rc.confidence_method, rc.llm_flags
         FROM resolution_claim rc
         WHERE rc.resolver_version = %s
           AND NOT EXISTS (

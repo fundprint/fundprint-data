@@ -57,12 +57,12 @@ def _fetch_unprocessed_rows(conn: Any, staging_table: str, batch_size: int) -> l
         WHERE NOT EXISTS (
             SELECT 1 FROM resolution_claim rc
             WHERE rc.resolver_version = %s
-              AND %s = ANY(rc.source_record_ids::text[])
+              AND s.source_record_id::text = ANY(rc.source_record_ids::text[])
         )
         ORDER BY s.ingested_at
         LIMIT %s
         """,
-        (RESOLVER_VERSION, "s.id", batch_size),
+        (RESOLVER_VERSION, batch_size),
     ).fetchall()
     return [
         {
@@ -189,10 +189,19 @@ def run(
                 }
                 staging_doc = {"id": staging_id, "name": row["raw_name"], "locality": locality}
 
+                # The verifier rejects any link with no supporting snippet, so it
+                # must be given source text to quote. Until richer per-row source
+                # documents are wired in from the snapshot store, pass the staging
+                # row's own text so the LLM has something concrete to ground in.
+                supporting_docs = [
+                    f"BACB provider record: {row['raw_name']}"
+                    + (f", located in {locality}." if locality else ".")
+                ]
+
                 claim: VerificationClaim = verify(
                     staging_doc,
                     candidate_doc,
-                    supporting_docs=[],
+                    supporting_docs=supporting_docs,
                     client=anthropic_client,
                 )
 

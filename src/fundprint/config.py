@@ -21,6 +21,10 @@ class Settings(BaseSettings):
         default="",
         description="Anthropic API key for LLM extraction in the Resolve layer",
     )
+    voyage_api_key: str = Field(
+        default="",
+        description="Voyage AI API key for embeddings in the Resolve layer",
+    )
     snapshot_store_path: str = Field(
         default="./snapshots",
         description="Local path or object-storage prefix for raw snapshot blobs",

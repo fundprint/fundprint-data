@@ -45,7 +45,9 @@ class VoyageProvider(EmbeddingProvider):
                 "install it with: pip install voyageai"
             ) from exc
         self.model = model or settings.embedding_model
-        self._client = voyageai.Client()
+        # Read the key from settings (.env) so it lives in one place; fall back
+        # to voyageai's own VOYAGE_API_KEY env-var lookup if unset.
+        self._client = voyageai.Client(api_key=settings.voyage_api_key or None)
 
     def embed(self, texts: list[str]) -> list[list[float]]:
         """Call the Voyage API and return embeddings in the same order as input."""
