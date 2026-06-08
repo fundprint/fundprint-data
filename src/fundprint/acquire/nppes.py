@@ -51,11 +51,16 @@ class NppesScraper(Scraper):
         *,
         taxonomy_description: str = "Behavior Analyst",
         enumeration_type: str = "NPI-2",  # NPI-2 = organizations (clinics)
+        organization_name: str | None = None,
         max_records: int = 200,
     ) -> None:
         super().__init__(store)
         self._taxonomy = taxonomy_description
         self._enumeration_type = enumeration_type
+        # When set, search by organization name (a trailing '*' wildcard is
+        # honoured by NPPES) instead of by taxonomy. Used to pull all the NPI
+        # enumerations for a specific provider brand, e.g. "BlueSprig".
+        self._org_name = organization_name
         self._max_records = max_records
 
     def fetch(self) -> tuple[bytes, str]:
@@ -72,12 +77,18 @@ class NppesScraper(Scraper):
             while skip <= NPPES_MAX_SKIP and len(results) < self._max_records:
                 params = {
                     "version": "2.1",
-                    "taxonomy_description": self._taxonomy,
                     "enumeration_type": self._enumeration_type,
                     "country_code": "US",
                     "limit": NPPES_PAGE_SIZE,
                     "skip": skip,
                 }
+                # Searching by name and taxonomy together ANDs the filters and
+                # can miss brand clinics that lack the taxonomy, so use one or
+                # the other: name search when a brand is given, else taxonomy.
+                if self._org_name:
+                    params["organization_name"] = self._org_name
+                elif self._taxonomy:
+                    params["taxonomy_description"] = self._taxonomy
                 resp = client.get(NPPES_API_URL, params=params, headers=headers)
                 resp.raise_for_status()
                 page = resp.json().get("results", []) or []
@@ -92,9 +103,12 @@ class NppesScraper(Scraper):
         results = results[: self._max_records]
         document = {"result_count": len(results), "results": results}
         content = json.dumps(document).encode()
+        if self._org_name:
+            criterion = f"organization_name={self._org_name.replace(' ', '+')}"
+        else:
+            criterion = f"taxonomy_description={self._taxonomy.replace(' ', '+')}"
         source_url = (
-            f"{NPPES_API_URL}?version=2.1"
-            f"&taxonomy_description={self._taxonomy.replace(' ', '+')}"
+            f"{NPPES_API_URL}?version=2.1&{criterion}"
             f"&enumeration_type={self._enumeration_type}&country_code=US"
         )
         logger.info(
