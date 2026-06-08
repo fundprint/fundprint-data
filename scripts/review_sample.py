@@ -122,7 +122,11 @@ def main() -> int:
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--to-csv", metavar="SAMPLE_JSON", help="render a sample to a review CSV")
     p.add_argument("--score", metavar="REVIEW_CSV", help="score a filled review CSV")
-    p.add_argument("--sample", metavar="SAMPLE_JSON", help="sample JSON to save labels into (with --score)")
+    p.add_argument(
+        "--sample",
+        metavar="SAMPLE_JSON",
+        help="sample JSON to save labels into (with --score)",
+    )
     args = p.parse_args()
 
     if args.to_csv:
