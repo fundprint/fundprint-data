@@ -271,7 +271,11 @@ def link_clinics(*, dry_run: bool = False, chunk_size: int = 20) -> dict[str, in
                     cc.close()
                 except Exception:
                     pass
-                logger.warning("db drop on chunk %d attempt %d, retrying", i // chunk_size + 1, attempt)
+                logger.warning(
+                    "db drop on chunk %d attempt %d, retrying",
+                    i // chunk_size + 1,
+                    attempt,
+                )
                 time.sleep(3)
         else:
             logger.error("chunk %d failed after retries", i // chunk_size + 1)
