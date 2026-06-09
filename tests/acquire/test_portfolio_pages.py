@@ -13,6 +13,7 @@ from fundprint.acquire.portfolio_pages import (
     _configs_by_firm,
     parse_portfolio_html,
     parse_portfolio_json,
+    parse_portfolio_wp,
 )
 
 
@@ -190,3 +191,120 @@ class TestPeFirmConfigs:
                 assert cfg.api_url.startswith("https://")
             else:
                 assert cfg.item_selector and cfg.name_selector
+
+    def test_blackstone_is_wp_mode_with_allowlist(self):
+        cfg = _configs_by_firm["Blackstone"]
+        assert cfg.api_style == "wp"
+        assert cfg.api_taxonomy_url.startswith("https://")
+        assert cfg.api_taxonomy_field == "investment-type"
+        assert "Healthcare" in cfg.sector_allowlist
+
+
+# A WordPress REST payload shaped like Blackstone's /wp/v2/investment feed,
+# mixing a real portfolio company, an allowlisted-sector company, and a CSR /
+# career-pathway entry that must be filtered out.
+_WP_SAMPLE = {
+    "taxonomy": {
+        "259": "Healthcare",
+        "102": "Technology",
+        "105": "Veterans",
+    },
+    "results": [
+        {
+            "title": {"rendered": "TeamHealth"},
+            "excerpt": {"rendered": "<p>A leading <b>physician</b> practice.</p>"},
+            "link": "https://www.blackstone.com/investment/teamhealth/",
+            "investment-type": [259],
+        },
+        {
+            "title": {"rendered": "Salas O&#8217;Brien"},
+            "excerpt": {"rendered": ""},
+            "link": "https://www.blackstone.com/investment/salas-obrien/",
+            "investment-type": [102],
+        },
+        {
+            "title": {"rendered": "Hire Heroes USA"},
+            "excerpt": {"rendered": "<p>Career support for veterans.</p>"},
+            "link": "https://www.blackstone.com/investment/hire-heroes/",
+            "investment-type": [105],
+        },
+    ],
+}
+
+
+@pytest.fixture
+def wp_config() -> PortfolioPageConfig:
+    return _configs_by_firm["Blackstone"]
+
+
+class TestParsePortfolioWp:
+    def test_filters_out_non_allowlisted_sectors(self, wp_config):
+        rows = parse_portfolio_wp(json.dumps(_WP_SAMPLE).encode(), wp_config)
+        names = {r["portfolio_name"] for r in rows}
+        assert "TeamHealth" in names
+        assert "Salas O’Brien" in names  # HTML entity unescaped
+        assert "Hire Heroes USA" not in names  # Veterans CSR entry dropped
+
+    def test_firm_name_stamped(self, wp_config):
+        rows = parse_portfolio_wp(json.dumps(_WP_SAMPLE).encode(), wp_config)
+        assert all(r["pe_firm_name"] == "Blackstone" for r in rows)
+
+    def test_sector_tags_resolved_from_taxonomy(self, wp_config):
+        rows = parse_portfolio_wp(json.dumps(_WP_SAMPLE).encode(), wp_config)
+        by_name = {r["portfolio_name"]: r for r in rows}
+        assert by_name["TeamHealth"]["sector_tags"] == ["Healthcare"]
+
+    def test_html_description_flattened(self, wp_config):
+        rows = parse_portfolio_wp(json.dumps(_WP_SAMPLE).encode(), wp_config)
+        by_name = {r["portfolio_name"]: r for r in rows}
+        desc = by_name["TeamHealth"]["description"]
+        assert "<" not in desc and "physician" in desc
+
+    def test_link_preserved(self, wp_config):
+        rows = parse_portfolio_wp(json.dumps(_WP_SAMPLE).encode(), wp_config)
+        by_name = {r["portfolio_name"]: r for r in rows}
+        assert by_name["TeamHealth"]["portfolio_url"].endswith("/teamhealth/")
+
+    def test_empty_results(self, wp_config):
+        rows = parse_portfolio_wp(
+            json.dumps({"results": [], "taxonomy": {}}).encode(), wp_config
+        )
+        assert rows == []
+
+    def test_fetch_wp_paginates_via_header(self):
+        """_fetch_wp follows X-WP-TotalPages and resolves the taxonomy once."""
+        cfg = _configs_by_firm["Blackstone"]
+        scraper = PortfolioPageScraper(firm_name="Blackstone")
+        with respx.mock:
+            respx.get(cfg.api_taxonomy_url).mock(
+                return_value=httpx.Response(200, json=[{"id": 259, "name": "Healthcare"}])
+            )
+            respx.get(cfg.api_url).mock(
+                side_effect=[
+                    httpx.Response(
+                        200,
+                        headers={"X-WP-TotalPages": "2"},
+                        json=[{
+                            "title": {"rendered": "TeamHealth"},
+                            "excerpt": {"rendered": ""},
+                            "link": "https://x/teamhealth/",
+                            "investment-type": [259],
+                        }],
+                    ),
+                    httpx.Response(
+                        200,
+                        headers={"X-WP-TotalPages": "2"},
+                        json=[{
+                            "title": {"rendered": "Medline"},
+                            "excerpt": {"rendered": ""},
+                            "link": "https://x/medline/",
+                            "investment-type": [259],
+                        }],
+                    ),
+                ]
+            )
+            content, url = scraper.fetch()
+
+        rows = parse_portfolio_wp(content, cfg)
+        assert [r["portfolio_name"] for r in rows] == ["TeamHealth", "Medline"]
+        assert url == cfg.url  # provenance is the human page
