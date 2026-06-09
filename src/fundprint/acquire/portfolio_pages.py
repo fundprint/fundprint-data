@@ -47,6 +47,17 @@ class PortfolioPageConfig:
                 data loads from a backing API rather than the initial HTML.
 
     `url` is always the human-facing portfolio page, recorded as provenance.
+
+    JSON mode has two flavours, selected by `api_style`:
+      * "object" (KKR) - the endpoint returns {"results": [...], "pages": N};
+        each result already carries name/url/description/industry fields.
+      * "wp" (WordPress REST, e.g. Blackstone) - the endpoint returns a bare
+        JSON array and paginates via the X-WP-TotalPages response header. Fields
+        live under .title.rendered / .excerpt.rendered / .link, and the sector
+        is a taxonomy-id list resolved against `api_taxonomy_url`. Because the
+        WP "investments" feed mixes real portfolio companies with CSR / career
+        programs, `sector_allowlist` keeps only items carrying a genuine
+        investment sector.
     """
 
     firm_name: str
@@ -62,6 +73,12 @@ class PortfolioPageConfig:
     # --- JSON mode (takes precedence over HTML when api_url is set) ---
     api_url: str = ""
     api_params: dict[str, str] = field(default_factory=dict)
+    api_style: str = "object"  # "object" (KKR) | "wp" (WordPress REST)
+    # WP mode only: taxonomy endpoint mapping id -> sector name, the item field
+    # holding the taxonomy-id list, and the set of sectors we accept.
+    api_taxonomy_url: str = ""
+    api_taxonomy_field: str = ""
+    sector_allowlist: tuple[str, ...] = ()
 
 
 # Real configs.
@@ -70,8 +87,17 @@ class PortfolioPageConfig:
 # HTML has no company data. It loads from a backing search servlet that returns
 # clean JSON, so we use JSON mode against that endpoint.
 #
-# Blackstone is kept as an HTML reference config; its selectors may need
-# updating after a site redesign (and it, too, may move to JS-only rendering).
+# Blackstone runs on WordPress; its portfolio is the "investment" post type
+# served by the WP REST API as a paginated JSON array. The same feed also
+# carries CSR / career-pathway entries (Veterans, Adult Learners, etc.), so we
+# keep only items tagged with a genuine investment sector via sector_allowlist.
+_BLACKSTONE_SECTORS = (
+    "Healthcare", "Technology", "Services", "Consumer/Leisure",
+    "Consumer & Retail", "Energy", "Industrials", "Industrial", "Media",
+    "Real Estate", "BXG Portfolio", "Investments Led by BXG Team", "Current",
+    "Aerospace & Defense", "Leisure & Entertainment",
+    "Manufacturing & Distribution", "Music",
+)
 PE_FIRM_CONFIGS: list[PortfolioPageConfig] = [
     PortfolioPageConfig(
         firm_name="KKR",
@@ -84,12 +110,13 @@ PE_FIRM_CONFIGS: list[PortfolioPageConfig] = [
     ),
     PortfolioPageConfig(
         firm_name="Blackstone",
-        url="https://www.blackstone.com/our-businesses/portfolio-operations/portfolio-companies/",
-        item_selector=".portfolio-company, article, .company-item",
-        name_selector="h3, h4, .name",
-        description_selector=".description, p",
-        link_selector="a",
-        sector_selector=".sector, .category",
+        url="https://www.blackstone.com/the-firm/asset-management/",
+        api_url="https://www.blackstone.com/wp-json/wp/v2/investment",
+        api_params={"per_page": "100"},
+        api_style="wp",
+        api_taxonomy_url="https://www.blackstone.com/wp-json/wp/v2/investment-type",
+        api_taxonomy_field="investment-type",
+        sector_allowlist=_BLACKSTONE_SECTORS,
     ),
 ]
 
@@ -117,6 +144,8 @@ class PortfolioPageScraper(Scraper):
     def fetch(self) -> tuple[bytes, str]:
         """Fetch the portfolio listing. JSON API if configured, else page HTML."""
         if self._config.api_url:
+            if self._config.api_style == "wp":
+                return self._fetch_wp()
             return self._fetch_api()
         headers = {"User-Agent": FUNDPRINT_UA}
         with httpx.Client(timeout=30.0, follow_redirects=True) as client:
@@ -149,9 +178,56 @@ class PortfolioPageScraper(Scraper):
         logger.info("%s portfolio API: %d companies", self._config.firm_name, len(results))
         return content, self._config.url
 
+    def _fetch_wp(self) -> tuple[bytes, str]:
+        """Paginate a WordPress REST post-type feed and resolve its taxonomy.
+
+        WP returns a bare JSON array per page and reports the page count in the
+        X-WP-TotalPages header. We accumulate every page, fetch the taxonomy map
+        (id -> sector name) once, and emit a self-describing
+        {"results": [...], "taxonomy": {id: name}} blob so parse() stays pure.
+        Provenance is the human portfolio page, not the wp-json endpoint.
+        """
+        headers = {"User-Agent": FUNDPRINT_UA, "Accept": "application/json"}
+        results: list[dict[str, Any]] = []
+        with httpx.Client(timeout=30.0, follow_redirects=True) as client:
+            taxonomy: dict[str, str] = {}
+            if self._config.api_taxonomy_url:
+                tax_resp = client.get(
+                    self._config.api_taxonomy_url,
+                    params={"per_page": "100"},
+                    headers=headers,
+                )
+                tax_resp.raise_for_status()
+                taxonomy = {
+                    str(t["id"]): t.get("name", "") for t in tax_resp.json()
+                }
+
+            page = 1
+            total_pages = 1
+            while page <= total_pages and page <= MAX_API_PAGES:
+                params = {**self._config.api_params, "page": str(page)}
+                resp = client.get(self._config.api_url, params=params, headers=headers)
+                resp.raise_for_status()
+                batch = resp.json()
+                if not batch:
+                    break
+                results.extend(batch)
+                total_pages = int(resp.headers.get("X-WP-TotalPages", 1) or 1)
+                page += 1
+                if page <= total_pages:
+                    time.sleep(REQUEST_DELAY_SEC)
+
+        content = json.dumps({"results": results, "taxonomy": taxonomy}).encode()
+        logger.info(
+            "%s WP portfolio feed: %d raw items", self._config.firm_name, len(results)
+        )
+        return content, self._config.url
+
     def parse(self, content: bytes) -> list[dict[str, Any]]:
         """Parse the portfolio listing into staging rows using this config."""
         if self._config.api_url:
+            if self._config.api_style == "wp":
+                return parse_portfolio_wp(content, self._config)
             return parse_portfolio_json(content, self._config)
         return parse_portfolio_html(content, self._config)
 
@@ -215,6 +291,59 @@ def parse_portfolio_html(
                 tag = tag_el.get_text(strip=True)
                 if tag:
                     sector_tags.append(tag)
+
+        rows.append({
+            "pe_firm_name": config.firm_name,
+            "portfolio_name": portfolio_name,
+            "portfolio_url": portfolio_url,
+            "description": description,
+            "sector_tags": sector_tags,
+            "listed_as_of": date.today().isoformat(),
+        })
+
+    return rows
+
+
+def parse_portfolio_wp(
+    content: bytes, config: PortfolioPageConfig
+) -> list[dict[str, Any]]:
+    """Parse a WordPress REST feed ({"results": [...], "taxonomy": {...}}).
+
+    Pure function - no HTTP, no side effects. Tests call this directly. Reads
+    the rendered title/excerpt/link fields, resolves the taxonomy-id list into
+    sector names, and - when sector_allowlist is set - keeps only items carrying
+    at least one allowed sector (dropping CSR / career-pathway entries that
+    share the same post type but are not portfolio companies).
+    """
+    import html
+
+    data = json.loads(content)
+    taxonomy = data.get("taxonomy", {})
+    allow = set(config.sector_allowlist)
+    rows = []
+
+    for item in data.get("results", []):
+        portfolio_name = html.unescape(
+            (item.get("title", {}).get("rendered") or "").strip()
+        )
+        if not portfolio_name:
+            continue
+
+        sector_tags = [
+            html.unescape(taxonomy.get(str(tid), "")).strip()
+            for tid in item.get(config.api_taxonomy_field, [])
+            if taxonomy.get(str(tid))
+        ]
+        # Keep only genuine portfolio companies when an allowlist is configured.
+        if allow and not (allow & set(sector_tags)):
+            continue
+
+        portfolio_url = (item.get("link") or "").strip() or None
+
+        desc_raw = item.get("excerpt", {}).get("rendered") or ""
+        description = (
+            BeautifulSoup(desc_raw, "html.parser").get_text(" ", strip=True) or None
+        )
 
         rows.append({
             "pe_firm_name": config.firm_name,
