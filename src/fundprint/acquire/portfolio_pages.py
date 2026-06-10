@@ -110,7 +110,13 @@ PE_FIRM_CONFIGS: list[PortfolioPageConfig] = [
     ),
     PortfolioPageConfig(
         firm_name="Blackstone",
-        url="https://www.blackstone.com/the-firm/asset-management/",
+        # Blackstone has no single human portfolio-companies page (the listing
+        # is rendered per business line, and /investment/<slug>/ permalinks
+        # redirect to the homepage). The public, authoritative source we fetch
+        # from is the WP REST investment feed itself, so that is the provenance
+        # URL recorded on every row - it is live and a reviewer can search it
+        # for a given company name.
+        url="https://www.blackstone.com/wp-json/wp/v2/investment?per_page=100",
         api_url="https://www.blackstone.com/wp-json/wp/v2/investment",
         api_params={"per_page": "100"},
         api_style="wp",
