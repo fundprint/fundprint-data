@@ -72,6 +72,14 @@ class NppesScraper(Scraper):
         headers = {"User-Agent": FUNDPRINT_UA, "Accept": "application/json"}
         results: list[dict[str, Any]] = []
 
+        # NPPES does prefix/partial name matching only with a trailing wildcard;
+        # a bare brand name requires an exact match and returns nothing. Append
+        # one when the caller hasn't, so "action behavior" finds "ACTION
+        # BEHAVIOR CENTERS LLC".
+        org_query = self._org_name
+        if org_query and "*" not in org_query:
+            org_query = org_query + "*"
+
         with httpx.Client(timeout=30.0) as client:
             skip = 0
             while skip <= NPPES_MAX_SKIP and len(results) < self._max_records:
@@ -86,7 +94,7 @@ class NppesScraper(Scraper):
                 # can miss brand clinics that lack the taxonomy, so use one or
                 # the other: name search when a brand is given, else taxonomy.
                 if self._org_name:
-                    params["organization_name"] = self._org_name
+                    params["organization_name"] = org_query
                 elif self._taxonomy:
                     params["taxonomy_description"] = self._taxonomy
                 resp = client.get(NPPES_API_URL, params=params, headers=headers)
@@ -104,7 +112,7 @@ class NppesScraper(Scraper):
         document = {"result_count": len(results), "results": results}
         content = json.dumps(document).encode()
         if self._org_name:
-            criterion = f"organization_name={self._org_name.replace(' ', '+')}"
+            criterion = f"organization_name={org_query.replace(' ', '+')}"
         else:
             criterion = f"taxonomy_description={self._taxonomy.replace(' ', '+')}"
         source_url = (

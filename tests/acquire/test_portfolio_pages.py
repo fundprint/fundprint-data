@@ -199,6 +199,58 @@ class TestPeFirmConfigs:
         assert cfg.api_taxonomy_field == "investment-type"
         assert "Healthcare" in cfg.sector_allowlist
 
+    def test_charlesbank_is_html_mode(self):
+        cfg = _configs_by_firm["Charlesbank"]
+        assert not cfg.api_url  # HTML mode, no JSON API
+        assert "PORTFOLIO-TILE" in cfg.item_selector
+        assert cfg.name_selector and cfg.link_selector
+
+
+# A snippet shaped like Charlesbank's portfolio tiles: <li> wrapping an
+# <a class="PORTFOLIO-TILE"> with the name in <h2> and description in the
+# first <p>. Action Behavior Centers (its PE-backed ABA chain) is included.
+_CHARLESBANK_HTML = b"""
+<ul>
+  <li class="mb-f">
+    <a class="PORTFOLIO-TILE" href="/investments/action-behavior-centers/">
+      <h2>Action Behavior Centers</h2>
+      <p>Personalized autism therapy</p>
+      <p>Current</p>
+    </a>
+  </li>
+  <li class="mb-f">
+    <a class="PORTFOLIO-TILE" href="/investments/access-medical-clinic/">
+      <h2>Access Medical Clinic</h2>
+      <p>Rural healthcare platform</p>
+    </a>
+  </li>
+</ul>
+"""
+
+
+class TestParseCharlesbankHtml:
+    def test_parses_both_tiles(self):
+        cfg = _configs_by_firm["Charlesbank"]
+        rows = parse_portfolio_html(_CHARLESBANK_HTML, cfg)
+        assert {r["portfolio_name"] for r in rows} == {
+            "Action Behavior Centers",
+            "Access Medical Clinic",
+        }
+
+    def test_description_and_relative_url_resolved(self):
+        cfg = _configs_by_firm["Charlesbank"]
+        by_name = {r["portfolio_name"]: r for r in parse_portfolio_html(_CHARLESBANK_HTML, cfg)}
+        abc = by_name["Action Behavior Centers"]
+        assert abc["description"] == "Personalized autism therapy"
+        assert abc["portfolio_url"] == (
+            "https://www.charlesbank.com/investments/action-behavior-centers/"
+        )
+
+    def test_firm_name_stamped(self):
+        cfg = _configs_by_firm["Charlesbank"]
+        rows = parse_portfolio_html(_CHARLESBANK_HTML, cfg)
+        assert all(r["pe_firm_name"] == "Charlesbank" for r in rows)
+
 
 # A WordPress REST payload shaped like Blackstone's /wp/v2/investment feed,
 # mixing a real portfolio company, an allowlisted-sector company, and a CSR /

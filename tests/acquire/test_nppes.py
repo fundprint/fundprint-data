@@ -133,3 +133,26 @@ class TestNppesFetch:
         rows = parse_nppes_json(content)
         assert {r["npi"] for r in rows} == {"1588030589", "1356713762"}
         assert NPPES_API_URL in url
+
+    @respx.mock
+    def test_org_name_gets_trailing_wildcard(self):
+        """A bare brand name must be sent with a trailing * for partial match."""
+        route = respx.get(NPPES_API_URL).mock(
+            return_value=httpx.Response(200, content=_sample_bytes())
+        )
+        scraper = NppesScraper(organization_name="action behavior")
+        _, url = scraper.fetch()
+
+        sent = route.calls.last.request.url
+        assert sent.params["organization_name"] == "action behavior*"
+        # The provenance URL reflects the wildcarded query too.
+        assert "organization_name=action+behavior*" in url
+
+    @respx.mock
+    def test_org_name_existing_wildcard_not_doubled(self):
+        route = respx.get(NPPES_API_URL).mock(
+            return_value=httpx.Response(200, content=_sample_bytes())
+        )
+        scraper = NppesScraper(organization_name="hopebridge*")
+        scraper.fetch()
+        assert route.calls.last.request.url.params["organization_name"] == "hopebridge*"

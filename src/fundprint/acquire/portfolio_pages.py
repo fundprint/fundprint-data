@@ -124,6 +124,18 @@ PE_FIRM_CONFIGS: list[PortfolioPageConfig] = [
         api_taxonomy_field="investment-type",
         sector_allowlist=_BLACKSTONE_SECTORS,
     ),
+    # Charlesbank serves its portfolio as static, server-rendered HTML: each
+    # company is an <a class="PORTFOLIO-TILE"> tile inside an <li>, with the
+    # name in an <h2> and a one-line description in the first <p>. Owner of
+    # Action Behavior Centers, a major PE-backed ABA chain.
+    PortfolioPageConfig(
+        firm_name="Charlesbank",
+        url="https://www.charlesbank.com/portfolio/",
+        item_selector="li:has(a.PORTFOLIO-TILE)",
+        name_selector="h2",
+        description_selector="p",
+        link_selector="a",
+    ),
 ]
 
 _configs_by_firm: dict[str, PortfolioPageConfig] = {
