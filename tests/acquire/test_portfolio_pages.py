@@ -205,6 +205,52 @@ class TestPeFirmConfigs:
         assert "PORTFOLIO-TILE" in cfg.item_selector
         assert cfg.name_selector and cfg.link_selector
 
+    def test_arsenal_is_html_mode(self):
+        cfg = _configs_by_firm["Arsenal Capital Partners"]
+        assert not cfg.api_url
+        assert "portfolio_tile" in cfg.item_selector
+        assert cfg.name_selector and cfg.link_selector
+
+
+# A snippet shaped like Arsenal's portfolio tiles: <span class="portfolio_tile">
+# wrapping an <a>, with the short name in <span class="typo_small"> and the
+# descriptor in a <p>. Hopebridge (its PE-backed ABA chain) is included.
+_ARSENAL_HTML = b"""
+<div class="tile_grid">
+  <span class="portfolio_tile portfolio_tile-healthcare">
+    <a class="base_link" href="/portfolio/hopebridge">
+      <div class="portfolio_tile--inner">
+        <span class="typo_small">Hopebridge</span>
+        <p class="typo_paragraph typo_paragraph-bold">Autism Therapy Services</p>
+      </div>
+    </a>
+  </span>
+  <span class="portfolio_tile portfolio_tile-industrial">
+    <a class="base_link" href="/portfolio/accella">
+      <div class="portfolio_tile--inner">
+        <span class="typo_small">Accella</span>
+        <p class="typo_paragraph typo_paragraph-bold">Formulated Polyurethane Products</p>
+      </div>
+    </a>
+  </span>
+</div>
+"""
+
+
+class TestParseArsenalHtml:
+    def test_parses_both_tiles(self):
+        cfg = _configs_by_firm["Arsenal Capital Partners"]
+        rows = parse_portfolio_html(_ARSENAL_HTML, cfg)
+        assert {r["portfolio_name"] for r in rows} == {"Hopebridge", "Accella"}
+
+    def test_hopebridge_fields(self):
+        cfg = _configs_by_firm["Arsenal Capital Partners"]
+        by_name = {r["portfolio_name"]: r for r in parse_portfolio_html(_ARSENAL_HTML, cfg)}
+        hb = by_name["Hopebridge"]
+        assert hb["description"] == "Autism Therapy Services"
+        assert hb["portfolio_url"] == "https://www.arsenalcapital.com/portfolio/hopebridge"
+        assert hb["pe_firm_name"] == "Arsenal Capital Partners"
+
 
 # A snippet shaped like Charlesbank's portfolio tiles: <li> wrapping an
 # <a class="PORTFOLIO-TILE"> with the name in <h2> and description in the

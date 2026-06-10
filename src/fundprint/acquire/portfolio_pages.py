@@ -136,6 +136,18 @@ PE_FIRM_CONFIGS: list[PortfolioPageConfig] = [
         description_selector="p",
         link_selector="a",
     ),
+    # Arsenal Capital also serves static HTML: each company is a
+    # <span class="portfolio_tile"> with the short name in <span class="typo_small">
+    # and the descriptor in the bold paragraph. Owner of Hopebridge, a major
+    # PE-backed ABA chain.
+    PortfolioPageConfig(
+        firm_name="Arsenal Capital Partners",
+        url="https://www.arsenalcapital.com/portfolio/",
+        item_selector="span.portfolio_tile",
+        name_selector="span.typo_small",
+        description_selector="p",
+        link_selector="a",
+    ),
 ]
 
 _configs_by_firm: dict[str, PortfolioPageConfig] = {
