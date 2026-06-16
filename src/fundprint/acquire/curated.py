@@ -50,12 +50,17 @@ class CuratedAcquisition:
     source_url: str
     description: str
     sector_tags: list[str] = field(default_factory=lambda: ["Autism/ABA"])
+    # Owner-type label. Most chains are PE-backed, but a few are owned by other
+    # institutional financial owners; we record the type honestly rather than
+    # calling everything "private equity". Maps to parent_pe_firm.firm_type.
+    firm_type: str = "private_equity"
 
 
 # Verified ownership facts. Each source_url was confirmed reachable and to state
-# the ownership at curation time (June 2026). Pension funds / family offices are
-# deliberately excluded here pending an editorial call on whether they count as
-# "PE-backed"; only unambiguous PE ownership is listed.
+# the ownership at curation time (June 2026). Most entries are private-equity
+# ownership; a few are other institutional financial owners (pension funds,
+# family offices). Those carry a non-default firm_type so the dashboard can
+# label them honestly rather than implying they are private equity.
 CURATED_ACQUISITIONS: list[CuratedAcquisition] = [
     CuratedAcquisition(
         pe_firm_name="Thomas H. Lee Partners",
@@ -92,6 +97,35 @@ CURATED_ACQUISITIONS: list[CuratedAcquisition] = [
         description=(
             "Trumpet Behavioral Health joined KKR-backed BlueSprig Pediatrics "
             "in 2023 (~40 locations), making KKR the ultimate PE owner."
+        ),
+    ),
+    CuratedAcquisition(
+        pe_firm_name="Ontario Teachers' Pension Plan",
+        portfolio_name="Acorn Health",
+        firm_type="pension_fund",
+        source_url=(
+            "https://www.otpp.com/en-ca/about-us/news-and-insights/2021/"
+            "ontario-teachers-acquires-majority-interest-in-acorn-health/"
+        ),
+        description=(
+            "Ontario Teachers' Pension Plan acquired a majority stake in Acorn "
+            "Health, a national ABA provider, from MBF Healthcare Partners "
+            "(Aug 2021). Owner is a pension fund, not a private-equity firm."
+        ),
+    ),
+    CuratedAcquisition(
+        pe_firm_name="Moran Capital Partners",
+        portfolio_name="Butterfly Effects",
+        firm_type="family_office",
+        source_url=(
+            "https://www.prweb.com/releases/"
+            "butterfly_effects_completes_acquisition_of_autism_treatment_solutions_llc/"
+            "prweb12936969.htm"
+        ),
+        description=(
+            "Butterfly Effects, a national in-home/in-center ABA provider, is a "
+            "portfolio company of Moran Capital Partners, LLC. Owner is a family "
+            "office / private holding company, not a traditional PE fund."
         ),
     ),
 ]

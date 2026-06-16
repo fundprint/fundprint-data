@@ -60,6 +60,7 @@ def _upsert_parent_pe_firm(
     embedding_model: str,
     source_record_id: str,
     extracted_at: datetime,
+    firm_type: str = "private_equity",
 ) -> str:
     """Return the id of an existing active parent_pe_firm row, or insert one.
 
@@ -87,12 +88,12 @@ def _upsert_parent_pe_firm(
     conn.execute(
         """
         INSERT INTO parent_pe_firm (
-            id, name,
+            id, name, firm_type,
             name_embedding, name_embedding_model,
             source_record_ids, confidence_score, confidence_method,
             resolver_version, extracted_at
         ) VALUES (
-            %s, %s,
+            %s, %s, %s,
             %s::vector, %s,
             %s::uuid[], %s, %s,
             %s, %s
@@ -101,6 +102,7 @@ def _upsert_parent_pe_firm(
         (
             firm_id,
             firm_name,
+            firm_type,
             _fmt_vec(name_vec),
             embedding_model,
             [source_record_id],
@@ -262,6 +264,7 @@ def resolve_portfolio(
     firm_name: str = "KKR",
     only_names: list[str] | set[str] | None = None,
     dry_run: bool = False,
+    firm_type: str = "private_equity",
 ) -> dict[str, int]:
     """Resolve PE-portfolio staging rows into entity rows and ownership claims.
 
@@ -297,6 +300,11 @@ def resolve_portfolio(
     dry_run:
         When ``True``, compute all counts but write nothing; the transaction is
         rolled back before the function returns.
+    firm_type:
+        Owner-type label for the ``parent_pe_firm`` row when it is first
+        inserted (``'private_equity'``, ``'pension_fund'``, ``'family_office'``
+        or ``'other'``).  Only applied on insert; existing firm rows are
+        reused unchanged.
 
     Returns
     -------
@@ -392,6 +400,7 @@ def resolve_portfolio(
             embedding_model=embedding_model,
             source_record_id=first_source_record_id,
             extracted_at=extracted_at,
+            firm_type=firm_type,
         )
 
     if firm_upserted:

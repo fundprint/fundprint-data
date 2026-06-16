@@ -33,6 +33,27 @@ class TestCuratedList:
         urls = [e.source_url for e in CURATED_ACQUISITIONS]
         assert len(urls) == len(set(urls))
 
+    def test_firm_type_is_a_known_label(self):
+        allowed = {"private_equity", "pension_fund", "family_office", "other"}
+        for e in CURATED_ACQUISITIONS:
+            assert e.firm_type in allowed
+
+    def test_institutional_owners_are_labelled_honestly(self):
+        by_owner = {e.portfolio_name: e for e in CURATED_ACQUISITIONS}
+        # These two chains are owned by non-PE institutional owners and must
+        # not be mislabelled as private equity.
+        assert by_owner["Acorn Health"].firm_type == "pension_fund"
+        assert by_owner["Butterfly Effects"].firm_type == "family_office"
+
+    def test_firm_type_defaults_to_private_equity(self):
+        entry = CuratedAcquisition(
+            pe_firm_name="Some PE Firm",
+            portfolio_name="Some Company",
+            source_url="https://example.com/deal",
+            description="desc",
+        )
+        assert entry.firm_type == "private_equity"
+
 
 class TestWriteStagingRow:
     def test_insert_carries_firm_company_and_source(self):

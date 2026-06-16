@@ -42,6 +42,16 @@ def build_parser() -> argparse.ArgumentParser:
         ),
     )
     p.add_argument(
+        "--firm-type",
+        default="private_equity",
+        choices=["private_equity", "pension_fund", "family_office", "other"],
+        help=(
+            "Owner-type label applied to the parent_pe_firm row on insert "
+            "(default: private_equity). Use for non-PE institutional owners "
+            "such as pension funds or family offices."
+        ),
+    )
+    p.add_argument(
         "--dry-run",
         action="store_true",
         help=(
@@ -72,6 +82,7 @@ def main() -> int:
             firm_name=args.firm,
             only_names=only_names,
             dry_run=args.dry_run,
+            firm_type=args.firm_type,
         )
         if not args.dry_run:
             conn.commit()

@@ -89,12 +89,13 @@ SELECT
     oe.id        AS owner_entity_id,
     oe.name      AS owner_entity_name,
     oe.state_of_incorporation,
-    ppf.id       AS parent_pe_firm_id,
-    ppf.name     AS parent_pe_firm_name,
+    ppf.id        AS parent_pe_firm_id,
+    ppf.name      AS parent_pe_firm_name,
     ppf.hq_state,
     vpc.confidence_score,
     vpc.confidence_method,
-    vpc.validation_run_id
+    vpc.validation_run_id,
+    ppf.firm_type AS parent_pe_firm_type
 FROM v_published_claims vpc
 JOIN owner_entity oe ON oe.id = vpc.owner_entity_id
 JOIN parent_pe_firm ppf ON ppf.id = vpc.parent_pe_firm_id

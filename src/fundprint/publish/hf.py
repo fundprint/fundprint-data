@@ -100,6 +100,17 @@ position on ABA therapy itself.
 Every row traces to a public URL. Confidence scores and method tags are included
 for every ownership claim so consumers can apply their own threshold.
 
+### Owner types
+
+Most ownership chains trace to a traditional private-equity firm. A small number of
+chains are owned by other institutional financial owners — pension funds or family
+offices — that operate them like PE-backed platforms. Rather than mislabel those as
+private equity, the ultimate owner is tagged honestly via the `firm_type` field on
+`parent_pe_firm` (`private_equity`, `pension_fund`, `family_office`, or `other`).
+For example, Acorn Health is owned by a pension fund (Ontario Teachers') and Butterfly
+Effects by a family office (Moran Capital Partners). Consumers who want strictly
+PE-backed clinics can filter on `firm_type = 'private_equity'`.
+
 ## What this dataset is NOT
 
 - It is not a clinical quality or outcomes dataset.
@@ -153,8 +164,9 @@ for every ownership claim so consumers can apply their own threshold.
   have higher recall.
 - LLM-inferred links carry inherent uncertainty; confidence scores reflect this.
 - Acquisition dates may be "circa year" estimates when exact dates are not in public filings.
-- This dataset covers PE-backed clinics only; independent and non-PE-backed chains are
-  out of scope per the methodology definition.
+- This dataset covers institutionally-owned chains (private equity plus a few pension
+  funds / family offices, distinguished by `firm_type`); independent and owner-operated
+  chains are out of scope per the methodology definition.
 
 ## Corrections and contact
 
