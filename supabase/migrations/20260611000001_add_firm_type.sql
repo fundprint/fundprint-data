@@ -6,8 +6,11 @@
 -- explicitly so the dashboard and exports can show it honestly. Existing rows
 -- default to 'private_equity', which is correct for every firm ingested so far.
 
+-- Idempotent: this column was first applied directly against the database, so
+-- a migration runner replaying the ledger would otherwise fail with 42701
+-- ("column already exists"). IF NOT EXISTS makes the migration safe to re-run.
 ALTER TABLE parent_pe_firm
-    ADD COLUMN firm_type text NOT NULL DEFAULT 'private_equity'
+    ADD COLUMN IF NOT EXISTS firm_type text NOT NULL DEFAULT 'private_equity'
     CHECK (firm_type IN (
         'private_equity', 'pension_fund', 'family_office', 'other'
     ));

@@ -36,5 +36,11 @@ target-version = "py312"
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP"]
 
+[tool.ruff.lint.per-file-ignores]
+# This script emits a self-contained HTML validation tool: its body is an
+# embedded HTML/JS template where hard-wrapping lines would break the markup
+# and hurt readability, so the line-length rule does not apply here.
+"scripts/build_validation_html.py" = ["E501"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
