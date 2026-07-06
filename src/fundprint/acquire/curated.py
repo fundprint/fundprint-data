@@ -63,15 +63,19 @@ class CuratedAcquisition:
 # label them honestly rather than implying they are private equity.
 CURATED_ACQUISITIONS: list[CuratedAcquisition] = [
     CuratedAcquisition(
+        # Brand stored as "Centria" (not "Centria Autism") so the clinic linker's
+        # normalized name-prefix match catches NPPES orgs named "CENTRIA",
+        # "CENTRIA HEALTHCARE", and "CENTRIA AUTISM".
         pe_firm_name="Thomas H. Lee Partners",
-        portfolio_name="Centria Autism",
+        portfolio_name="Centria",
         source_url=(
             "https://www.pehub.com/"
             "thomas-h-lee-partners-buys-centria-in-400-mln-plus-deal/"
         ),
         description=(
-            "Centria Autism (Centria Healthcare), a national ABA provider, was "
-            "recapitalized by Thomas H. Lee Partners in a $400M+ deal (Dec 2019)."
+            "Centria (Centria Healthcare / Centria Autism), a national ABA "
+            "provider, was recapitalized by Thomas H. Lee Partners in a $400M+ "
+            "deal (Dec 2019)."
         ),
     ),
     CuratedAcquisition(
