@@ -104,6 +104,28 @@ def _load_owners(conn: Any) -> list[tuple[str, str]]:
     return owners
 
 
+def _load_existing_location_keys(conn: Any) -> set[tuple[str, str | None, str]]:
+    """Return existing clinic keys (owner_id, state, normalized city).
+
+    Used to de-duplicate directory-sourced centers (which have no NPI) against
+    clinics already gathered from NPPES or a previous directory run, so the same
+    physical center is not counted twice. Keyed by owner + state + city because a
+    self-reported directory listing does not carry an NPI to match on.
+    """
+    rows = conn.execute(
+        """
+        SELECT owner_entity_id, state, city
+        FROM clinic
+        WHERE superseded_by IS NULL AND owner_entity_id IS NOT NULL
+        """
+    ).fetchall()
+    return {
+        (str(owner_id), state, normalize(city))
+        for owner_id, state, city in rows
+        if city
+    }
+
+
 def _load_unpromoted_clinics(conn: Any) -> list[dict]:
     """Return staged provider rows that do not yet have a clinic row by NPI."""
     rows = conn.execute(
@@ -236,12 +258,16 @@ def link_clinics(*, dry_run: bool = False, chunk_size: int = 20) -> dict[str, in
     try:
         owners = _load_owners(c)
         staged = _load_unpromoted_clinics(c)
+        location_keys = _load_existing_location_keys(c)
     finally:
         c.close()
 
     summary["staged_seen"] = len(staged)
-    # Brand-match each staged row, de-duplicating by NPI within this run so the
-    # exact+wildcard NPPES pulls don't create two clinics for the same NPI.
+    # Brand-match each staged row. Rows with an NPI (NPPES) are de-duplicated by
+    # NPI within this run. Rows without an NPI (owner location directories) are
+    # de-duplicated by (owner, state, city) against clinics that already exist
+    # and against each other, so a directory center is not counted twice with an
+    # NPPES record for the same physical center.
     matched: list[tuple[dict, str]] = []
     seen_npi: set[str] = set()
     for row in staged:
@@ -249,10 +275,15 @@ def link_clinics(*, dry_run: bool = False, chunk_size: int = 20) -> dict[str, in
         if not owner_id:
             continue
         npi = row.get("npi")
-        if npi and npi in seen_npi:
-            continue
         if npi:
+            if npi in seen_npi:
+                continue
             seen_npi.add(npi)
+        else:
+            key = (owner_id, row.get("state"), normalize(row.get("city")))
+            if not key[2] or key in location_keys:
+                continue
+            location_keys.add(key)
         matched.append((row, owner_id))
     summary["matched"] = len(matched)
     logger.info("link_clinics: %d staged, %d brand-matched", len(staged), len(matched))
@@ -260,7 +291,7 @@ def link_clinics(*, dry_run: bool = False, chunk_size: int = 20) -> dict[str, in
     if not matched:
         return summary
     if dry_run:
-        logger.info("dry_run=True — not writing; summary=%s", summary)
+        logger.info("dry_run=True, not writing; summary=%s", summary)
         return summary
 
     # One embed call for every matched clinic name (stay under Voyage rate limit).
