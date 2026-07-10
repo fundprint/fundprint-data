@@ -70,6 +70,10 @@ TRACKED_BRANDS: list[str] = [
     "Behavior Analysis Center for Autism",
     "Priorities ABA",
     "Total Spectrum Autism Services",
+    # ACES (Comprehensive Educational Services) -> General Atlantic. Its centers
+    # register as "ACES 2020, LLC"; the bare "ACES" is too short and collides
+    # with unrelated orgs, so the specific legal name is used.
+    "ACES 2020",
 ]
 
 

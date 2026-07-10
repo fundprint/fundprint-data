@@ -323,6 +323,31 @@ CURATED_ACQUISITIONS: list[CuratedAcquisition] = [
             "making Gryphon the ultimate private-equity owner."
         ),
     ),
+    CuratedAcquisition(
+        # ACES (Comprehensive Educational Services), founded by Kristin Farmer,
+        # received a strategic investment from General Atlantic in January 2020.
+        # Its centers register in NPPES under the legal entity "ACES 2020, LLC"
+        # (formed the year of the investment); one record's NPPES other-names are
+        # literally "ACES" and "COMPREHENSIVE EDUCATIONAL SERVICES, INC.",
+        # confirming the identity. Brand is stored as "ACES 2020" (not the bare
+        # "ACES", which is too short and collides with unrelated dental,
+        # anesthesia, and evaluation-service orgs) so the name-prefix match stays
+        # specific to ACES's "ACES 2020, LLC" behavioral-health centers.
+        pe_firm_name="General Atlantic",
+        portfolio_name="ACES 2020",
+        source_url=(
+            "https://www.generalatlantic.com/media-article/"
+            "aces-and-general-atlantic-announce-strategic-partnership/"
+        ),
+        description=(
+            "ACES (Comprehensive Educational Services), a Western-US ABA "
+            "provider founded by Kristin Farmer, received a strategic investment "
+            "from General Atlantic (a global growth-equity firm) in January 2020. "
+            "Its centers register under the legal entity 'ACES 2020, LLC', whose "
+            "NPPES alternate names include 'ACES' and 'Comprehensive Educational "
+            "Services, Inc.', making General Atlantic the private-equity owner."
+        ),
+    ),
 ]
 
 
