@@ -91,6 +91,30 @@ CURATED_ACQUISITIONS: list[CuratedAcquisition] = [
         ),
     ),
     CuratedAcquisition(
+        # "Monarch Behavioral Therapy BII, LLC" is the single legal entity under
+        # which Behavioral Innovations operates its Maryland and Colorado ABA
+        # centers, so those clinics roll up to Tenex through Behavioral
+        # Innovations. Evidence: the federal NPI registry (NPPES) records this
+        # entity's alternate organization name as "Behavioral Innovations", and
+        # Behavioral Innovations' own site lists Maryland centers in the same
+        # cities as the entity's Maryland clinics (Cockeysville, Columbia,
+        # Linthicum Heights, Silver Spring, Waldorf, Windsor Mill). Brand stored
+        # as "Monarch Behavioral Therapy" so the linker's name-prefix match
+        # catches the NPPES "MONARCH BEHAVIORAL THERAPY BII, LLC" orgs.
+        pe_firm_name="Tenex Capital Management",
+        portfolio_name="Monarch Behavioral Therapy",
+        source_url="https://behavioral-innovations.com/location/maryland/",
+        description=(
+            "Monarch Behavioral Therapy BII, LLC operates Behavioral "
+            "Innovations' Maryland and Colorado ABA centers. The NPI registry "
+            "records the entity's alternate name as 'Behavioral Innovations', "
+            "and Behavioral Innovations lists Maryland centers in the same "
+            "cities. Behavioral Innovations is owned by Tenex Capital "
+            "Management (acquired from Shore Capital Partners in 2024), so "
+            "Tenex is the ultimate private-equity owner."
+        ),
+    ),
+    CuratedAcquisition(
         # Trumpet was rolled up by KKR-backed BlueSprig, so KKR is the PE owner.
         pe_firm_name="KKR",
         portfolio_name="Trumpet Behavioral Health",

@@ -50,6 +50,10 @@ TRACKED_BRANDS: list[str] = [
     "Butterfly Effects",
     "Centria",
     "Behavioral Innovations",
+    # Behavioral Innovations operates its Maryland and Colorado centers under the
+    # legal entity "Monarch Behavioral Therapy BII, LLC" (NPPES alternate name
+    # "Behavioral Innovations"), so it is pulled as its own brand.
+    "Monarch Behavioral Therapy",
 ]
 
 
