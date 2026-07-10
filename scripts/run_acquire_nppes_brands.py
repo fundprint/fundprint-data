@@ -60,6 +60,16 @@ TRACKED_BRANDS: list[str] = [
     "Caravel Autism Health",
     # Key Autism Services -> Cane Investment Partners (private investment firm).
     "Key Autism Services",
+    # LEARN Behavioral federation -> Gryphon Investors. LEARN keeps each brand's
+    # own name, so its ABA centers register under these distinctive names.
+    # "Behavioral Concepts" and "SPARKS" are omitted: those names collide with
+    # unrelated NPPES organizations (over-capture risk).
+    "Autism Spectrum Therapies",
+    "Trellis Services",
+    "Tandem Therapy Services",
+    "Behavior Analysis Center for Autism",
+    "Priorities ABA",
+    "Total Spectrum Autism Services",
 ]
 
 

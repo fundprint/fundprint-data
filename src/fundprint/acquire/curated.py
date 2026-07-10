@@ -228,6 +228,101 @@ CURATED_ACQUISITIONS: list[CuratedAcquisition] = [
             "an institutional private investor, not a traditional buyout PE fund."
         ),
     ),
+    # --- LEARN Behavioral federation (Gryphon Investors) ---------------------
+    # LEARN Behavioral is majority-owned by Gryphon Investors (invested 2019,
+    # per Gryphon's own portfolio page https://www.gryphon-inv.com/companies/
+    # learn-behavioral/). LEARN runs as a federation of distinct, locally
+    # recognized ABA brands rather than one name, and lists those brands on its
+    # own site (source_url below). Each brand below is therefore attributed to
+    # Gryphon through LEARN. Only brands whose name is distinctive enough for a
+    # clean NPPES name-prefix match are included; LEARN's "Behavioral Concepts"
+    # and "SPARKS" are deliberately omitted because those names collide with
+    # unrelated organizations in the registry (over-capture risk).
+    CuratedAcquisition(
+        pe_firm_name="Gryphon Investors",
+        portfolio_name="Autism Spectrum Therapies",
+        source_url=(
+            "https://learnbehavioral.com/careers/working-at-learn-behavioral"
+            "#autism-spectrum-therapies"
+        ),
+        description=(
+            "Autism Spectrum Therapies (AST) is a California-based ABA provider "
+            "and one of the brands in LEARN Behavioral's network. LEARN "
+            "Behavioral is majority-owned by Gryphon Investors (invested 2019), "
+            "making Gryphon the ultimate private-equity owner."
+        ),
+    ),
+    CuratedAcquisition(
+        pe_firm_name="Gryphon Investors",
+        portfolio_name="Trellis Services",
+        source_url=(
+            "https://learnbehavioral.com/careers/working-at-learn-behavioral"
+            "#trellis-services"
+        ),
+        description=(
+            "Trellis Services, a Maryland-based ABA provider, is a brand in LEARN "
+            "Behavioral's network. LEARN Behavioral is majority-owned by Gryphon "
+            "Investors (invested 2019), making Gryphon the private-equity owner."
+        ),
+    ),
+    CuratedAcquisition(
+        pe_firm_name="Gryphon Investors",
+        portfolio_name="Tandem Therapy Services",
+        source_url=(
+            "https://learnbehavioral.com/careers/working-at-learn-behavioral"
+            "#tandem-therapy-services"
+        ),
+        description=(
+            "Tandem Therapy Services, a Nevada-based ABA provider, is a brand in "
+            "LEARN Behavioral's network. LEARN Behavioral is majority-owned by "
+            "Gryphon Investors (invested 2019), making Gryphon the PE owner."
+        ),
+    ),
+    CuratedAcquisition(
+        pe_firm_name="Gryphon Investors",
+        portfolio_name="Behavior Analysis Center for Autism",
+        source_url=(
+            "https://learnbehavioral.com/careers/working-at-learn-behavioral"
+            "#behavior-analysis-center-for-autism"
+        ),
+        description=(
+            "Behavior Analysis Center for Autism (BACA), an Indiana ABA provider "
+            "known for verbal-behavior specialization, joined LEARN Behavioral's "
+            "network. LEARN is majority-owned by Gryphon Investors (invested "
+            "2019), making Gryphon the ultimate private-equity owner."
+        ),
+    ),
+    CuratedAcquisition(
+        pe_firm_name="Gryphon Investors",
+        portfolio_name="Priorities ABA",
+        source_url=(
+            "https://learnbehavioral.com/careers/working-at-learn-behavioral"
+            "#priorities-aba"
+        ),
+        description=(
+            "Priorities ABA is a brand in LEARN Behavioral's network. LEARN "
+            "Behavioral is majority-owned by Gryphon Investors (invested 2019), "
+            "making Gryphon the ultimate private-equity owner."
+        ),
+    ),
+    CuratedAcquisition(
+        # Stored under the full registered name "Total Spectrum Autism Services"
+        # (not the shorter brand "Total Spectrum") so the name-prefix match stays
+        # specific to LEARN's ABA entity and does not capture the unrelated
+        # "Total Spectrum" counseling / speech / mental-health orgs in NPPES.
+        pe_firm_name="Gryphon Investors",
+        portfolio_name="Total Spectrum Autism Services",
+        source_url=(
+            "https://learnbehavioral.com/careers/working-at-learn-behavioral"
+            "#total-spectrum"
+        ),
+        description=(
+            "Total Spectrum (registered as Total Spectrum Autism Services), a "
+            "Midwest ABA provider, is a brand in LEARN Behavioral's network. "
+            "LEARN is majority-owned by Gryphon Investors (invested 2019), "
+            "making Gryphon the ultimate private-equity owner."
+        ),
+    ),
 ]
 
 
