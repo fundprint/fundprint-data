@@ -41,6 +41,15 @@ _CONFIDENCE_METHOD = "fuzzy_high"
 # so a short name like "April" cannot capture unrelated clinics.
 _MIN_BRAND_LEN = 6
 
+# Owner brands that are correctly identified but out of scope for this dataset:
+# the parent firm is one we track, yet the named entity does not operate ABA or
+# autism-therapy clinics. Geode Health, for example, is a KKR-backed outpatient
+# mental-health provider whose clinic names prefix-match its brand but are not
+# autism therapy. Excluding it here keeps any future linker run from
+# re-capturing those out-of-scope clinics. Names are stored normalized (see
+# normalize()).
+_OUT_OF_SCOPE_BRANDS = frozenset({"geodehealth"})
+
 _NON_ALNUM = re.compile(r"[^a-z0-9]+")
 
 
@@ -49,6 +58,17 @@ def normalize(name: str | None) -> str:
     if not name:
         return ""
     return _NON_ALNUM.sub("", name.lower())
+
+
+def is_linkable_brand(name: str | None) -> bool:
+    """Whether an owner brand may be used for clinic matching.
+
+    Excludes brands that are too short to be distinctive and brands that are
+    correctly identified but out of scope for this dataset (see
+    _OUT_OF_SCOPE_BRANDS). Pure so it can be tested without a database.
+    """
+    norm = normalize(name)
+    return len(norm) >= _MIN_BRAND_LEN and norm not in _OUT_OF_SCOPE_BRANDS
 
 
 def match_owner(
@@ -78,7 +98,7 @@ def _load_owners(conn: Any) -> list[tuple[str, str]]:
     owners = [
         (normalize(name), str(oid))
         for oid, name in rows
-        if len(normalize(name)) >= _MIN_BRAND_LEN
+        if is_linkable_brand(name)
     ]
     owners.sort(key=lambda t: len(t[0]), reverse=True)
     return owners

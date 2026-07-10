@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from fundprint.resolve.clinic_link import match_owner, normalize
+from fundprint.resolve.clinic_link import is_linkable_brand, match_owner, normalize
 
 
 class TestNormalize:
@@ -43,3 +43,21 @@ class TestMatchOwner:
 
     def test_empty_name_returns_none(self):
         assert match_owner("", self.OWNERS) is None
+
+
+class TestIsLinkableBrand:
+    def test_normal_brand_is_linkable(self):
+        assert is_linkable_brand("Blue Sprig") is True
+
+    def test_short_brand_is_not_linkable(self):
+        # Fewer than _MIN_BRAND_LEN normalized characters.
+        assert is_linkable_brand("April") is False
+
+    def test_out_of_scope_brand_is_not_linkable(self):
+        # Geode Health is a KKR-backed mental-health provider, out of scope for
+        # an ABA / autism dataset. It must never be used for clinic matching.
+        assert is_linkable_brand("Geode Health") is False
+        assert is_linkable_brand("GEODE HEALTH") is False
+
+    def test_none_is_not_linkable(self):
+        assert is_linkable_brand(None) is False
