@@ -54,6 +54,12 @@ TRACKED_BRANDS: list[str] = [
     # legal entity "Monarch Behavioral Therapy BII, LLC" (NPPES alternate name
     # "Behavioral Innovations"), so it is pulled as its own brand.
     "Monarch Behavioral Therapy",
+    # Proud Moments ABA -> Nautic Partners (acquired from Audax, Feb 2025).
+    "Proud Moments",
+    # Caravel Autism Health -> GTCR (acquired from Frazier Healthcare, 2024).
+    "Caravel Autism Health",
+    # Key Autism Services -> Cane Investment Partners (private investment firm).
+    "Key Autism Services",
 ]
 
 

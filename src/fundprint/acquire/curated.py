@@ -175,6 +175,59 @@ CURATED_ACQUISITIONS: list[CuratedAcquisition] = [
             "office / private holding company, not a traditional PE fund."
         ),
     ),
+    CuratedAcquisition(
+        # Nautic Partners acquired Proud Moments ABA from Audax Private Equity
+        # on Feb 3, 2025, so Nautic is the current PE owner. Source is Audax's
+        # own exit announcement, which names Nautic as the buyer. Brand stored
+        # as "Proud Moments" so the clinic linker's normalized name-prefix match
+        # catches the NPPES "PROUD MOMENTS ABA OF <STATE>" orgs.
+        pe_firm_name="Nautic Partners",
+        portfolio_name="Proud Moments",
+        source_url=(
+            "https://www.audaxprivateequity.com/news/"
+            "audax-private-equity-completes-exit-of-proud-moments"
+        ),
+        description=(
+            "Proud Moments ABA, a national provider of applied behavior analysis "
+            "therapy for children with autism (70+ clinics across 12 states), was "
+            "acquired by Nautic Partners from Audax Private Equity on Feb 3, 2025. "
+            "Nautic Partners is the current private-equity owner."
+        ),
+    ),
+    CuratedAcquisition(
+        # GTCR acquired Caravel Autism Health from Frazier Healthcare Partners in
+        # 2024 and lists it as a current portfolio company. Brand stored as
+        # "Caravel Autism Health" (not just "Caravel") so the name-prefix match
+        # stays specific to the NPPES "CARAVEL AUTISM HEALTH" orgs.
+        pe_firm_name="GTCR",
+        portfolio_name="Caravel Autism Health",
+        source_url="https://www.gtcr.com/portfolio-company/caravel-autism-health/",
+        description=(
+            "Caravel Autism Health, an Upper-Midwest ABA provider (60+ locations "
+            "across eight states), was acquired by GTCR from Frazier Healthcare "
+            "Partners in 2024 and is a current GTCR portfolio company, making "
+            "GTCR the private-equity owner."
+        ),
+    ),
+    CuratedAcquisition(
+        # Key Autism Services is a portfolio company of Cane Investment Partners,
+        # which lists it on its portfolio page. Cane describes itself as "a
+        # private investment firm" providing expansion capital for mid- and
+        # long-term holdings, not a traditional buyout PE fund, so firm_type is
+        # "other" rather than "private_equity" to label the owner honestly.
+        # Brand stored as "Key Autism Services" so the name-prefix match catches
+        # the NPPES "KEY AUTISM SERVICES <STATE>, LLC" orgs.
+        pe_firm_name="Cane Investment Partners",
+        portfolio_name="Key Autism Services",
+        firm_type="other",
+        source_url="https://caneip.com/portfolio/",
+        description=(
+            "Key Autism Services, a multi-state ABA provider, is a portfolio "
+            "company of Cane Investment Partners, a private investment firm that "
+            "provides expansion capital for mid- and long-term holdings. Owner is "
+            "an institutional private investor, not a traditional buyout PE fund."
+        ),
+    ),
 ]
 
 
