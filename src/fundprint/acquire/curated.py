@@ -104,6 +104,25 @@ CURATED_ACQUISITIONS: list[CuratedAcquisition] = [
         ),
     ),
     CuratedAcquisition(
+        # BlueSprig (KKR-backed) acquired Florida Autism Center from Shore
+        # Capital in a ~$120M deal (2020); FAC now operates as a division of
+        # BlueSprig, so KKR is the ultimate PE owner. Brand stored as "Florida
+        # Autism Center" so the clinic linker's normalized name-prefix match
+        # catches the NPPES "FLORIDA AUTISM CENTER" orgs.
+        pe_firm_name="KKR",
+        portfolio_name="Florida Autism Center",
+        source_url=(
+            "https://www.prnewswire.com/news-releases/"
+            "bluesprig-and-fac-partner-to-build-a-national-leader-in-aba-therapy-services-301018648.html"
+        ),
+        description=(
+            "Florida Autism Center was acquired by KKR-backed BlueSprig "
+            "Pediatrics (from Shore Capital Partners) in a ~$120M deal (2020) "
+            "and now operates as a division of BlueSprig, making KKR the "
+            "ultimate private-equity owner."
+        ),
+    ),
+    CuratedAcquisition(
         pe_firm_name="Ontario Teachers' Pension Plan",
         portfolio_name="Acorn Health",
         firm_type="pension_fund",
