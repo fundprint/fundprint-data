@@ -47,6 +47,46 @@ def _source_urls(conn, source_record_ids) -> list[str]:
     return sorted(u for (u,) in rows if u)
 
 
+# ZIP-level geocoding for the map. Coordinates are ZIP Code Tabulation Area
+# centroids from the U.S. Census 2023 national gazetteer (public domain), bundled
+# at data/geo/zcta_centroids.json for reproducibility (no build-time API call).
+# ZIP-centroid precision is deliberate: the map is a national dot map, so we
+# place a clinic in its ZIP, not at a false-precision street pin.
+_CENTROIDS_PATH = Path(__file__).resolve().parent.parent / "data" / "geo" / "zcta_centroids.json"
+
+
+def _load_centroids() -> tuple[dict[str, list[float]], dict[str, list[float]]]:
+    """Return (exact ZIP5 -> [lat, lng], ZIP3 prefix -> mean [lat, lng])."""
+    try:
+        exact = json.loads(_CENTROIDS_PATH.read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        logger.warning("zcta centroids missing at %s; clinics will be unplaced", _CENTROIDS_PATH)
+        return {}, {}
+    buckets: dict[str, list[list[float]]] = {}
+    for z, latlng in exact.items():
+        buckets.setdefault(z[:3], []).append(latlng)
+    zip3 = {
+        pre: [
+            round(sum(p[0] for p in pts) / len(pts), 5),
+            round(sum(p[1] for p in pts) / len(pts), 5),
+        ]
+        for pre, pts in buckets.items()
+    }
+    return exact, zip3
+
+
+def _coords(zipc, exact, zip3) -> tuple[float | None, float | None]:
+    """Best ZIP centroid for a clinic: exact ZIP5, then ZIP3 prefix, else none."""
+    if not zipc:
+        return None, None
+    digits = "".join(ch for ch in str(zipc) if ch.isdigit())
+    if len(digits) < 5:
+        return None, None
+    z = digits[:5]
+    hit = exact.get(z) or zip3.get(z[:3])
+    return (hit[0], hit[1]) if hit else (None, None)
+
+
 def build_snapshot(conn) -> dict:
     # --- clinics (the search + heatmap substrate) -----------------------------
     # Join each published clinic to its owner brand and ultimate acquirer via
@@ -66,10 +106,12 @@ def build_snapshot(conn) -> dict:
         """
     ).fetchall()
 
+    exact_centroids, zip3_centroids = _load_centroids()
     clinics = []
     for r in clinic_rows:
         (cid, name, city, state, zipc, npi, conf, method, srids,
          owner_id, owner_name, firm_id, firm_name, firm_type) = r
+        lat, lng = _coords(zipc, exact_centroids, zip3_centroids)
         clinics.append(
             {
                 "id": str(cid),
@@ -78,6 +120,8 @@ def build_snapshot(conn) -> dict:
                 "state": state,
                 "zip": zipc,
                 "npi": npi,
+                "lat": lat,
+                "lng": lng,
                 "owner_id": str(owner_id),
                 "owner_name": owner_name,
                 "firm_id": str(firm_id),
@@ -202,6 +246,7 @@ def build_snapshot(conn) -> dict:
 
     current_owner_count = sum(1 for a in acquirers if a["clinic_count"] > 0)
     pe_clinics = sum(1 for c in clinics if c["firm_type"] == "private_equity")
+    located_clinics = sum(1 for c in clinics if c["lat"] is not None)
 
     snapshot = {
         "meta": {
@@ -219,6 +264,9 @@ def build_snapshot(conn) -> dict:
             "states": len(states),
             "pe_clinics": pe_clinics,
             "non_pe_clinics": len(clinics) - pe_clinics,
+            # How many clinics carry a map coordinate (ZIP centroid). Disclosed
+            # on the map so a reader knows the dot count vs the tracked count.
+            "located_clinics": located_clinics,
         },
         "acquirers": acquirers,
         "brands": brands,
