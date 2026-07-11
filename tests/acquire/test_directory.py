@@ -5,6 +5,7 @@ from __future__ import annotations
 from fundprint.acquire.directory import (
     BlueSprigDirectory,
     parse_jsonld_location,
+    parse_us_address,
 )
 
 _PAGE_WITH_JSONLD = """
@@ -73,11 +74,9 @@ class TestParseJsonLd:
 
 class TestSeoFallback:
     def test_row_from_seo_title(self):
-        center = {
-            "url": "https://x/centers/y/",
-            "seo_title": "ABA Therapy & Autism Treatment Center in Round Rock, TX",
-        }
-        row = BlueSprigDirectory._row_from_seo(center)
+        row = BlueSprigDirectory._row_from_seo(
+            "ABA Therapy & Autism Treatment Center in Round Rock, TX"
+        )
         assert row is not None
         assert row["city"] == "Round Rock"
         assert row["state"] == "TX"
@@ -85,5 +84,32 @@ class TestSeoFallback:
         assert row["npi"] is None
 
     def test_row_from_seo_returns_none_without_city(self):
-        center = {"url": "https://x", "seo_title": "BlueSprig Autism Centers"}
-        assert BlueSprigDirectory._row_from_seo(center) is None
+        assert BlueSprigDirectory._row_from_seo("BlueSprig Autism Centers") is None
+
+
+class TestParseUsAddress:
+    def test_comma_separated(self):
+        assert parse_us_address("5701 W Talavi Blvd., Glendale, AZ 85306") == (
+            "5701 W Talavi Blvd.",
+            "Glendale",
+            "AZ",
+            "85306",
+        )
+
+    def test_suite_then_city_without_comma(self):
+        # City runs straight on from the suite with no comma before it.
+        street, city, state, zc = parse_us_address(
+            "6511 W Loop 1604 N., Suite 123 San Antonio, TX 78254"
+        )
+        assert city == "San Antonio"
+        assert state == "TX"
+        assert zc == "78254"
+
+    def test_zip_plus_four_is_trimmed(self):
+        _, city, state, zc = parse_us_address(
+            "6419 W Loop 1604 N., Suite 108, San Antonio, TX 78254-5763"
+        )
+        assert (city, state, zc) == ("San Antonio", "TX", "78254")
+
+    def test_returns_none_without_state_zip(self):
+        assert parse_us_address("123 Main Street, Somewhere") is None

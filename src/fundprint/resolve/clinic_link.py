@@ -333,3 +333,127 @@ def link_clinics(*, dry_run: bool = False, chunk_size: int = 20) -> dict[str, in
 
     logger.info("link_clinics complete: %s", summary)
     return summary
+
+
+# Source type stamped on owner location-directory snapshots (see
+# fundprint.acquire.directory). Kept as a literal so this module does not import
+# the acquire layer.
+_DIRECTORY_SOURCE_TYPE = "owner_location_directory"
+
+
+def link_directory_owner(
+    owner_entity_name: str,
+    source_host: str,
+    *,
+    dry_run: bool = False,
+    chunk_size: int = 20,
+) -> dict[str, int]:
+    """Attach an explicit-owner directory source's staged centers to one owner.
+
+    Some directories (e.g. ACES) list generically-named pages that all belong to
+    a single known owner, so the brand-prefix linker cannot attribute them. This
+    attaches every center staged from ``source_host`` to ``owner_entity_name``,
+    de-duplicating against that owner's existing clinics by (state, city, street)
+    so a center already present from NPPES or a previous run is not added twice.
+    Idempotent via that key; the resolution method is recorded as ``fuzzy_high``
+    (a high-confidence name match), the source as ``owner_location_directory``.
+    """
+    summary = {"staged_seen": 0, "matched": 0, "clinics_written": 0}
+
+    c = db.connect()
+    try:
+        row = c.execute(
+            "SELECT id FROM owner_entity WHERE name = %s AND superseded_by IS NULL",
+            (owner_entity_name,),
+        ).fetchone()
+        if row is None:
+            raise ValueError(f"owner_entity {owner_entity_name!r} not found")
+        owner_id = str(row[0])
+        existing = c.execute(
+            "SELECT state, city, address_line1 FROM clinic "
+            "WHERE owner_entity_id = %s AND superseded_by IS NULL",
+            (owner_id,),
+        ).fetchall()
+        keys = {(s, normalize(ci), normalize(ad)) for s, ci, ad in existing}
+        staged = c.execute(
+            """
+            SELECT s.source_record_id, s.raw_name, s.address_line1, s.city,
+                   s.state, s.zip
+            FROM staging_bacb_provider s
+            JOIN source_record sr ON sr.id = s.source_record_id
+            WHERE sr.source_type = %s AND sr.source_url LIKE %s
+            """,
+            (_DIRECTORY_SOURCE_TYPE, f"%{source_host}%"),
+        ).fetchall()
+    finally:
+        c.close()
+
+    summary["staged_seen"] = len(staged)
+    # De-duplicate by (state, city, street) against existing clinics and each
+    # other, so distinct centers in one city are kept but a repeat is not.
+    matched: list[tuple[dict, str]] = []
+    for srid, raw_name, addr1, city, state, zc in staged:
+        key = (state, normalize(city), normalize(addr1))
+        if key in keys:
+            continue
+        keys.add(key)
+        matched.append(
+            (
+                {
+                    "source_record_id": str(srid),
+                    "raw_name": raw_name,
+                    "address_line1": addr1,
+                    "city": city,
+                    "state": state,
+                    "zip": zc,
+                    "npi": None,
+                },
+                owner_id,
+            )
+        )
+    summary["matched"] = len(matched)
+    logger.info(
+        "link_directory_owner(%s): %d staged, %d new after dedup",
+        owner_entity_name,
+        len(staged),
+        len(matched),
+    )
+    if not matched or dry_run:
+        return summary
+
+    names = [row["raw_name"] for row, _ in matched]
+    vectors, model = embed(names)
+    extracted_at = datetime.now(UTC)
+    for i in range(0, len(matched), chunk_size):
+        batch = list(zip(matched[i : i + chunk_size], vectors[i : i + chunk_size]))
+        for attempt in range(1, 6):
+            cc = db.connect()
+            try:
+                for ((row, oid), vec) in batch:
+                    _write_clinic_and_claim(
+                        cc,
+                        clinic_row=row,
+                        owner_id=oid,
+                        name_vec=vec,
+                        embedding_model=model,
+                        extracted_at=extracted_at,
+                    )
+                    summary["clinics_written"] += 1
+                cc.commit()
+                cc.close()
+                break
+            except (psycopg.OperationalError, psycopg.InterfaceError):
+                try:
+                    cc.close()
+                except Exception:
+                    pass
+                logger.warning(
+                    "db drop on chunk %d attempt %d, retrying",
+                    i // chunk_size + 1,
+                    attempt,
+                )
+                time.sleep(3)
+        else:
+            logger.error("chunk %d failed after retries", i // chunk_size + 1)
+    logger.info("link_directory_owner complete: %s", summary)
+    return summary
