@@ -67,6 +67,13 @@ _JSONLD_RE = re.compile(
 )
 _LOC_RE = re.compile(r"<loc>([^<]+)</loc>", re.I)
 _CITY_STATE_RE = re.compile(r"\bin\s+([A-Za-z .'\-]+?),\s*([A-Z]{2})\b")
+# A Drupal "address" field: semantic <span class="..."> parts under one wrapper.
+_DRUPAL_ADDR_BLOCK_RE = re.compile(
+    r"field--name-field-location-address.*?</p>", re.S | re.I
+)
+_DRUPAL_SPAN_RE = re.compile(
+    r'<span class="([a-z0-9\-]+)"[^>]*>(.*?)</span>', re.S | re.I
+)
 _LOCATION_TYPES = {"MedicalBusiness", "MedicalClinic", "LocalBusiness", "Physician"}
 # Splits a US "street, City, ST ZIP" tail. City may lack a leading comma.
 _STATE_ZIP_RE = re.compile(
@@ -163,6 +170,38 @@ def parse_us_address(value: str) -> tuple[str | None, str | None, str, str] | No
         else:
             city, street = None, pre
     return (street or None, city or None, state, zip_code)
+
+
+def parse_drupal_address_field(content: bytes | str) -> dict[str, str | None] | None:
+    """Read a Drupal ``address`` field's semantic spans into address parts.
+
+    Drupal's address field renders each part in its own class-named span
+    (``address-line1``, ``locality``, ``administrative-area``, ``postal-code``),
+    which is a machine-readable contract the same way schema.org JSON-LD is, not
+    brittle scraping of free text. Returns None when no ``ST ZIP`` is present.
+    Pure function for testing.
+    """
+    text = content.decode("utf-8", "replace") if isinstance(content, bytes) else content
+    block = _DRUPAL_ADDR_BLOCK_RE.search(text)
+    if block is None:
+        return None
+    parts = {
+        cls: html.unescape(val.strip())
+        for cls, val in _DRUPAL_SPAN_RE.findall(block.group(0))
+    }
+    state = (parts.get("administrative-area") or "").strip()[:2].upper()
+    zip_code = (parts.get("postal-code") or "").strip()[:5]
+    if not (state and zip_code.isdigit()):
+        return None
+    street = " ".join(
+        p for p in (parts.get("address-line1"), parts.get("address-line2")) if p
+    ).strip()
+    return {
+        "address_line1": street or None,
+        "city": (parts.get("locality") or "").strip() or None,
+        "state": state,
+        "zip": zip_code,
+    }
 
 
 def _write_staging_row(conn: Any, row: dict[str, Any], source_record_id: str) -> None:
@@ -376,9 +415,65 @@ class AcesDirectory(_DirectorySource):
         return centers
 
 
+class ProudMomentsDirectory(_DirectorySource):
+    """The Proud Moments directory (an explicit-owner source, all Nautic / Proud Moments).
+
+    Proud Moments lists every center as a card on ``/our-locations`` linking to a
+    detail page, whose Drupal ``address`` field carries the street address in
+    class-named spans. Every center belongs to Proud Moments, so they are
+    attributed to the ``Proud Moments`` owner entity directly. NPPES registers
+    only ~14 organization NPIs for the chain; the public directory lists ~109
+    operating centers, which is exactly the undercount this layer exists to fill.
+    """
+
+    key = "proudmoments"
+    host = "proudmomentsaba.com"
+    base = "https://www.proudmomentsaba.com"
+    owner_name = "Proud Moments"
+
+    _CARD_LINK_RE = re.compile(
+        r'class="location-card".*?<a href="(https://www\.proudmomentsaba\.com/[a-z0-9\-]+)"',
+        re.S | re.I,
+    )
+
+    def _center_urls(self, client: httpx.Client) -> list[str]:
+        resp = client.get(f"{self.base}/our-locations")
+        resp.raise_for_status()
+        return sorted(set(self._CARD_LINK_RE.findall(resp.text)))
+
+    @staticmethod
+    def _name_from_slug(url: str) -> str:
+        slug = url.rstrip("/").rsplit("/", 1)[-1]
+        slug = re.sub(r"-aba-therapy$", "", slug)
+        return f"Proud Moments ABA - {slug.replace('-', ' ').title()}"
+
+    def _centers(self, client: httpx.Client) -> list[dict[str, Any]]:
+        centers: list[dict[str, Any]] = []
+        for url in self._center_urls(client):
+            try:
+                resp = client.get(url)
+                resp.raise_for_status()
+            except Exception:
+                logger.exception("directory fetch failed for %s", url)
+                continue
+            addr = parse_drupal_address_field(resp.content)
+            if addr is None:
+                continue
+            centers.append(
+                {
+                    "url": url,
+                    "content": resp.content,
+                    "row": {"raw_name": self._name_from_slug(url), "npi": None, **addr},
+                }
+            )
+            time.sleep(REQUEST_DELAY_SEC)
+        return centers
+
+
 _SOURCES: dict[str, type[_DirectorySource]] = {
     BlueSprigDirectory.key: BlueSprigDirectory,
     AcesDirectory.key: AcesDirectory,
+    ProudMomentsDirectory.key: ProudMomentsDirectory,
 }
 
 

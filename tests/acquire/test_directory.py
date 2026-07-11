@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from fundprint.acquire.directory import (
     BlueSprigDirectory,
+    ProudMomentsDirectory,
+    parse_drupal_address_field,
     parse_jsonld_location,
     parse_us_address,
 )
@@ -113,3 +115,56 @@ class TestParseUsAddress:
 
     def test_returns_none_without_state_zip(self):
         assert parse_us_address("123 Main Street, Somewhere") is None
+
+
+_DRUPAL_ADDR = """
+<div class="field field--name-field-location-address field--item">
+<p class="address" translate="no"><span class="address-line1">851 North Wilson St.</span><br>
+<span class="locality">Crestview</span>, <span class="administrative-area">FL</span>
+<span class="postal-code">32536</span><br>
+<span class="country">United States</span></p></div>
+"""
+
+_DRUPAL_ADDR_TWO_LINES = """
+<div class="field field--name-field-location-address field--item">
+<p class="address"><span class="address-line1">2929 Coors Blvd. NW</span>
+<span class="address-line2">Suite 100</span>
+<span class="locality">Albuquerque</span> <span class="administrative-area">NM</span>
+<span class="postal-code">87120</span></p></div>
+"""
+
+
+class TestParseDrupalAddress:
+    def test_reads_class_named_spans(self):
+        assert parse_drupal_address_field(_DRUPAL_ADDR) == {
+            "address_line1": "851 North Wilson St.",
+            "city": "Crestview",
+            "state": "FL",
+            "zip": "32536",
+        }
+
+    def test_joins_address_line2(self):
+        row = parse_drupal_address_field(_DRUPAL_ADDR_TWO_LINES)
+        assert row["address_line1"] == "2929 Coors Blvd. NW Suite 100"
+        assert (row["city"], row["state"], row["zip"]) == ("Albuquerque", "NM", "87120")
+
+    def test_accepts_bytes(self):
+        assert parse_drupal_address_field(_DRUPAL_ADDR.encode("utf-8"))["state"] == "FL"
+
+    def test_returns_none_without_address_block(self):
+        assert parse_drupal_address_field("<p>no address field here</p>") is None
+
+
+class TestProudMomentsSlug:
+    def test_strips_aba_therapy_suffix(self):
+        assert (
+            ProudMomentsDirectory._name_from_slug(
+                "https://www.proudmomentsaba.com/crestview-fl-aba-therapy"
+            )
+            == "Proud Moments ABA - Crestview Fl"
+        )
+
+    def test_keeps_named_learning_center(self):
+        assert ProudMomentsDirectory._name_from_slug(
+            "https://www.proudmomentsaba.com/albuquerque-coors-learning-center-aba-therapy"
+        ) == "Proud Moments ABA - Albuquerque Coors Learning Center"
