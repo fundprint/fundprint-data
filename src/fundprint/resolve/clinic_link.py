@@ -50,6 +50,33 @@ _MIN_BRAND_LEN = 6
 # normalize()).
 _OUT_OF_SCOPE_BRANDS = frozenset({"geodehealth"})
 
+# Addresses a chain registers with the provider registry that are not clinics:
+# corporate headquarters, billing offices, registered agents. Nothing in NPPES
+# marks an address as clinical, and a provider may register its head office as
+# the practice "LOCATION", so the registry hands these to us looking exactly like
+# a center.
+#
+# The bar for this list is direct evidence, not a heuristic. Both entries below
+# are corporate headquarters that the owner's OWN public location directory --
+# their own statement of which centers they operate -- does not list. Nothing is
+# added here on a hunch.
+#
+# A tempting heuristic was rejected: "many NPIs at one address means head
+# office". It is false. Action Behavior Centers registers three to four NPIs at
+# every one of its 35 Colorado centers, and Hopebridge does the same at real
+# Florida and Kentucky centers. Multi-NPI registration is a billing practice, not
+# an HQ signature, and keying on it would have deleted dozens of real clinics.
+#
+# Keyed by (normalized owner brand, normalized street).
+_ADMIN_ADDRESSES = frozenset({
+    # 350 Fifth Avenue is the Empire State Building. Proud Moments registers six
+    # NPIs in suite 6115; its own directory of 109 centers does not list it.
+    ("proudmoments", "3505thaveste6115"),
+    # ACES is headquartered in San Diego. Its own directory of 67 centers does
+    # not list this address.
+    ("aces2020", "5333missioncenterrdste110"),
+})
+
 _NON_ALNUM = re.compile(r"[^a-z0-9]+")
 
 
@@ -103,6 +130,14 @@ def is_linkable_brand(name: str | None) -> bool:
     return len(norm) >= _MIN_BRAND_LEN and norm not in _OUT_OF_SCOPE_BRANDS
 
 
+def is_admin_address(owner_name: str | None, address_line1: str | None) -> bool:
+    """Whether this owner/address pair is a head office rather than a clinic.
+
+    See _ADMIN_ADDRESSES. Pure so it can be tested without a database.
+    """
+    return (normalize(owner_name), normalize(address_line1)) in _ADMIN_ADDRESSES
+
+
 def match_owner(
     clinic_name: str,
     owners_by_brand: list[tuple[str, str]],
@@ -123,9 +158,19 @@ def match_owner(
 
 
 def _load_owners(conn: Any) -> list[tuple[str, str]]:
-    """Return [(normalized_brand, owner_id)] sorted longest brand first."""
+    """Return [(normalized_brand, owner_id)] sorted longest brand first.
+
+    In-home owners are excluded: they operate no centers, so every address the
+    registry holds for them is administrative, and linking them would publish
+    offices and apartments as clinics. Their ownership chain is published
+    separately and is unaffected.
+    """
     rows = conn.execute(
-        "SELECT id, name FROM owner_entity WHERE superseded_by IS NULL"
+        """
+        SELECT id, name FROM owner_entity
+        WHERE superseded_by IS NULL
+          AND service_model = 'center_based'
+        """
     ).fetchall()
     owners = [
         (normalize(name), str(oid))
@@ -309,11 +354,15 @@ def link_clinics(*, dry_run: bool = False, chunk_size: int = 20) -> dict[str, in
     # clinic no matter how many NPIs the chain registered there or how many
     # sources listed it. De-duplicating registry rows on NPI alone (the previous
     # behaviour) inflated any chain that enumerates several NPIs per address.
+    brand_by_owner_id = {oid: brand for brand, oid in owners}
     matched: list[tuple[dict, str]] = []
     seen_npi: set[str] = set()
     for row in staged:
         owner_id = match_owner(row["raw_name"], owners)
         if not owner_id:
+            continue
+        # A head office is not a clinic, however the registry labels it.
+        if is_admin_address(brand_by_owner_id.get(owner_id), row.get("address_line1")):
             continue
         npi = row.get("npi")
         if npi and npi in seen_npi:

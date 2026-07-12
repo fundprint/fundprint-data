@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from fundprint.resolve.clinic_link import (
+    is_admin_address,
     is_linkable_brand,
     match_owner,
     normalize,
@@ -95,6 +96,26 @@ class TestSiteKey:
         street = site_key(self.OWNER, "100 MAIN ST", "80020", "DENVER", "CO")
         city_only = site_key(self.OWNER, None, None, "DENVER", "CO")
         assert street != city_only
+
+
+class TestIsAdminAddress:
+    def test_corporate_hq_is_not_a_clinic(self):
+        # 350 Fifth Avenue is the Empire State Building. Proud Moments registers
+        # six NPIs in suite 6115 and its own directory does not list it.
+        assert is_admin_address("Proud Moments", "350 5TH AVE STE 6115") is True
+
+    def test_matching_is_normalized(self):
+        assert is_admin_address("proud moments", "350 5th Ave, Ste 6115") is True
+
+    def test_a_real_center_of_the_same_owner_is_kept(self):
+        assert is_admin_address("Proud Moments", "4961 TESLA DR STE A-C") is False
+
+    def test_same_address_under_another_owner_is_not_excluded(self):
+        # The list is keyed by owner AND street, so it cannot leak across owners.
+        assert is_admin_address("Blue Sprig", "350 5TH AVE STE 6115") is False
+
+    def test_missing_values_are_safe(self):
+        assert is_admin_address(None, None) is False
 
 
 class TestIsLinkableBrand:

@@ -147,6 +147,22 @@ def build_snapshot(conn) -> dict:
         """
     ).fetchall()
 
+    # Firms whose only ABA holding delivers therapy in the client's home and runs
+    # no centers. They correctly have zero clinics, but the ownership is real and
+    # sourced, so they stay on the map with an honest label rather than being
+    # dropped -- deleting them would understate PE presence in ABA.
+    in_home_firms = {
+        name
+        for (name,) in conn.execute(
+            """
+            SELECT DISTINCT ppf.name
+            FROM owner_entity oe
+            JOIN parent_pe_firm ppf ON ppf.id = oe.parent_pe_firm_id
+            WHERE oe.service_model = 'in_home' AND oe.superseded_by IS NULL
+            """
+        ).fetchall()
+    }
+
     # clinic counts per firm, from the joined clinic set above
     clinics_per_firm: dict[str, int] = {}
     brands_per_firm: dict[str, set] = {}
@@ -231,17 +247,21 @@ def build_snapshot(conn) -> dict:
     except Exception as exc:  # pragma: no cover - schema drift tolerance
         logger.warning("acquisition_event export skipped: %s", exc)
 
-    # Keep an owner in the table only if it currently has clinics OR it has a
-    # sourced history to show (e.g. Blackstone, which no longer owns any ABA
-    # clinics but whose CARD acquisition + bankruptcy is the canonical story).
-    # Owners with neither would render as a broken "0" row, so they are dropped.
+    # Keep an owner in the table if it currently has clinics, OR it has a sourced
+    # history to show (Blackstone, which no longer owns any ABA clinics but whose
+    # CARD acquisition and bankruptcy is the canonical story), OR its ABA holding
+    # is an in-home provider that runs no centers (Moran, Cane). The last case is
+    # a zero that means something specific, so it is labeled rather than dropped.
     firms_with_history = {e["firm_name"] for e in timeline if e["firm_name"]}
     for a in acquirers:
         a["former"] = a["clinic_count"] == 0 and a["name"] in firms_with_history
+        a["in_home"] = a["clinic_count"] == 0 and a["name"] in in_home_firms
     acquirers = [
         a
         for a in acquirers
-        if a["clinic_count"] > 0 or a["name"] in firms_with_history
+        if a["clinic_count"] > 0
+        or a["name"] in firms_with_history
+        or a["name"] in in_home_firms
     ]
 
     current_owner_count = sum(1 for a in acquirers if a["clinic_count"] > 0)
