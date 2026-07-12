@@ -43,7 +43,9 @@ class NppesScraper(Scraper):
     """Fetches ABA provider organizations from the NPPES NPI registry."""
 
     source_family = "nppes"
-    module_version = "0.1.0"
+    # 0.2.0: also extract the registry freshness fields (status, last_updated /
+    # certification_date, enumeration_date), which 0.1.0 discarded.
+    module_version = "0.2.0"
 
     def __init__(
         self,
@@ -139,8 +141,9 @@ class NppesScraper(Scraper):
                 """
                 INSERT INTO staging_bacb_provider
                     (source_record_id, raw_name, address_line1, city, state, zip,
-                     npi, credential_type)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                     npi, credential_type,
+                     registry_status, registry_last_updated, registry_enumerated_on)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                 """,
                 (
                     source_record_id,
@@ -151,6 +154,9 @@ class NppesScraper(Scraper):
                     row.get("zip"),
                     row.get("npi"),
                     row.get("credential_type"),
+                    row.get("registry_status"),
+                    row.get("registry_last_updated"),
+                    row.get("registry_enumerated_on"),
                 ),
             )
 
@@ -178,6 +184,14 @@ def parse_nppes_json(content: bytes) -> list[dict[str, Any]]:
             seen_npi.add(npi)
         rows.append(row)
     return rows
+
+
+def _iso_date(value: Any) -> str | None:
+    """Return an ISO date string NPPES gave us, or None. No reformatting."""
+    if not value:
+        return None
+    text = str(value).strip()[:10]
+    return text if len(text) == 10 and text[4] == "-" and text[7] == "-" else None
 
 
 def _extract_provider_row(res: dict[str, Any]) -> dict[str, Any] | None:
@@ -213,6 +227,19 @@ def _extract_provider_row(res: dict[str, Any]) -> dict[str, Any] | None:
         or None
     )
 
+    # Freshness. NPPES never marks a closed clinic closed -- status stays 'A'
+    # indefinitely -- so the only signal that a record may be dead is how long it
+    # has gone untouched. `last_updated` is the provider's last edit;
+    # `certification_date` is their last attestation that the record is correct.
+    # Take whichever is later, since either one is the provider saying "this is
+    # still true". Carried forward so downstream layers can flag or disclose a
+    # stale registration; see docs/ingestion.md.
+    dates = [d for d in (
+        _iso_date(basic.get("last_updated")),
+        _iso_date(basic.get("certification_date")),
+    ) if d]
+    touched = max(dates) if dates else None
+
     return {
         "raw_name": raw_name,
         "address_line1": (loc.get("address_1") or None),
@@ -221,4 +248,7 @@ def _extract_provider_row(res: dict[str, Any]) -> dict[str, Any] | None:
         "zip": postal,
         "npi": str(res.get("number")) if res.get("number") else None,
         "credential_type": credential_type,
+        "registry_status": (basic.get("status") or None),
+        "registry_last_updated": touched,
+        "registry_enumerated_on": _iso_date(basic.get("enumeration_date")),
     }

@@ -161,7 +161,8 @@ def _load_unpromoted_clinics(conn: Any) -> list[dict]:
     rows = conn.execute(
         """
         SELECT s.id, s.source_record_id, s.raw_name, s.address_line1,
-               s.city, s.state, s.zip, s.npi
+               s.city, s.state, s.zip, s.npi,
+               s.registry_status, s.registry_last_updated, s.registry_enumerated_on
         FROM staging_bacb_provider s
         WHERE s.npi IS NULL
            OR NOT EXISTS (
@@ -181,6 +182,9 @@ def _load_unpromoted_clinics(conn: Any) -> list[dict]:
             "state": r[5],
             "zip": r[6],
             "npi": r[7],
+            "registry_status": r[8],
+            "registry_last_updated": r[9],
+            "registry_enumerated_on": r[10],
         }
         for r in rows
     ]
@@ -208,12 +212,14 @@ def _write_clinic_and_claim(
             id, name, name_normalized, address_line1, city, state, zip, npi,
             owner_entity_id, name_embedding, name_embedding_model,
             source_record_ids, confidence_score, confidence_method,
-            resolver_version, extracted_at
+            resolver_version, extracted_at,
+            registry_status, registry_last_updated, registry_enumerated_on
         ) VALUES (
             %s, %s, %s, %s, %s, %s, %s, %s,
             %s, %s::vector, %s,
             %s::uuid[], %s, %s,
-            %s, %s
+            %s, %s,
+            %s, %s, %s
         )
         """,
         (
@@ -233,6 +239,11 @@ def _write_clinic_and_claim(
             _CONFIDENCE_METHOD,
             RESOLVER_VERSION,
             extracted_at,
+            # NULL for directory-sourced centers: they carry no registry record,
+            # and are current by construction rather than by timestamp.
+            clinic_row.get("registry_status"),
+            clinic_row.get("registry_last_updated"),
+            clinic_row.get("registry_enumerated_on"),
         ),
     )
     snippets = json.dumps(

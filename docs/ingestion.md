@@ -42,6 +42,20 @@ Every ingestion run produces, for each logical record:
 
 The snapshot blob is the truth. The parsed staging row is convenience. If the parser was wrong, we re-parse from the blob; we do not re-fetch.
 
+This is not a hypothetical. The NPPES parser (module 0.1.0) discarded the registry's freshness fields — `status`, `last_updated`, `certification_date`, `enumeration_date` — so nothing downstream could tell a live clinic from one that closed years ago. Module 0.2.0 extracts them, and `scripts/backfill_registry_freshness.py` recovered them for every already-staged row by re-parsing the stored blobs. No network call, no re-fetch, no lost history. Keep parsers lossy at your peril; keep blobs and you can always undo it.
+
+## Capture liveness, not just existence
+
+A source that tells you a provider *exists* is not telling you it exists *now*. NPPES is a register of identifiers, not an inventory of open businesses: an NPI is not deactivated when a clinic closes, and the record keeps reporting status `A` forever. A closed clinic and an open one are byte-identical.
+
+So for every source, ask what its liveness signal is, and stage it:
+
+- **Provider registries** (NPPES): the only signal is *staleness* — how long the record has gone untouched. Stage the timestamps. They are the only thing standing between the dataset and a growing population of ghost clinics.
+- **Owner location directories**: current by construction. An owner lists the centers it operates today. This is why a directory is worth more than its row count suggests.
+- **Enrollment and licensing files**: carry a real liveness signal, because a closed provider stops billing and is disenrolled or lapses.
+
+If a new source has no liveness signal at all, say so in this doc when you add it, and expect its rows to decay.
+
 ## Rate limits, retries, and politeness
 
 - All scrapers respect robots.txt unless we have written permission otherwise.

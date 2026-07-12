@@ -108,6 +108,62 @@ class TestParseNppesJson:
         assert rows == []
 
 
+class TestRegistryFreshness:
+    """NPPES never marks a closed clinic closed, so how stale a record is, is the
+    only liveness signal it gives. These fields were dropped by module 0.1.0."""
+
+    def _row(self, basic: dict) -> dict:
+        return _extract_provider_row(
+            {
+                "number": 1,
+                "basic": {"organization_name": "ACME ABA", **basic},
+                "addresses": [
+                    {"address_purpose": "LOCATION", "address_1": "1 A ST", "state": "TX"}
+                ],
+            }
+        )
+
+    def test_captures_status_and_dates(self):
+        row = self._row(
+            {
+                "status": "A",
+                "last_updated": "2024-11-05",
+                "enumeration_date": "2016-05-20",
+            }
+        )
+        assert row["registry_status"] == "A"
+        assert row["registry_last_updated"] == "2024-11-05"
+        assert row["registry_enumerated_on"] == "2016-05-20"
+
+    def test_takes_the_later_of_last_updated_and_certification(self):
+        # Either field is the provider saying "this is still true", so the later
+        # one is the freshest evidence the record is live.
+        row = self._row({"last_updated": "2019-01-01", "certification_date": "2025-06-30"})
+        assert row["registry_last_updated"] == "2025-06-30"
+
+        row = self._row({"last_updated": "2025-06-30", "certification_date": "2019-01-01"})
+        assert row["registry_last_updated"] == "2025-06-30"
+
+    def test_certification_alone_is_used(self):
+        row = self._row({"certification_date": "2021-03-04"})
+        assert row["registry_last_updated"] == "2021-03-04"
+
+    def test_missing_dates_are_none_not_a_crash(self):
+        row = self._row({"status": "A"})
+        assert row["registry_last_updated"] is None
+        assert row["registry_enumerated_on"] is None
+
+    def test_malformed_date_is_rejected(self):
+        row = self._row({"last_updated": "not-a-date"})
+        assert row["registry_last_updated"] is None
+
+    def test_absent_freshness_fields_do_not_break_older_fixtures(self):
+        # The pre-0.2.0 sample has no basic.status at all.
+        rows = parse_nppes_json(_sample_bytes())
+        assert rows[0]["registry_status"] is None
+        assert rows[0]["registry_last_updated"] is None
+
+
 class TestExtractProviderRow:
     def test_returns_none_without_any_name(self):
         res = {"number": 1, "basic": {}, "addresses": [], "taxonomies": []}
