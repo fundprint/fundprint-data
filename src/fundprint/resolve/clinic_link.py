@@ -160,15 +160,22 @@ def match_owner(
 def _load_owners(conn: Any) -> list[tuple[str, str]]:
     """Return [(normalized_brand, owner_id)] sorted longest brand first.
 
-    In-home owners are excluded: they operate no centers, so every address the
-    registry holds for them is administrative, and linking them would publish
-    offices and apartments as clinics. Their ownership chain is published
-    separately and is unaffected.
+    Two filters, and both are load-bearing:
+
+    * ``is_aba`` -- owner_entity also holds every non-ABA company scraped from a
+      PE firm's portfolio page (MyEyeDr., Heartland Dental, Del Taco). Against the
+      taxonomy-filtered API they never matched anything. Against the bulk registry
+      they match thousands of optometry and dental locations. Only ABA owners may
+      capture a clinic.
+    * ``service_model`` -- in-home owners operate no centers, so every address the
+      registry holds for them is administrative. Their ownership chain is
+      published separately and is unaffected.
     """
     rows = conn.execute(
         """
         SELECT id, name FROM owner_entity
         WHERE superseded_by IS NULL
+          AND is_aba
           AND service_model = 'center_based'
         """
     ).fetchall()
@@ -202,18 +209,23 @@ def _load_existing_site_keys(conn: Any) -> set[tuple[str, str, str]]:
 
 
 def _load_unpromoted_clinics(conn: Any) -> list[dict]:
-    """Return staged provider rows that do not yet have a clinic row by NPI."""
+    """Return every staged provider row; site_key decides what is already a clinic.
+
+    This used to skip rows whose NPI already had a clinic. That guard has to go:
+    one NPI can hold many locations. The bulk registry's Practice Location file
+    lists a chain's secondary sites under the same NPI as its primary, so an
+    NPI-based filter would discard every additional center a chain operates --
+    exactly the undercount the bulk file exists to fix.
+
+    Idempotence now rests entirely on site_key, which is the honest identity of a
+    clinic anyway (see link_clinics).
+    """
     rows = conn.execute(
         """
         SELECT s.id, s.source_record_id, s.raw_name, s.address_line1,
                s.city, s.state, s.zip, s.npi,
                s.registry_status, s.registry_last_updated, s.registry_enumerated_on
         FROM staging_bacb_provider s
-        WHERE s.npi IS NULL
-           OR NOT EXISTS (
-               SELECT 1 FROM clinic c
-               WHERE c.npi = s.npi AND c.superseded_by IS NULL
-           )
         ORDER BY s.raw_name
         """
     ).fetchall()
@@ -351,12 +363,17 @@ def link_clinics(*, dry_run: bool = False, chunk_size: int = 20) -> dict[str, in
     summary["staged_seen"] = len(staged)
     # Brand-match each staged row, then de-duplicate every row -- registry and
     # directory alike -- on its site_key, so one physical center yields one
-    # clinic no matter how many NPIs the chain registered there or how many
-    # sources listed it. De-duplicating registry rows on NPI alone (the previous
-    # behaviour) inflated any chain that enumerates several NPIs per address.
+    # clinic no matter how many NPIs the chain registered there, how many
+    # locations one NPI holds, or how many sources listed it.
+    #
+    # There is deliberately no NPI-based de-duplication. Keying on the NPI is
+    # wrong in both directions: several NPIs can share one address (which
+    # inflated Action Behavior Centers threefold), and one NPI can hold many
+    # addresses (which is how a chain registers its secondary centers in the bulk
+    # registry's Practice Location file). The address is the clinic. The NPI is
+    # a billing identifier and is not.
     brand_by_owner_id = {oid: brand for brand, oid in owners}
     matched: list[tuple[dict, str]] = []
-    seen_npi: set[str] = set()
     for row in staged:
         owner_id = match_owner(row["raw_name"], owners)
         if not owner_id:
@@ -365,8 +382,6 @@ def link_clinics(*, dry_run: bool = False, chunk_size: int = 20) -> dict[str, in
         if is_admin_address(brand_by_owner_id.get(owner_id), row.get("address_line1")):
             continue
         npi = row.get("npi")
-        if npi and npi in seen_npi:
-            continue
 
         if normalize(row.get("address_line1")) or normalize(row.get("city")):
             key = site_key(
@@ -387,8 +402,6 @@ def link_clinics(*, dry_run: bool = False, chunk_size: int = 20) -> dict[str, in
         if key in site_keys:
             continue
         site_keys.add(key)
-        if npi:
-            seen_npi.add(npi)
         matched.append((row, owner_id))
     summary["matched"] = len(matched)
     logger.info("link_clinics: %d staged, %d brand-matched", len(staged), len(matched))

@@ -19,3 +19,4 @@ samples/validation_*.html
 review_*.csv
 labels_*.json
 hand_validation*.csv
+.cache/
