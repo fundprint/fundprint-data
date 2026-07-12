@@ -309,13 +309,24 @@ def extract(archive: Path, brands: list[tuple[str, str]]) -> ExtractResult:
 
 
 def _load_aba_brands(conn: Any) -> list[tuple[str, str]]:
-    """Return [(normalized_brand, display_name)], longest first. ABA owners only."""
+    """Return [(normalized_brand, display_name)], longest first. ABA owners only.
+
+    Excludes ``directory_only`` owners. Some real ABA brands have names generic
+    enough that unrelated organizations in the national registry begin the same
+    way ("Behavioral Concepts", "SPARKS ABA"), and the linker matches by name
+    prefix, so using them here would attribute other companies' clinics to their
+    parent firm. Those owners are linked from their own published roster instead,
+    where nothing has to be inferred.
+    """
     from fundprint.resolve.clinic_link import is_linkable_brand, normalize
 
     rows = conn.execute(
         """
         SELECT name FROM owner_entity
-        WHERE superseded_by IS NULL AND is_aba AND service_model = 'center_based'
+        WHERE superseded_by IS NULL
+          AND is_aba
+          AND service_model = 'center_based'
+          AND NOT directory_only
         """
     ).fetchall()
     brands = [(normalize(n), n) for (n,) in rows if is_linkable_brand(n)]

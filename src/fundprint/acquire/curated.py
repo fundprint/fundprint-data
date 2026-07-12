@@ -323,6 +323,131 @@ CURATED_ACQUISITIONS: list[CuratedAcquisition] = [
             "making Gryphon the ultimate private-equity owner."
         ),
     ),
+    # ---- Chains found by ranking the whole registry, then verifying owners ---
+    # These were surfaced by ranking every ABA organization in the national
+    # provider registry by site count and researching the owners of the largest
+    # ones we did not already track. Most of the big untracked chains turned out
+    # NOT to be institutionally owned (Bierman is clinician-owned, Stride is
+    # family-owned, Intercare has been family-owned since 1979, Soar Health is
+    # venture-backed) and are therefore correctly absent from this dataset. These
+    # three are the ones with a private-equity owner and a fetchable public source.
+    CuratedAcquisition(
+        pe_firm_name="NexPhase Capital",
+        portfolio_name="Behavior Frontiers",
+        source_url=(
+            "https://www.prnewswire.com/news-releases/"
+            "behavior-frontiers-announces-sale-to-nexphase-capital-302445660.html"
+        ),
+        description=(
+            "Behavior Frontiers, a national ABA provider, was sold by Lorient "
+            "Capital to NexPhase Capital in May 2025. NexPhase is the current "
+            "private-equity owner."
+        ),
+    ),
+    CuratedAcquisition(
+        pe_firm_name="Zenyth Partners",
+        portfolio_name="Helping Hands Family",
+        source_url=(
+            "https://monroecap.com/press_release/"
+            "monroe-capital-supports-zenyth-partners-helping-hands-family/"
+        ),
+        description=(
+            "Helping Hands Family (HHF), a Mid-Atlantic ABA provider, was founded "
+            "as a platform by Zenyth Partners in 2019 and remains a Zenyth "
+            "portfolio company, confirmed in a November 2024 financing "
+            "announcement describing HHF as 'an existing portfolio company of "
+            "Zenyth Partners'."
+        ),
+    ),
+    # NOT INGESTED, deliberately: Alternative Behavior Strategies (ABS Kids, ~36
+    # sites) is reported to be owned by Petra Capital Partners via its MMC Health
+    # Services platform (2017). The only source found for that is a law firm's
+    # deal page, which serves 200 to curl but 403 to our HTTP client, so it cannot
+    # be fetched and content-hashed. A claim we cannot snapshot is a claim we do
+    # not publish, however plausible it is. Revisit when a fetchable primary
+    # source (a Petra portfolio page or an ABS announcement) is found.
+    # ---- LEARN Behavioral's remaining brands (Gryphon Investors) -------------
+    # LEARN publishes a single location roster covering all of its brands, and
+    # labels every center with the brand that runs it. That roster (read by
+    # fundprint.acquire.roster) is LEARN's own statement that these are its
+    # centers, and Gryphon's portfolio page is the statement that LEARN is
+    # Gryphon's. Both hops are sourced. These five brands were previously omitted
+    # for want of a safe way to identify their centers in the provider registry;
+    # the roster removes that need, because a roster does not have to be matched
+    # by name, it is published by the owner.
+    CuratedAcquisition(
+        pe_firm_name="Gryphon Investors",
+        portfolio_name="Wisconsin Early Autism Project",
+        source_url=(
+            "https://learnbehavioral.com/careers/working-at-learn-behavioral"
+            "#wisconsin-early-autism-project"
+        ),
+        description=(
+            "Wisconsin Early Autism Project (WEAP), a Wisconsin ABA provider, is "
+            "a brand in LEARN Behavioral's network. LEARN Behavioral is "
+            "majority-owned by Gryphon Investors (invested 2019), making Gryphon "
+            "the private-equity owner."
+        ),
+    ),
+    CuratedAcquisition(
+        pe_firm_name="Gryphon Investors",
+        portfolio_name="Little Leaves Behavioral Services",
+        source_url=(
+            "https://learnbehavioral.com/careers/working-at-learn-behavioral"
+            "#little-leaves-behavioral-services"
+        ),
+        description=(
+            "Little Leaves Behavioral Services, a Mid-Atlantic ABA provider, is a "
+            "brand in LEARN Behavioral's network. LEARN Behavioral is "
+            "majority-owned by Gryphon Investors (invested 2019), making Gryphon "
+            "the private-equity owner."
+        ),
+    ),
+    CuratedAcquisition(
+        # Name is too generic for the provider registry: unrelated organizations
+        # begin with "Behavioral Concepts". Marked directory_only, so it is linked
+        # only from LEARN's own roster and never used to match the registry.
+        pe_firm_name="Gryphon Investors",
+        portfolio_name="Behavioral Concepts",
+        source_url=(
+            "https://learnbehavioral.com/careers/working-at-learn-behavioral"
+            "#behavioral-concepts"
+        ),
+        description=(
+            "Behavioral Concepts (BCI), a Massachusetts ABA provider, is a brand "
+            "in LEARN Behavioral's network. LEARN Behavioral is majority-owned by "
+            "Gryphon Investors (invested 2019), making Gryphon the private-equity "
+            "owner."
+        ),
+    ),
+    CuratedAcquisition(
+        # Also too generic for the registry; directory_only. See above.
+        pe_firm_name="Gryphon Investors",
+        portfolio_name="SPARKS ABA",
+        source_url=(
+            "https://learnbehavioral.com/careers/working-at-learn-behavioral"
+            "#sparks-aba"
+        ),
+        description=(
+            "SPARKS ABA, an ABA provider, is a brand in LEARN Behavioral's "
+            "network. LEARN Behavioral is majority-owned by Gryphon Investors "
+            "(invested 2019), making Gryphon the private-equity owner."
+        ),
+    ),
+    CuratedAcquisition(
+        pe_firm_name="Gryphon Investors",
+        portfolio_name="Behavioral Development and Educational Services",
+        source_url=(
+            "https://learnbehavioral.com/careers/working-at-learn-behavioral"
+            "#behavioral-development-and-educational-services"
+        ),
+        description=(
+            "Behavioral Development and Educational Services (BDES) is a brand in "
+            "LEARN Behavioral's network. LEARN Behavioral is majority-owned by "
+            "Gryphon Investors (invested 2019), making Gryphon the private-equity "
+            "owner."
+        ),
+    ),
     CuratedAcquisition(
         # ACES (Comprehensive Educational Services), founded by Kristin Farmer,
         # received a strategic investment from General Atlantic in January 2020.
