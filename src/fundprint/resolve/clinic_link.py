@@ -60,6 +60,38 @@ def normalize(name: str | None) -> str:
     return _NON_ALNUM.sub("", name.lower())
 
 
+def zip5(zipc: str | None) -> str:
+    """First five digits of a ZIP, or '' when there aren't five."""
+    digits = "".join(ch for ch in str(zipc or "") if ch.isdigit())
+    return digits[:5] if len(digits) >= 5 else ""
+
+
+def site_key(
+    owner_id: str,
+    address_line1: str | None,
+    zipc: str | None,
+    city: str | None,
+    state: str | None,
+) -> tuple[str, str, str]:
+    """Identity of one physical service location, for de-duplication.
+
+    A clinic is a physical location, not a billing registration. A chain may hold
+    several NPIs at one address -- Action Behavior Centers registers six at 320 E
+    1st Ave Ste 101, Broomfield, under two legal-entity name variants -- so an
+    NPI is not a location identity and de-duplicating on it counts one center
+    many times.
+
+    The key is (owner, normalized street, ZIP5). The street retains its suite, so
+    two genuinely distinct clinics in one office park stay distinct. When a row
+    carries no street (some directory pages), fall back to (owner, state, city),
+    which is what the directory linker used before addresses were available.
+    """
+    street = normalize(address_line1)
+    if street:
+        return (owner_id, street, zip5(zipc))
+    return (owner_id, f"city:{normalize(city)}", (state or "").strip().upper())
+
+
 def is_linkable_brand(name: str | None) -> bool:
     """Whether an owner brand may be used for clinic matching.
 
@@ -104,25 +136,23 @@ def _load_owners(conn: Any) -> list[tuple[str, str]]:
     return owners
 
 
-def _load_existing_location_keys(conn: Any) -> set[tuple[str, str | None, str]]:
-    """Return existing clinic keys (owner_id, state, normalized city).
+def _load_existing_site_keys(conn: Any) -> set[tuple[str, str, str]]:
+    """Return the site_key of every live clinic, to de-duplicate new rows against.
 
-    Used to de-duplicate directory-sourced centers (which have no NPI) against
-    clinics already gathered from NPPES or a previous directory run, so the same
-    physical center is not counted twice. Keyed by owner + state + city because a
-    self-reported directory listing does not carry an NPI to match on.
+    Covers both directions the same key protects against: a directory center that
+    is already present from NPPES, and a second NPI enumeration at an address the
+    chain already has a clinic row for.
     """
     rows = conn.execute(
         """
-        SELECT owner_entity_id, state, city
+        SELECT owner_entity_id, address_line1, zip, city, state
         FROM clinic
         WHERE superseded_by IS NULL AND owner_entity_id IS NOT NULL
         """
     ).fetchall()
     return {
-        (str(owner_id), state, normalize(city))
-        for owner_id, state, city in rows
-        if city
+        site_key(str(owner_id), addr, zipc, city, state)
+        for owner_id, addr, zipc, city, state in rows
     }
 
 
@@ -250,7 +280,7 @@ def link_clinics(*, dry_run: bool = False, chunk_size: int = 20) -> dict[str, in
     Self-managing: loads data on one short-lived connection, embeds all matched
     clinic names in a single Voyage call, then writes in small chunks each on a
     fresh connection with retry (the hosted pooler intermittently drops large
-    or long transactions). Idempotent via the existing-clinic-by-NPI guard.
+    or long transactions). Idempotent via the existing-clinic site_key guard.
     """
     summary = {"staged_seen": 0, "matched": 0, "clinics_written": 0}
 
@@ -258,16 +288,16 @@ def link_clinics(*, dry_run: bool = False, chunk_size: int = 20) -> dict[str, in
     try:
         owners = _load_owners(c)
         staged = _load_unpromoted_clinics(c)
-        location_keys = _load_existing_location_keys(c)
+        site_keys = _load_existing_site_keys(c)
     finally:
         c.close()
 
     summary["staged_seen"] = len(staged)
-    # Brand-match each staged row. Rows with an NPI (NPPES) are de-duplicated by
-    # NPI within this run. Rows without an NPI (owner location directories) are
-    # de-duplicated by (owner, state, city) against clinics that already exist
-    # and against each other, so a directory center is not counted twice with an
-    # NPPES record for the same physical center.
+    # Brand-match each staged row, then de-duplicate every row -- registry and
+    # directory alike -- on its site_key, so one physical center yields one
+    # clinic no matter how many NPIs the chain registered there or how many
+    # sources listed it. De-duplicating registry rows on NPI alone (the previous
+    # behaviour) inflated any chain that enumerates several NPIs per address.
     matched: list[tuple[dict, str]] = []
     seen_npi: set[str] = set()
     for row in staged:
@@ -275,15 +305,30 @@ def link_clinics(*, dry_run: bool = False, chunk_size: int = 20) -> dict[str, in
         if not owner_id:
             continue
         npi = row.get("npi")
-        if npi:
-            if npi in seen_npi:
-                continue
-            seen_npi.add(npi)
+        if npi and npi in seen_npi:
+            continue
+
+        if normalize(row.get("address_line1")) or normalize(row.get("city")):
+            key = site_key(
+                owner_id,
+                row.get("address_line1"),
+                row.get("zip"),
+                row.get("city"),
+                row.get("state"),
+            )
+        elif npi:
+            # No street and no city: unplaceable, but a registry row is still a
+            # real record, so keep it keyed by its NPI rather than dropping it.
+            key = (owner_id, f"npi:{npi}", "")
         else:
-            key = (owner_id, row.get("state"), normalize(row.get("city")))
-            if not key[2] or key in location_keys:
-                continue
-            location_keys.add(key)
+            # A directory row with no location at all carries nothing usable.
+            continue
+
+        if key in site_keys:
+            continue
+        site_keys.add(key)
+        if npi:
+            seen_npi.add(npi)
         matched.append((row, owner_id))
     summary["matched"] = len(matched)
     logger.info("link_clinics: %d staged, %d brand-matched", len(staged), len(matched))
@@ -370,11 +415,13 @@ def link_directory_owner(
             raise ValueError(f"owner_entity {owner_entity_name!r} not found")
         owner_id = str(row[0])
         existing = c.execute(
-            "SELECT state, city, address_line1 FROM clinic "
+            "SELECT state, city, address_line1, zip FROM clinic "
             "WHERE owner_entity_id = %s AND superseded_by IS NULL",
             (owner_id,),
         ).fetchall()
-        keys = {(s, normalize(ci), normalize(ad)) for s, ci, ad in existing}
+        keys = {
+            site_key(owner_id, ad, zc, ci, s) for s, ci, ad, zc in existing
+        }
         staged = c.execute(
             """
             SELECT s.source_record_id, s.raw_name, s.address_line1, s.city,
@@ -389,11 +436,11 @@ def link_directory_owner(
         c.close()
 
     summary["staged_seen"] = len(staged)
-    # De-duplicate by (state, city, street) against existing clinics and each
-    # other, so distinct centers in one city are kept but a repeat is not.
+    # De-duplicate on the same site_key the brand linker uses, so a center is one
+    # clinic whether it arrives from this directory or from the NPI registry.
     matched: list[tuple[dict, str]] = []
     for srid, raw_name, addr1, city, state, zc in staged:
-        key = (state, normalize(city), normalize(addr1))
+        key = site_key(owner_id, addr1, zc, city, state)
         if key in keys:
             continue
         keys.add(key)

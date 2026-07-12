@@ -42,6 +42,14 @@ class TestGenerateViewSql:
         sql = generate_view_sql()
         assert "CREATE OR REPLACE VIEW" in sql
 
+    def test_clinics_view_excludes_superseded_rows(self):
+        sql = generate_view_sql()
+        clinics_view = sql[sql.index("VIEW v_published_clinics") :]
+        clinics_view = clinics_view[: clinics_view.index(";")]
+        # A clinic merged into another (e.g. a second NPI at the same address)
+        # carries superseded_by and must not be counted again.
+        assert "superseded_by IS NULL" in clinics_view
+
     def test_provenance_completeness_filter(self):
         sql = generate_view_sql()
         # Rows missing source_record_ids must not export.

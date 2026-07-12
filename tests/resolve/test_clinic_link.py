@@ -2,7 +2,13 @@
 
 from __future__ import annotations
 
-from fundprint.resolve.clinic_link import is_linkable_brand, match_owner, normalize
+from fundprint.resolve.clinic_link import (
+    is_linkable_brand,
+    match_owner,
+    normalize,
+    site_key,
+    zip5,
+)
 
 
 class TestNormalize:
@@ -43,6 +49,52 @@ class TestMatchOwner:
 
     def test_empty_name_returns_none(self):
         assert match_owner("", self.OWNERS) is None
+
+
+class TestZip5:
+    def test_truncates_zip_plus_four(self):
+        assert zip5("800203786") == "80020"
+
+    def test_strips_hyphenated_form(self):
+        assert zip5("80020-3786") == "80020"
+
+    def test_short_or_missing_zip_is_empty(self):
+        assert zip5("802") == ""
+        assert zip5(None) == ""
+
+
+class TestSiteKey:
+    OWNER = "abc-id"
+
+    def test_same_address_different_npis_is_one_site(self):
+        # The bug this key exists to fix: Action Behavior Centers registers six
+        # NPIs at one Broomfield suite under two legal-entity name variants.
+        a = site_key(self.OWNER, "320 E 1ST AVE STE 101", "800203786", "BROOMFIELD", "CO")
+        b = site_key(self.OWNER, "320 e 1st ave, Ste 101", "80020", "Broomfield", "CO")
+        assert a == b
+
+    def test_different_suites_stay_distinct(self):
+        # Two clinics in one office park are two clinics; the suite is in the key.
+        a = site_key(self.OWNER, "100 MAIN ST STE 1", "80020", "DENVER", "CO")
+        b = site_key(self.OWNER, "100 MAIN ST STE 2", "80020", "DENVER", "CO")
+        assert a != b
+
+    def test_same_address_different_owners_stay_distinct(self):
+        a = site_key("owner-a", "100 MAIN ST", "80020", "DENVER", "CO")
+        b = site_key("owner-b", "100 MAIN ST", "80020", "DENVER", "CO")
+        assert a != b
+
+    def test_falls_back_to_city_when_street_missing(self):
+        # Some directory pages carry no street; the old (owner, state, city) key
+        # is the fallback so directory de-duplication does not regress.
+        a = site_key(self.OWNER, None, None, "Denver", "CO")
+        b = site_key(self.OWNER, "", "", "DENVER", "co")
+        assert a == b
+
+    def test_city_fallback_does_not_collide_with_a_street(self):
+        street = site_key(self.OWNER, "100 MAIN ST", "80020", "DENVER", "CO")
+        city_only = site_key(self.OWNER, None, None, "DENVER", "CO")
+        assert street != city_only
 
 
 class TestIsLinkableBrand:

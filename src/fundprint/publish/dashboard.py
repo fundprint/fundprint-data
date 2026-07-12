@@ -38,6 +38,10 @@ def generate_view_sql() -> str:
       2. Not quarantined (decision != 'quarantined').
       3. Not embargoed (embargo flag on the claim row).
       4. Allow-listed columns only - no scoring intermediates.
+      5. Not superseded. A clinic row merged into another (e.g. one of several
+         NPI enumerations at a single physical site) carries superseded_by and
+         must not be counted again here. hf.py already filters this; the view
+         did not, so the two exports disagreed on any superseded row.
 
     The embargo column does not exist yet.
     TODO: add embargoed boolean column to resolution_claim in a future migration.
@@ -78,7 +82,8 @@ SELECT DISTINCT
     c.extracted_at,
     c.source_record_ids
 FROM clinic c
-WHERE EXISTS (
+WHERE c.superseded_by IS NULL
+  AND EXISTS (
     SELECT 1 FROM v_published_claims vpc
     WHERE vpc.clinic_id = c.id
 );
