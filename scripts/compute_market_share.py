@@ -270,7 +270,10 @@ def main() -> int:
     logger.info("--- share ---")
     logger.info("  tracked share of ALL ABA sites   : %5.1f%%", s["tracked_of_all_sites"])
     logger.info("  PE share of ALL ABA sites        : %5.1f%%", s["private_equity_of_all_sites"])
-    logger.info("  tracked share of CHAIN sites     : %5.1f%%  <-- the story", s["tracked_of_chain_sites"])
+    logger.info(
+        "  tracked share of CHAIN sites     : %5.1f%%  <-- the story",
+        s["tracked_of_chain_sites"],
+    )
     logger.info("wrote %s", args.out)
     return 0
 
