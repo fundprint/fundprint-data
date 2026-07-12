@@ -25,9 +25,7 @@ from dataclasses import dataclass, field
 from datetime import UTC, date, datetime
 from typing import Any
 
-import httpx
-
-from fundprint import db
+from fundprint import db, fetch
 from fundprint.acquire.base import (
     _find_existing_source_record,
     _insert_source_record,
@@ -359,13 +357,25 @@ CURATED_ACQUISITIONS: list[CuratedAcquisition] = [
             "Zenyth Partners'."
         ),
     ),
-    # NOT INGESTED, deliberately: Alternative Behavior Strategies (ABS Kids, ~36
-    # sites) is reported to be owned by Petra Capital Partners via its MMC Health
-    # Services platform (2017). The only source found for that is a law firm's
-    # deal page, which serves 200 to curl but 403 to our HTTP client, so it cannot
-    # be fetched and content-hashed. A claim we cannot snapshot is a claim we do
-    # not publish, however plausible it is. Revisit when a fetchable primary
-    # source (a Petra portfolio page or an ABS announcement) is found.
+    CuratedAcquisition(
+        # The registry lists this chain under its legal name, "ALTERNATIVE
+        # BEHAVIOR STRATEGIES, LLC", though it trades publicly as ABS Kids. The
+        # legal name is stored so the name-prefix match finds its centers.
+        #
+        # This source sits behind a TLS-fingerprinting WAF and was unfetchable
+        # until fundprint.fetch could retry through curl, so the entry was held
+        # back rather than published on an unsnapshottable source.
+        pe_firm_name="Petra Capital Partners",
+        portfolio_name="Alternative Behavior Strategies",
+        source_url=(
+            "https://www.bassberry.com/experience/petra-capital-and-mmc-acquire-abs/"
+        ),
+        description=(
+            "Alternative Behavior Strategies (ABS Kids), an ABA provider, was "
+            "acquired by Petra Capital Partners through its MMC Health Services "
+            "platform (2017). Petra Capital Partners is the private-equity owner."
+        ),
+    ),
     # ---- LEARN Behavioral's remaining brands (Gryphon Investors) -------------
     # LEARN publishes a single location roster covering all of its brands, and
     # labels every center with the brand that runs it. That roster (read by
@@ -477,12 +487,15 @@ CURATED_ACQUISITIONS: list[CuratedAcquisition] = [
 
 
 def _fetch(url: str) -> tuple[bytes, str]:
-    """Fetch a curated source URL. Returns (content_bytes, final_url)."""
-    headers = {"User-Agent": FUNDPRINT_UA}
-    with httpx.Client(timeout=30.0, follow_redirects=True) as client:
-        resp = client.get(url, headers=headers)
-        resp.raise_for_status()
-    return resp.content, str(resp.url)
+    """Fetch a curated source URL. Returns (content_bytes, source_url).
+
+    Goes through fundprint.fetch, which retries a TLS-fingerprint block (a 403 to
+    httpx, a 200 to curl, same User-Agent) through curl without changing who we
+    say we are. Several ownership sources -- law-firm deal pages in particular --
+    sit behind such a WAF. If every client fails, the exception propagates and the
+    entry is not staged: a source we cannot snapshot is a claim we do not publish.
+    """
+    return fetch.get(url), url
 
 
 def _write_staging_row(

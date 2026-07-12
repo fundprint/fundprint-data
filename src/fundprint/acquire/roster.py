@@ -52,7 +52,7 @@ from typing import Any
 
 import httpx
 
-from fundprint import db
+from fundprint import db, fetch
 from fundprint.acquire.base import _find_existing_source_record, _insert_source_record
 from fundprint.storage import LocalFilesystemStore, SnapshotStore
 
@@ -212,15 +212,18 @@ def fetch_caravel(client: httpx.Client) -> tuple[bytes, str]:
         page += 1
         time.sleep(REQUEST_DELAY_SEC)
 
+    # Caravel's center pages sit behind a WAF that fingerprints the TLS handshake
+    # and serves httpx a 403 while serving curl a 200, for the identical
+    # User-Agent. fundprint.fetch retries such a block through curl, keeping our
+    # user-agent and contact address unchanged. See that module for the reasoning.
     centers: list[dict] = []
     for link in links:
         try:
-            r = client.get(link, headers=headers)
-            r.raise_for_status()
-        except httpx.HTTPError as exc:
+            html = fetch.get(link, client=client).decode("utf-8", errors="replace")
+        except (httpx.HTTPError, fetch.FetchError) as exc:
             logger.warning("caravel page failed %s: %s", link, exc)
             continue
-        center = parse_caravel_page(r.text)
+        center = parse_caravel_page(html)
         if center:
             center.detail_url = link
             centers.append(vars(center))
