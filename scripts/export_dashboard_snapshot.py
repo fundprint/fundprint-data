@@ -268,6 +268,16 @@ def build_snapshot(conn) -> dict:
     pe_clinics = sum(1 for c in clinics if c["firm_type"] == "private_equity")
     located_clinics = sum(1 for c in clinics if c["lat"] is not None)
 
+    # The national market denominator, computed by scripts/compute_market_share.py
+    # from the same bulk registry. Optional: if it has not been computed, the
+    # dashboard simply omits the share rather than inventing one.
+    market = None
+    market_path = Path(__file__).resolve().parent.parent / "data" / "market" / "aba_market.json"
+    try:
+        market = json.loads(market_path.read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        logger.warning("no market file at %s; snapshot will carry no share", market_path)
+
     snapshot = {
         "meta": {
             "dataset_version": DATASET_VERSION,
@@ -288,6 +298,7 @@ def build_snapshot(conn) -> dict:
             # on the map so a reader knows the dot count vs the tracked count.
             "located_clinics": located_clinics,
         },
+        "market": market,
         "acquirers": acquirers,
         "brands": brands,
         "states": states,
