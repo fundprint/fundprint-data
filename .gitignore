@@ -19,3 +19,8 @@ review_*.csv
 labels_*.json
 hand_validation*.csv
 .cache/
+
+# Verification review artifacts: a drawn sample is reproducible from its seed, and
+# a half-finished review is personal working state, not a record.
+verify_*.html
+review_verify_*.csv

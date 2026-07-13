@@ -83,3 +83,59 @@ For any row in the validated view, you must be able to:
 4. Answer one follow-up question you did not anticipate.
 
 If you cannot do this for a randomly selected row, the validation gate has been too loose. Tighten it before the next release.
+
+---
+
+# Clinic verification (the published accuracy rate)
+
+Separate from the resolver's hand-validation gate above. That gate asks whether a
+*claim* was resolved correctly. This asks the question a journalist or a referee
+will ask: **when Fundprint says a clinic exists and names its owner, how often is
+that true?** The answer becomes a published rate with a confidence interval.
+
+## Why it samples three populations, not one
+
+Sampling only the clinics we publish measures **precision**, and a precision-only
+sample is structurally incapable of finding the errors that matter most: the
+clinics we missed. A dataset can be 100% precise and still be missing half the
+market, and a sample drawn only from its own rows will report a perfect score
+while that happens.
+
+| Stratum | What it is | What it can catch |
+|---|---|---|
+| `pe` | Clinics we attribute to a private-equity firm | A wrong ownership claim, a ghost |
+| `non_pe` | Clinics we attribute to a pension fund, family office or search fund | The same, plus a wrong **owner type**, which the headline depends on |
+| `unclaimed` | ABA sites in the registry we attribute to **nobody** | A **false negative**: an owner we failed to find |
+
+`pe` and `non_pe` are further split by source, because a registry clinic and a
+directory clinic fail differently. A registry clinic can be a ghost (the registry
+never marks a closed clinic closed). A directory clinic cannot be, because the
+owner is saying it is open today, so a directory ghost means something is wrong
+with our parsing. One blended number would hide both.
+
+## Run it
+
+    # draw the sample (the archive is only needed for the `unclaimed` stratum)
+    python scripts/build_verification_sample.py --archive .cache/nppes/monthly.zip
+
+    # build the review tool
+    python scripts/build_verification_html.py samples/verify_<id>.json
+
+    # open verify_<id>.html, label every row, click "Download CSV", then:
+    python scripts/score_verification.py review_verify_<id>.csv
+
+The draw is seeded and the seed is written into the sample file, so anyone can
+redraw the identical 150 clinics with `--seed` and check us.
+
+## Two rules for the score
+
+**"Cannot tell" counts against us.** An unverifiable clinic is not dropped and is
+not counted as correct; it stays in the denominator. Dropping unverifiable rows
+would inflate the rate by discarding exactly the hardest cases, which are the ones
+most likely to be wrong. The published number is therefore a conservative floor.
+
+**Publish the interval, not the point estimate.** The score uses a Wilson interval
+rather than the normal approximation, because the normal approximation misbehaves
+at small n and rates near 100%, which is precisely where we will be using it. A
+rate of 100% on n=20 is not "100% accurate": its true lower bound is about 84%,
+and the report says so.
