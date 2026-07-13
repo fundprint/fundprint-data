@@ -72,6 +72,12 @@ TEMPLATE = """<!doctype html>
   button.opt[aria-pressed="true"] kbd {{ opacity:.85; }}
   textarea {{ width:100%; margin-top:14px; padding:10px; font:inherit;
               border:1px solid var(--rule); border-radius:2px; min-height:56px; }}
+  .fix {{ margin-top:12px; padding:12px 14px; background:#fff;
+          border-left:3px solid var(--pen); }}
+  .fix p {{ margin:0 0 8px; font-weight:600; }}
+  .fix input {{ width:100%; padding:9px 10px; font:inherit;
+                border:1px solid var(--rule); border-radius:2px; }}
+  .fix .muted {{ margin-top:8px; }}
   nav {{ position:fixed; bottom:0; left:0; right:0; background:var(--sheet);
          border-top:1px solid var(--rule); padding:12px 20px; display:flex;
          gap:10px; align-items:center; justify-content:center; }}
@@ -106,22 +112,41 @@ const KEY = "fundprint_verify_" + RUN;
 let answers = JSON.parse(localStorage.getItem(KEY) || "{{}}");
 let i = 0;
 
-// The questions differ by stratum. For a clinic we claim, we are testing whether
-// the claim is true. For an unclaimed clinic, we are testing whether we MISSED an
-// owner, which is the only way this exercise can discover a false negative.
+// "Open, but not at this address" is its own answer, and keeping it separate from
+// "closed" is the whole point. A clinic is DEFINED here as a physical site
+// (owner + street + ZIP), so a wrong address is a wrong record even though the
+// clinic is real. The two failures are opposites and must never be blended:
+//
+//   closed        -> we are counting a clinic that does not exist. An OVERCOUNT.
+//   wrong_address -> the clinic exists, so the count is right, but the site key is
+//                    wrong. The map lies, the state attribution may be wrong, and
+//                    if the true address is already in the dataset under another
+//                    row, one real site has been counted twice.
+//
+// So the reviewer is asked for the real address when they pick it. That turns a
+// vague "this is a bit off" into a checkable fact, and the scorer can then ask the
+// database whether the corrected address collides with a clinic we already hold.
+const Q_EXISTS = {{
+  id: "exists",
+  q: "Does an ABA clinic operate at THIS address today?",
+  opts: [
+    ["yes", "Yes, open at this address", "1"],
+    ["closed", "Closed / gone", "2"],
+    ["wrong_address", "Open, but NOT at this address", "3"],
+    ["not_aba", "Not an ABA clinic", "4"],
+    ["unclear", "Cannot tell", "5"],
+  ],
+}};
+
 const Q_CLAIMED = [
-  {{ id:"exists", q:"Does an ABA clinic operate at this address today?",
-     opts:[["yes","Yes, it is open","1"],["closed","Closed / gone","2"],
-           ["not_aba","Not an ABA clinic","3"],["unclear","Cannot tell","4"]] }},
+  Q_EXISTS,
   {{ id:"owner", q:"Is the owner brand correct?",
      opts:[["yes","Correct","1"],["no","Wrong","2"],["unclear","Cannot tell","3"]] }},
   {{ id:"firm", q:"Is the parent firm correct?",
      opts:[["yes","Correct","1"],["no","Wrong","2"],["unclear","Cannot tell","3"]] }},
 ];
 const Q_UNCLAIMED = [
-  {{ id:"exists", q:"Does an ABA clinic operate at this address today?",
-     opts:[["yes","Yes, it is open","1"],["closed","Closed / gone","2"],
-           ["not_aba","Not an ABA clinic","3"],["unclear","Cannot tell","4"]] }},
+  Q_EXISTS,
   {{ id:"missed",
      q:"We claim NO owner here. Is it in fact owned by a PE firm or other "
        + "financial owner?",
@@ -173,6 +198,17 @@ function render() {{
               <button class="opt" data-q="${{q.id}}" data-v="${{val}}"
                 aria-pressed="${{a[q.id] === val}}">${{esc(label)}}<kbd>${{key}}</kbd></button>`).join("")}}
           </div>
+          ${{q.id === "exists" && a.exists === "wrong_address" ? `
+            <div class="fix">
+              <p>What is the real street address? Copy it exactly as the owner or
+                 Maps gives it, including the suite.</p>
+              <input id="correct_address" value="${{esc(a.correct_address||"")}}"
+                     placeholder="e.g. 2760 Virginia Parkway Suite 100, McKinney, TX 75071">
+              <div class="muted">A wrong address is not a closed clinic. The centre is
+                real, so the count is not inflated, but the site key is wrong, and if
+                the true address is already in the dataset then one real centre has
+                been counted twice. Typing it here is what lets us find out.</div>
+            </div>` : ""}}
         </div>`).join("")}}
       <textarea id="notes" placeholder="Notes (what you found, the URL that settled it)">${{esc(a.notes||"")}}</textarea>
     </div>`;
@@ -185,6 +221,12 @@ function render() {{
       save(); render();
     }};
   }});
+  const fix = document.getElementById("correct_address");
+  if (fix) fix.oninput = e => {{
+    answers[r.clinic_id] = answers[r.clinic_id] || {{}};
+    answers[r.clinic_id].correct_address = e.target.value;
+    save();
+  }};
   document.getElementById("notes").oninput = e => {{
     answers[r.clinic_id] = answers[r.clinic_id] || {{}};
     answers[r.clinic_id].notes = e.target.value;
@@ -212,7 +254,7 @@ document.getElementById("skip").onclick = () => {{ if (i < ROWS.length-1) {{ i++
 // Keys: 1-4 answer the FIRST unanswered question on the card, so a fast reviewer
 // can go 1, 1, 1, Enter without ever touching the mouse.
 document.onkeydown = e => {{
-  if (e.target.tagName === "TEXTAREA") return;
+  if (e.target.tagName === "TEXTAREA" || e.target.tagName === "INPUT") return;
   const r = ROWS[i];
   const a = answers[r.clinic_id] || {{}};
   const qs = questionsFor(r);
@@ -230,7 +272,7 @@ document.onkeydown = e => {{
 document.getElementById("export").onclick = () => {{
   const cols = ["clinic_id","stratum","sub_stratum","name","address","city","state","zip",
                 "npi","claimed_owner","claimed_firm","claimed_firm_type",
-                "exists","owner","firm","missed","notes"];
+                "exists","owner","firm","missed","correct_address","notes"];
   const lines = [cols.join(",")];
   for (const r of ROWS) {{
     const a = answers[r.clinic_id] || {{}};

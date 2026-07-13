@@ -127,6 +127,27 @@ with our parsing. One blended number would hide both.
 The draw is seeded and the seed is written into the sample file, so anyone can
 redraw the identical 150 clinics with `--seed` and check us.
 
+## "Open, but not at this address" is its own answer
+
+A clinic here is *defined* as a physical site (owner + street + ZIP). So a wrong
+address is a wrong record even when the clinic is perfectly real, and it is the
+opposite failure to a ghost:
+
+| Answer | What it means | Effect on the count |
+|---|---|---|
+| `closed` | We publish a centre that is not there | **Overcount.** A ghost. |
+| `wrong_address` | The centre is real, but not where we say | **Count is fine.** The site key, the map and the state total are wrong. |
+
+They must never be blended, because the fix is different. A ghost is quarantined.
+A wrong address is corrected, and it carries a hidden risk: if the *true* address
+is already in the dataset under another row, then two rows are one physical site,
+one real centre has been counted twice, and the count IS inflated after all.
+
+That is why the tool asks for the real street address when you pick that option.
+`score_verification.py` then normalizes what you typed and asks the database
+whether that address is one we already hold for the same owner. If it is, it
+prints a DOUBLE COUNT warning: supersede one row, never delete it.
+
 ## Two rules for the score
 
 **"Cannot tell" counts against us.** An unverifiable clinic is not dropped and is
