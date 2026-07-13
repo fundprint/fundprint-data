@@ -134,6 +134,7 @@ def main() -> int:
         is_linkable_brand,
         match_owner,
         normalize,
+        normalize_street,
         zip5,
     )
 
@@ -177,7 +178,7 @@ def main() -> int:
     site_state: dict[tuple[str, str], str] = {}
 
     def add(stem_: str, owner: str | None, street: str, zipc: str, state: str) -> None:
-        st = normalize(street)
+        st = normalize_street(street)
         if not st:
             return
         if owner and is_admin_address(owner, street):

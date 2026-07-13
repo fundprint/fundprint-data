@@ -71,10 +71,10 @@ _OUT_OF_SCOPE_BRANDS = frozenset({"geodehealth"})
 _ADMIN_ADDRESSES = frozenset({
     # 350 Fifth Avenue is the Empire State Building. Proud Moments registers six
     # NPIs in suite 6115; its own directory of 109 centers does not list it.
-    ("proudmoments", "3505thaveste6115"),
+    ("proudmoments", "3505thavste6115"),
     # ACES is headquartered in San Diego. Its own directory of 67 centers does
     # not list this address.
-    ("aces2020", "5333missioncenterrdste110"),
+    ("aces2020", "5333missioncnrdste110"),
 })
 
 _NON_ALNUM = re.compile(r"[^a-z0-9]+")
@@ -93,6 +93,93 @@ def zip5(zipc: str | None) -> str:
     return digits[:5] if len(digits) >= 5 else ""
 
 
+# One address, spelled two ways, is one address. The registry shouts abbreviations
+# ("18301 N 79TH AVE, BUILDING A STE 101") and an owner's own directory writes them
+# out ("18301 N 79th Avenue, Building A, Suite 101"). Stripping punctuation is not
+# enough: `ave` != `avenue` and `ste` != `suite`, so the same suite was landing in
+# the dataset twice, once per source, and being counted twice.
+#
+# This is NOT a fuzzy match and must never become one. Each pair below is a USPS
+# abbreviation and its expansion, so mapping them together cannot merge two
+# addresses that differ in any way that matters. Anything looser (dropping the
+# unit, say) WOULD merge real neighbouring clinics, which is the failure this key
+# exists to prevent: two suites in one office park are two clinics.
+#
+# Order matters: longer alternatives first, so "avenue" is consumed before "ave"
+# could match its prefix.
+_STREET_CANON: list[tuple[re.Pattern[str], str]] = [
+    (re.compile(rf"\b({'|'.join(alts)})\b"), canon)
+    for alts, canon in [
+        (("avenue", "aven", "ave"), "av"),
+        (("street", "str", "st"), "st"),
+        (("road", "rd"), "rd"),
+        (("drive", "driv", "drv", "dr"), "dr"),
+        (("boulevard", "boulvard", "blvd"), "bl"),
+        (("parkway", "pkway", "pkwy", "pky"), "pk"),
+        (("lane", "ln"), "ln"),
+        (("highway", "hiway", "hwy"), "hy"),
+        (("expressway", "expy", "expwy"), "ex"),
+        (("freeway", "fwy"), "fy"),
+        (("circle", "cir"), "ci"),
+        (("court", "ct"), "ct"),
+        (("place", "pl"), "pl"),
+        (("trail", "trl"), "tl"),
+        (("terrace", "terr", "ter"), "te"),
+        (("square", "sq"), "sq"),
+        (("turnpike", "tpke", "tpk"), "tp"),
+        (("plaza", "plz"), "pz"),
+        (("center", "centre", "ctr"), "cn"),
+        # Units. "Unit" and "Suite" are folded together deliberately: they are the
+        # same idea, and a building never has both a Suite 100 and a Unit 100.
+        (("suite", "ste", "unit"), "ste"),
+        (("building", "bldg", "bld"), "bldg"),
+        (("floor", "flr", "fl"), "flr"),
+        # Directionals.
+        (("northeast", "ne"), "ne"),
+        (("northwest", "nw"), "nw"),
+        (("southeast", "se"), "se"),
+        (("southwest", "sw"), "sw"),
+        (("north", "n"), "n"),
+        (("south", "s"), "s"),
+        (("east", "e"), "e"),
+        (("west", "w"), "w"),
+    ]
+]
+
+
+# "#101" and "Ste 101" are the same unit. ABC's own directory writes 320 E 1st
+# Avenue #101 where the registry writes 320 E 1ST AVE STE 101, and stripping the
+# "#" as punctuation left one address with a unit token and the other without.
+_HASH_UNIT = re.compile(r"#\s*(?=[a-z0-9])")
+
+
+def normalize_street(address_line1: str | None) -> str:
+    """Canonicalize a street address for site identity.
+
+    Separate from `normalize` on purpose: that one also keys brand matching, where
+    collapsing "st" and "street" would be meaningless and risky. This one only ever
+    sees an address.
+    """
+    s = (address_line1 or "").lower()
+    s = _HASH_UNIT.sub("ste ", s)
+    s = _NON_ALNUM.sub(" ", s)
+    tokens = s.split()
+    if not tokens:
+        return ""
+    out: list[str] = []
+    for token in tokens:
+        for pattern, canon in _STREET_CANON:
+            if pattern.fullmatch(token):
+                token = canon
+                break
+        # "Suite #101" canonicalizes to "ste ste 101"; collapse the repeat so it
+        # keys the same as a plain "Ste 101".
+        if out and out[-1] == token:
+            continue
+        out.append(token)
+    return "".join(out)
+
+
 def site_key(
     owner_id: str,
     address_line1: str | None,
@@ -108,12 +195,12 @@ def site_key(
     NPI is not a location identity and de-duplicating on it counts one center
     many times.
 
-    The key is (owner, normalized street, ZIP5). The street retains its suite, so
+    The key is (owner, canonicalized street, ZIP5). The street retains its suite, so
     two genuinely distinct clinics in one office park stay distinct. When a row
     carries no street (some directory pages), fall back to (owner, state, city),
     which is what the directory linker used before addresses were available.
     """
-    street = normalize(address_line1)
+    street = normalize_street(address_line1)
     if street:
         return (owner_id, street, zip5(zipc))
     return (owner_id, f"city:{normalize(city)}", (state or "").strip().upper())
@@ -135,7 +222,7 @@ def is_admin_address(owner_name: str | None, address_line1: str | None) -> bool:
 
     See _ADMIN_ADDRESSES. Pure so it can be tested without a database.
     """
-    return (normalize(owner_name), normalize(address_line1)) in _ADMIN_ADDRESSES
+    return (normalize(owner_name), normalize_street(address_line1)) in _ADMIN_ADDRESSES
 
 
 def match_owner(
@@ -396,7 +483,7 @@ def link_clinics(*, dry_run: bool = False, chunk_size: int = 20) -> dict[str, in
             continue
         npi = row.get("npi")
 
-        if normalize(row.get("address_line1")) or normalize(row.get("city")):
+        if normalize_street(row.get("address_line1")) or normalize(row.get("city")):
             key = site_key(
                 owner_id,
                 row.get("address_line1"),

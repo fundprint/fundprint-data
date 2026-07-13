@@ -65,7 +65,7 @@ def _check_collisions(moved: list[dict]) -> None:
         return
     try:
         from fundprint import db
-        from fundprint.resolve.clinic_link import normalize
+        from fundprint.resolve.clinic_link import normalize_street
     except Exception as exc:  # pragma: no cover - environment, not logic
         print(f"    (Collision check skipped: {exc})")
         return
@@ -97,11 +97,11 @@ def _check_collisions(moved: list[dict]) -> None:
     # trailing city/state/ZIP they include, and it keeps the suite.
     by_owner: dict[str, list[str]] = {}
     for o, a, _z in rows:
-        by_owner.setdefault(o, []).append(normalize(a or ""))
+        by_owner.setdefault(o, []).append(normalize_street(a or ""))
 
     hits = []
     for r in with_addr:
-        typed = normalize(r["correct_address"] or "")
+        typed = normalize_street(r["correct_address"] or "")
         for street in by_owner.get(r["claimed_owner"], []):
             # A short stem would prefix-match half a city, so require some length.
             if len(street) >= 10 and typed.startswith(street):

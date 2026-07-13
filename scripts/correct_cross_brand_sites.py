@@ -74,7 +74,7 @@ def main() -> int:
     args = p.parse_args()
 
     from fundprint import db
-    from fundprint.resolve.clinic_link import normalize, zip5
+    from fundprint.resolve.clinic_link import normalize_street, zip5
 
     conn = db.connect()
     try:
@@ -113,7 +113,7 @@ def main() -> int:
             firm_name,
             source_types,
         ) in rows:
-            street = normalize(addr)
+            street = normalize_street(addr)
             if not street:
                 continue
             key = (str(firm_id), street, zip5(zipc))

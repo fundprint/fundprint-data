@@ -78,7 +78,7 @@ def main() -> int:
     args = p.parse_args()
 
     from fundprint import db
-    from fundprint.resolve.clinic_link import normalize, zip5
+    from fundprint.resolve.clinic_link import normalize_street, zip5
     from fundprint.resolve.version import RESOLVER_VERSION
 
     conn = db.connect()
@@ -98,8 +98,8 @@ def main() -> int:
         groups = defaultdict(list)
         for r in rows:
             (cid, cname, addr, city, state, zc, touched, owner, firm_id, firm) = r
-            if normalize(addr):
-                groups[(normalize(addr), zip5(zc))].append(
+            if normalize_street(addr):
+                groups[(normalize_street(addr), zip5(zc))].append(
                     {
                         "clinic_id": str(cid),
                         "name": cname,

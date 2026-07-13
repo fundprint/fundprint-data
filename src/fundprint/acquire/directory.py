@@ -131,10 +131,14 @@ def parse_jsonld_location(
         return None
     state = (addr.get("addressRegion") or "").strip()[:2].upper() or None
     postal = addr.get("postalCode")
+    # Unescape the ADDRESS too, not just the name. JSON-LD embedded in HTML carries
+    # HTML entities, and "Suite 100 &amp; 400" was reaching the database verbatim:
+    # it displays wrong, and worse, the stray "amp" token lands in the site key and
+    # stops the address matching itself when it arrives from another source.
     return {
         "raw_name": name,
-        "address_line1": (addr.get("streetAddress") or "").strip() or None,
-        "city": (addr.get("addressLocality") or "").strip() or None,
+        "address_line1": html.unescape((addr.get("streetAddress") or "").strip()) or None,
+        "city": html.unescape((addr.get("addressLocality") or "").strip()) or None,
         "state": state,
         "zip": str(postal).strip() if postal else None,
         "npi": None,
@@ -470,10 +474,80 @@ class ProudMomentsDirectory(_DirectorySource):
         return centers
 
 
+class ActionBehaviorDirectory(_DirectorySource):
+    """The Action Behavior Centers directory (an explicit-owner source, Charlesbank).
+
+    ABC publishes every centre as ``/location/<state>/<slug>``, enumerated from the
+    site's sitemap, each carrying schema.org JSON-LD with a split ``PostalAddress``.
+
+    This source exists because the registry is wrong about ABC in *both* directions
+    at once, which is the clearest case yet for reading an owner's own directory:
+
+      * It undercounts. ABC's directory lists 227 Texas centres. NPPES gave us 15.
+        The registry cannot see a centre a chain never registered separately.
+      * It overcounts. NPPES gave us 67 Colorado clinics against ABC's 42, plus
+        nine in Ohio, three in Virginia, one in Georgia and an *apartment* in Palm
+        Beach Gardens, none of which ABC operates. The registry never marks a
+        closed clinic closed, and it happily carries an address the company
+        abandoned years ago.
+
+    The JSON-LD ``name`` is the brand string ("Action Behavior Centers") on every
+    page, so it cannot distinguish one centre from another. The slug is what
+    carries the identity ("alamo-ranch"), so the row name is built from the URL,
+    as it is for ACES and Proud Moments.
+    """
+
+    key = "action_behavior"
+    host = "actionbehavior.com"
+    base = "https://www.actionbehavior.com"
+    owner_name = "Action Behavior Centers"
+
+    def _center_urls(self, client: httpx.Client) -> list[str]:
+        resp = client.get(f"{self.base}/sitemap.xml")
+        resp.raise_for_status()
+        urls = _LOC_RE.findall(resp.text)
+        # Centre detail pages are /location/<state>/<slug>. /location/request is the
+        # "find a centre near me" form, not a centre.
+        detail = [
+            u.rstrip("/")
+            for u in urls
+            if re.search(r"/location/[^/]+/[^/]+/?$", u) and "/location/request" not in u
+        ]
+        return sorted(set(detail))
+
+    @staticmethod
+    def _name_from_slug(url: str) -> str:
+        slug = url.rstrip("/").rsplit("/", 1)[-1]
+        return f"Action Behavior Centers - {slug.replace('-', ' ').title()}"
+
+    def _centers(self, client: httpx.Client) -> list[dict[str, Any]]:
+        centers: list[dict[str, Any]] = []
+        for url in self._center_urls(client):
+            try:
+                resp = client.get(url)
+                resp.raise_for_status()
+            except Exception:
+                logger.exception("directory fetch failed for %s", url)
+                continue
+            row = parse_jsonld_location(resp.content)
+            if row is None or not row.get("address_line1"):
+                continue
+            centers.append(
+                {
+                    "url": url,
+                    "content": resp.content,
+                    "row": {**row, "raw_name": self._name_from_slug(url)},
+                }
+            )
+            time.sleep(REQUEST_DELAY_SEC)
+        return centers
+
+
 _SOURCES: dict[str, type[_DirectorySource]] = {
     BlueSprigDirectory.key: BlueSprigDirectory,
     AcesDirectory.key: AcesDirectory,
     ProudMomentsDirectory.key: ProudMomentsDirectory,
+    ActionBehaviorDirectory.key: ActionBehaviorDirectory,
 }
 
 

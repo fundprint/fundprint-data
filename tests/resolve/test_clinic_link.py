@@ -134,3 +134,56 @@ class TestIsLinkableBrand:
 
     def test_none_is_not_linkable(self):
         assert is_linkable_brand(None) is False
+
+
+class TestNormalizeStreet:
+    """The site key must survive the same address written two ways.
+
+    The registry shouts abbreviations and an owner's own directory writes them out.
+    Before this, "18301 N 79TH AVE, BUILDING A STE 101" and "18301 N 79th Avenue,
+    Building A, Suite 101" were two different clinics, and 44 real sites were being
+    counted twice, once per source.
+    """
+
+    def test_abbreviation_and_expansion_are_one_address(self):
+        from fundprint.resolve.clinic_link import normalize_street
+
+        assert normalize_street("18301 N 79TH AVE, BUILDING A STE 101") == normalize_street(
+            "18301 N 79th Avenue, Building A, Suite 101"
+        )
+        assert normalize_street("11476 S. Apopka Vineland Rd Suite 118") == normalize_street(
+            "11476 S APOPKA VINELAND RD STE 118"
+        )
+        assert normalize_street("146 SW 134th St") == normalize_street("146 SW 134TH STREET")
+        assert normalize_street("45 ALABAMA AVE") == normalize_street("45 Alabama Avenue")
+
+    def test_hash_unit_matches_suite(self):
+        from fundprint.resolve.clinic_link import normalize_street
+
+        # ABC's own directory writes "#101" where the registry writes "STE 101".
+        assert normalize_street("320 E 1st Avenue #101") == normalize_street(
+            "320 E 1ST AVE STE 101"
+        )
+
+    def test_different_suites_stay_different(self):
+        """The whole point of keeping the unit. Two suites in one building are two
+        clinics, and any normalization that merged them would be worse than the bug
+        it fixed."""
+        from fundprint.resolve.clinic_link import normalize_street
+
+        assert normalize_street("100 Main St Ste 101") != normalize_street("100 Main St Ste 102")
+        assert normalize_street("100 Main St Bldg A Ste 1") != normalize_street(
+            "100 Main St Bldg D Ste 1"
+        )
+
+    def test_different_streets_stay_different(self):
+        from fundprint.resolve.clinic_link import normalize_street
+
+        assert normalize_street("100 Main St") != normalize_street("100 Main Ave")
+        assert normalize_street("100 N Main St") != normalize_street("100 S Main St")
+
+    def test_empty(self):
+        from fundprint.resolve.clinic_link import normalize_street
+
+        assert normalize_street(None) == ""
+        assert normalize_street("   ") == ""
