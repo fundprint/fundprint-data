@@ -452,6 +452,43 @@ CURATED_ACQUISITIONS: list[CuratedAcquisition] = [
         ),
     ),
     CuratedAcquisition(
+        # Registers every Colorado center as "BUCK JACK LLC"; trades as Woven Care
+        # (formerly Shandy Clinic). The legal name is what the registry carries, so
+        # it is what the name-prefix linker has to match on, exactly as with
+        # Vocational Development Group (InBloom) and Carolina Center for Autism
+        # Services (Kind Behavioral Health).
+        #
+        # Anacapa's portfolio page marks Shandy Clinic `opc new`: its own markup
+        # defines .opc as "Operating Companies" and .new as "Current", so the firm
+        # is stating this is a current holding, and a sibling entry records that
+        # Buck Jack Capital "partnered with Anacapa to acquire Shandy Clinic".
+        # Recorded as `other`, not private equity: a search fund is neither a buyout
+        # fund, a pension, nor a family office. Same call as Trilogy Search Partners.
+        #
+        # WHY THIS ONE IS IN SCOPE AND ELITE DNA IS NOT. Woven Care is a
+        # multi-service pediatric provider (ABA, speech, OT, PT), and those are
+        # normally excluded: Geode Health, Invo Healthcare and Elite DNA all are.
+        # The test is whether ABA is a core line or an incidental one. Woven Care
+        # holds 22 NPIs whose PRIMARY taxonomy is behavior analysis and carries an
+        # ABA taxonomy at 22 of its 24 sites. Elite DNA (which registers as DNA
+        # Comprehensive Therapy Services) has exactly ONE primary-ABA NPI out of 65.
+        # One of those companies runs ABA at essentially every center; the other
+        # offers it here and there alongside psychiatry.
+        pe_firm_name="Anacapa Partners",
+        portfolio_name="Buck Jack",
+        firm_type="other",
+        source_url="https://anacapapartners.com/site/global/anacapa/portfolio/",
+        description=(
+            "Woven Care (formerly Shandy Clinic), a Colorado pediatric therapy "
+            "provider that runs applied behavior analysis at essentially all of "
+            "its centers, is listed as a current operating company in the "
+            "portfolio of Anacapa Partners, a search-fund investor, which acquired "
+            "it through the search vehicle Buck Jack Capital. It registers with the "
+            "provider registry as Buck Jack LLC. Recorded as `other` because a "
+            "search fund is neither a buyout fund, a pension, nor a family office."
+        ),
+    ),
+    CuratedAcquisition(
         # Rolls up to Zenyth Partners, which Fundprint already tracks through
         # Helping Hands Family. Mission is a separate registered brand, so it is
         # its own owner entity under the same parent firm.
