@@ -109,6 +109,23 @@ _SUFFIX = re.compile(
 )
 
 
+# Trailing unit markers, as normalize_street leaves them (it folds suite/ste/unit to
+# "ste" and "#" to "ste", so only these three can end a key).
+_UNIT_TAIL = re.compile(r"(?:ste|bldg|flr)[a-z0-9-]*$")
+
+
+def _building(key: tuple[str, str]) -> tuple[str, str]:
+    """The building a site key sits in: the key with its unit markers peeled off.
+
+    Only ever used to ask "can the registry see this building?". Never used as an
+    identity: see the numerator below for why that distinction is load-bearing.
+    """
+    street, zipc = key
+    while (m := _UNIT_TAIL.search(street)) is not None:
+        street = street[: m.start()]
+    return (street, zipc)
+
+
 def chain_stem(name: str) -> str:
     """Collapse legal-entity variants to one operator ("HOPEBRIDGE, LLC" -> "hopebridge")."""
     s = re.sub(r"[^a-z0-9 ]+", " ", (name or "").lower())
@@ -170,8 +187,6 @@ def main() -> int:
     npi_meta: dict[str, tuple[str, str | None]] = {}
     # operator stem -> {(street, zip5)}
     org_sites: dict[str, set] = defaultdict(set)
-    # tracked owner -> {(street, zip5)}
-    owner_sites: dict[str, set] = defaultdict(set)
     # (street, zip5) -> state. One address has one state, so this is a plain map
     # and not a set: it lets every national figure be re-cut by state without a
     # second pass, and without a site key ever meaning two different things.
@@ -185,8 +200,6 @@ def main() -> int:
             return  # a head office is not a clinic, on either side of the ratio
         key = (st, zip5(zipc))
         org_sites[stem_].add(key)
-        if owner:
-            owner_sites[owner].add(key)
         s = (state or "").strip().upper()[:2]
         if s:
             site_state.setdefault(key, s)
@@ -250,6 +263,72 @@ def main() -> int:
     # multiset that could, in principle, exceed it. Unions make the claim true.
     all_universe: set = set().union(*org_sites.values()) if org_sites else set()
     all_sites = len(all_universe)
+
+    # The numerator is the PUBLISHED dataset, intersected with the registry universe
+    # above. It is emphatically NOT "archive rows whose name matches a tracked brand",
+    # which is what this used to be, because that re-derived the numerator from the
+    # registry and so re-imported every error the corrections exist to remove:
+    #
+    #   * Clinics an owner's own directory contradicts. Hopebridge's Arkansas and
+    #     Colorado registrations are quarantined as closed, and were still being
+    #     counted here, so Arkansas read 7.6% PE off eight centres Hopebridge does
+    #     not operate.
+    #   * Companies that merely share a name prefix. "HOPE BRIDGE COUNSELING LLC" and
+    #     "ACORN HEALTHCARE SERVICES INCORPORATED" are not Hopebridge and not Acorn.
+    #     The clinic linker's output is reviewed and corrected; a second, unreviewed
+    #     name match here was not.
+    #
+    # Reading the published views instead means one correction fixes the map, the
+    # owner tables and the share together, which is the only way they can agree.
+    # Intersecting with `all_universe` keeps the numerator a strict subset of the
+    # denominator and drops directory-only sites, which the registry cannot see and
+    # which therefore belong on neither side.
+    conn = db.connect()
+    published_sites = conn.execute(
+        """
+        SELECT oe.name, ppf.name, ppf.firm_type, cl.address_line1, cl.zip
+        FROM v_published_clinics vc
+        JOIN clinic cl ON cl.id = vc.id
+        JOIN owner_entity oe ON oe.id = vc.owner_entity_id
+        JOIN parent_pe_firm ppf ON ppf.id = oe.parent_pe_firm_id
+        WHERE oe.is_aba AND oe.service_model = 'center_based'
+        """
+    ).fetchall()
+    conn.close()
+
+    # Which archive site, if any, is this published clinic? An owner and the registry
+    # often write one building differently: the registry has "551 36th St SE Unit 2"
+    # and Acorn's directory has "551 36th St. SE". Those are the same building, and
+    # the registry plainly sees it, so requiring an exact site-key hit would drop 94
+    # real sites (82 of them PE) out of the numerator and quietly understate the
+    # share. Matching at building level here does NOT relax the site key: identity
+    # keeps the unit, because two suites in one office park are two clinics. This is
+    # only a visibility test, deciding which side of a ratio a site belongs on. It
+    # resolves to the ARCHIVE's key, never ours, so the numerator stays a strict
+    # subset of the denominator, and a building the archive splits into several
+    # suites is skipped rather than guessed at.
+    building_index: dict[tuple[str, str], set] = defaultdict(set)
+    for k in all_universe:
+        building_index[_building(k)].add(k)
+
+    owner_sites: dict[str, set] = defaultdict(set)
+    firm_of = {}
+    for owner, firm, ftype, street, zipc in published_sites:
+        st = normalize_street(street or "")
+        if not st or is_admin_address(owner, street or ""):
+            continue
+        key = (st, zip5(zipc or ""))
+        if key in all_universe:
+            archive_key = key
+        else:
+            candidates = building_index.get(_building(key), set())
+            if len(candidates) != 1:
+                # No candidate: directory-only, invisible to the registry, excluded
+                # from BOTH sides. Several: ambiguous, so attribute none of them.
+                continue
+            archive_key = next(iter(candidates))
+        owner_sites[owner].add(archive_key)
+        firm_of[owner] = (firm, ftype)
 
     tracked_universe: set = set().union(*owner_sites.values()) if owner_sites else set()
     tracked_sites = len(tracked_universe)

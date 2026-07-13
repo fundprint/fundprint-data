@@ -75,9 +75,74 @@ _DRUPAL_SPAN_RE = re.compile(
     r'<span class="([a-z0-9\-]+)"[^>]*>(.*?)</span>', re.S | re.I
 )
 _LOCATION_TYPES = {"MedicalBusiness", "MedicalClinic", "LocalBusiness", "Physician"}
-# Splits a US "street, City, ST ZIP" tail. City may lack a leading comma.
+_EN_DASH_RE = re.compile(r"[‐-―]")
+_TAG_RE = re.compile(r"<[^>]+>")
+_US_STATE_NAMES = {
+    "alabama": "AL", "alaska": "AK", "arizona": "AZ", "arkansas": "AR",
+    "california": "CA", "colorado": "CO", "connecticut": "CT", "delaware": "DE",
+    "district of columbia": "DC", "florida": "FL", "georgia": "GA", "hawaii": "HI",
+    "idaho": "ID", "illinois": "IL", "indiana": "IN", "iowa": "IA", "kansas": "KS",
+    "kentucky": "KY", "louisiana": "LA", "maine": "ME", "maryland": "MD",
+    "massachusetts": "MA", "michigan": "MI", "minnesota": "MN", "mississippi": "MS",
+    "missouri": "MO", "montana": "MT", "nebraska": "NE", "nevada": "NV",
+    "new hampshire": "NH", "new jersey": "NJ", "new mexico": "NM", "new york": "NY",
+    "north carolina": "NC", "north dakota": "ND", "ohio": "OH", "oklahoma": "OK",
+    "oregon": "OR", "pennsylvania": "PA", "rhode island": "RI",
+    "south carolina": "SC", "south dakota": "SD", "tennessee": "TN", "texas": "TX",
+    "utah": "UT", "vermont": "VT", "virginia": "VA", "washington": "WA",
+    "west virginia": "WV", "wisconsin": "WI", "wyoming": "WY",
+}
+_USPS_CODES = set(_US_STATE_NAMES.values())
+_STATE_NAME_TAIL_RE = re.compile(
+    r"\b(" + "|".join(sorted(_US_STATE_NAMES, key=len, reverse=True)) + r")\b"
+    r"(?=[,\s]+\d{5}(?:-\d{4})?\s*$)",
+    re.I,
+)
+
+
+def _strip_tags(value: str) -> str:
+    """Drop HTML tags from a JSON-LD text value (some CMSes leave a <br /> in)."""
+    return _TAG_RE.sub(" ", value)
+
+
+def _is_street(street: str | None) -> bool:
+    """True when a parsed street plausibly names a building.
+
+    A directory row is not always an address. Acorn lists Alpena, MI with the text
+    "In-home services available now" where the street goes, which parsed cleanly and
+    staged a clinic whose street was that sentence. Requiring a digit is enough to
+    reject it: a US street address carries a house number, and an entry without one
+    is either prose or a service area, neither of which is a physical site.
+    """
+    return bool(street) and any(ch.isdigit() for ch in street)
+
+
+def _expand_state_name(value: str) -> str:
+    """Rewrite a spelled-out state immediately before the ZIP to its USPS code.
+
+    ALP publishes both "Holyoke, MA 01040" and "Holyoke, Massachusetts 01040". This is
+    a canonicalisation of one fixed vocabulary, not a fuzzy match: it only ever fires
+    on a state name sitting directly in front of a five-digit ZIP, so a street called
+    Virginia Avenue is untouched.
+    """
+    return _STATE_NAME_TAIL_RE.sub(
+        lambda m: _US_STATE_NAMES[m.group(1).lower()], value
+    )
+# Splits a US "street, City, ST ZIP" tail. City may lack a leading comma, the state
+# may be lowercased and abbreviated with a period, and a comma may sit between the
+# state and the ZIP: Hopebridge writes Georgia centres as "Atlanta, Ga., 30329".
+# Matching case-insensitively is only safe because the captured token is then checked
+# against the real USPS code list, so a two-letter word cannot be read as a state.
 _STATE_ZIP_RE = re.compile(
-    r"^(?P<pre>.*?)[,\s]+(?P<state>[A-Z]{2})\s+(?P<zip>\d{5})(?:-\d{4})?\s*$"
+    r"^(?P<pre>.*?)[,\s]+(?P<state>[A-Za-z]{2})\.?[,\s]+(?P<zip>\d{5})(?:-\d{4})?\s*$"
+)
+# A country suffix sits *after* the ZIP, so it defeats the anchored tail match above.
+_TRAILING_COUNTRY_RE = re.compile(
+    r"[,\s]+(?:USA|U\.S\.A\.|US|United States(?: of America)?)\.?\s*$", re.I
+)
+# Splits a "City, ST" or "City ST - Neighbourhood" locality label.
+_LOCALITY_RE = re.compile(
+    r"^(?P<city>.*?)[,\s]+(?P<state>[A-Z]{2})\b(?:\s*[-,]\s*(?P<suffix>.*))?$"
 )
 
 
@@ -101,7 +166,7 @@ def _iter_jsonld_nodes(content: bytes | str) -> Any:
 
 
 def _jsonld_address(content: bytes | str) -> dict[str, Any] | None:
-    """Return the schema.org ``address`` dict of the first location node, if any."""
+    """Return the schema.org ``address`` of the first location node, if any."""
     for node in _iter_jsonld_nodes(content):
         node_type = node.get("@type")
         types = node_type if isinstance(node_type, list) else [node_type]
@@ -110,6 +175,12 @@ def _jsonld_address(content: bytes | str) -> dict[str, Any] | None:
         addr = node.get("address")
         if isinstance(addr, list):
             addr = addr[0] if addr else None
+        # schema.org allows `address` to be a plain Text as well as a PostalAddress,
+        # and Autism Learning Partners uses the Text form. Reading only the dict form
+        # silently skipped all 59 of its centre pages, which is why the chain sat at
+        # one clinic. Present it as a one-line streetAddress; parse_us_address splits it.
+        if isinstance(addr, str) and addr.strip():
+            return {"name": node.get("name"), "streetAddress": addr.strip()}
         if isinstance(addr, dict) and (addr.get("streetAddress") or addr.get("addressLocality")):
             return {"name": node.get("name"), **addr}
     return None
@@ -152,12 +223,17 @@ def parse_us_address(value: str) -> tuple[str | None, str | None, str, str] | No
     the comma-less ``"6511 W Loop 1604 N., Suite 123 San Antonio, TX 78254"``.
     Returns None when no ``ST ZIP`` tail is present. Pure function for testing.
     """
-    s = " ".join((value or "").split())
+    s = _strip_tags(value or "")
+    s = " ".join(s.split())
+    s = _TRAILING_COUNTRY_RE.sub("", s)
+    s = _expand_state_name(s)
     m = _STATE_ZIP_RE.match(s)
     if not m:
         return None
+    state = m.group("state").upper()
+    if state not in _USPS_CODES:
+        return None
     pre = m.group("pre").rstrip(", ").strip()
-    state = m.group("state")
     zip_code = m.group("zip")
     if "," in pre:
         street, last = pre.rsplit(",", 1)
@@ -173,7 +249,65 @@ def parse_us_address(value: str) -> tuple[str | None, str | None, str, str] | No
             street = pre[: city_m.start(2)].strip()
         else:
             city, street = None, pre
+        # The peel is only safe when a street name survives it. On "7041 Transit Rd
+        # East Amherst" the last digit run is the house number itself, so every word
+        # after it gets taken for the city and the street collapses to "7041". Refuse
+        # the row instead: a wrong street silently becomes a wrong site key, and the
+        # centre then fails to match the same building arriving from the registry and
+        # is counted twice. Use parse_address_with_known_locality when the source
+        # tells us the city separately.
+        if street and not re.search(r"[A-Za-z]", street):
+            return None
+    if not _is_street(street):
+        return None
     return (street or None, city or None, state, zip_code)
+
+
+def parse_address_with_known_locality(
+    value: str, locality: str
+) -> tuple[str | None, str | None, str, str] | None:
+    """Split a one-line US address whose city and state are already known.
+
+    Use this, not ``parse_us_address``, whenever the source hands us the locality
+    separately (Acorn Health titles every centre "Novi, MI"). Guessing where the
+    street ends is unreliable exactly where it matters: "890 Airport Park Road Suite
+    100 Glen Burnie MD 21061" has no comma before the city, so a heuristic peels only
+    the last alpha run and yields the street "...Suite 100 Glen" in the city "Burnie".
+    A wrong street is worse than no street, because the site key is built from it, so
+    the centre stops matching the registry row for the same building and gets counted
+    twice.
+
+    Knowing the locality turns the guess into a subtraction: strip the ZIP, strip the
+    known "City, ST" tail, and whatever remains in front is the street. Returns None if
+    the address does not in fact end with that locality. Pure function for testing.
+    """
+    s = _EN_DASH_RE.sub("-", _strip_tags(html.unescape(value or "")))
+    s = _expand_state_name(" ".join(s.split()))
+    label = " ".join(_EN_DASH_RE.sub("-", html.unescape(locality or "")).split())
+    m = _LOCALITY_RE.match(label)
+    if not m:
+        return None
+    city, state = m.group("city").strip(), m.group("state").upper()
+    zip_m = re.search(r"\b(\d{5})(?:-\d{4})?\s*$", _TRAILING_COUNTRY_RE.sub("", s))
+    if not zip_m:
+        return None
+    body = _TRAILING_COUNTRY_RE.sub("", s)[: zip_m.start()].strip().strip(",").strip()
+    # Match the label's words rather than its exact text: the source punctuates the
+    # same locality inconsistently ("Fort Wayne, IN" in the address, "Fort Wayne IN"
+    # in the heading it came from). Slicing at the match keeps the street's own
+    # internal commas intact.
+    tail = re.compile(
+        r"[,\s]+".join(re.escape(tok) for tok in label.replace(",", " ").split())
+        + r"\s*$",
+        re.I,
+    )
+    tail_m = tail.search(body)
+    if tail_m is None:
+        return None
+    street = body[: tail_m.start()].strip().strip(",").strip()
+    if not _is_street(street):
+        return None
+    return (street or None, city or None, state, zip_m.group(1))
 
 
 def parse_drupal_address_field(content: bytes | str) -> dict[str, str | None] | None:
@@ -543,11 +677,208 @@ class ActionBehaviorDirectory(_DirectorySource):
         return centers
 
 
+class AutismLearningPartnersDirectory(_DirectorySource):
+    """The Autism Learning Partners directory (an explicit-owner source, FFL Partners).
+
+    ALP's sitemap carries 200 URLs under ``/locations/``, but they are a three-level
+    tree: ``/locations/<state>/``, ``/locations/<state>/<county>/`` and, at the leaf,
+    ``/locations/<state>/<county>/<centre>/``. Only the leaves are centres, and only
+    the leaves carry an address, so the depth filter is the whole selection rule.
+
+    This corrects a real misreading. ALP was previously recorded as a chain that
+    publishes service-area pages with no street address and registers a single NPI,
+    and so was left at one clinic on purpose. That is true of the state and county
+    pages. It is not true of the 59 leaf pages beneath them, each of which is a
+    physical centre publishing its own street address in schema.org JSON-LD. The
+    lesson generalises: "the directory has no addresses" has to be checked at the
+    leaf, not at the index that links to it.
+
+    The address is a schema.org Text (one line, "2406 Merced Street, San Leandro, CA
+    94577, USA"), not a PostalAddress, so it is split by ``parse_us_address``.
+    """
+
+    key = "autism_learning_partners"
+    host = "autismlearningpartners.com"
+    base = "https://autismlearningpartners.com"
+    owner_name = "Autism Learning Partners"
+
+    # /locations/<state>/<county>/<centre>/ -> 7 parts once the scheme is counted.
+    _LEAF_DEPTH = 7
+
+    def _center_urls(self, client: httpx.Client) -> list[str]:
+        resp = client.get(f"{self.base}/sitemap.xml")
+        resp.raise_for_status()
+        urls = _LOC_RE.findall(resp.text)
+        if "<sitemapindex" in resp.text:
+            nested: list[str] = []
+            for sub in urls:
+                sub_resp = client.get(sub)
+                sub_resp.raise_for_status()
+                nested.extend(_LOC_RE.findall(sub_resp.text))
+            urls = nested
+        return sorted(
+            {
+                u
+                for u in urls
+                if "/locations/" in u
+                and len(u.rstrip("/").split("/")) == self._LEAF_DEPTH
+            }
+        )
+
+    @staticmethod
+    def _parse_with_url_city(
+        raw: str, url: str
+    ) -> tuple[str | None, str | None, str, str] | None:
+        """Fall back on the city in the URL when the address omits its commas.
+
+        Some ALP pages write the address as one unpunctuated run ("7041 Transit Rd
+        East Amherst New York 14051"), where no rule can tell the street from the
+        city: the last number is the house number, so peeling trailing words takes
+        the whole street name into the city. The leaf URL
+        (``/new-york/erie-county/east-amherst/``) already names the city, which turns
+        the guess back into a subtraction. If the address does not actually end in
+        that city, the parse is refused rather than forced.
+        """
+        m = re.search(r"\b([A-Z]{2})\s+\d{5}(?:-\d{4})?\s*$", _expand_state_name(
+            _TRAILING_COUNTRY_RE.sub("", " ".join(_strip_tags(raw).split()))
+        ))
+        if not m:
+            return None
+        slug = url.rstrip("/").rsplit("/", 1)[-1]
+        city = slug.replace("-", " ").title()
+        return parse_address_with_known_locality(raw, f"{city} {m.group(1)}")
+
+    def _centers(self, client: httpx.Client) -> list[dict[str, Any]]:
+        centers: list[dict[str, Any]] = []
+        for url in self._center_urls(client):
+            try:
+                resp = client.get(url)
+                resp.raise_for_status()
+            except Exception:
+                logger.exception("directory fetch failed for %s", url)
+                continue
+            addr = _jsonld_address(resp.content)
+            if addr is None or not addr.get("streetAddress"):
+                continue
+            name = html.unescape((addr.get("name") or "").strip())
+            raw = html.unescape(str(addr["streetAddress"])).strip()
+            # A few pages prepend the centre's own name to its address ("Autism
+            # Learning Partners San Diego, 4025 Camino del Rio South #101, ..."),
+            # which would otherwise land in address_line1 and be published as if it
+            # were part of the street.
+            if name and raw.casefold().startswith(name.casefold()):
+                raw = raw[len(name) :].lstrip(" ,")
+            # URL-city subtraction first, guess second. parse_us_address does not fail
+            # loudly on an unpunctuated address, it just returns a bad split ("7316
+            # Spout Springs Rd Suite 103 Flowery" in a city called "Branch"), so
+            # trying it first would mask the reliable answer with a plausible wrong
+            # one. When the slug is not the city (whittier -> La Habra) the
+            # subtraction declines and the guess still gets its turn.
+            parsed = self._parse_with_url_city(raw, url) or parse_us_address(raw)
+            if parsed is None:
+                # City-only pages ("Newark, NJ, USA") are service-area pages, not
+                # centres, and are meant to fall out here.
+                logger.info("alp: no street address on %s (%r)", url, raw)
+                continue
+            street, city, state, zip_code = parsed
+            centers.append(
+                {
+                    "url": url,
+                    "content": resp.content,
+                    "row": {
+                        "raw_name": name or "Autism Learning Partners",
+                        "address_line1": street,
+                        "city": city,
+                        "state": state,
+                        "zip": zip_code,
+                        "npi": None,
+                    },
+                }
+            )
+            time.sleep(REQUEST_DELAY_SEC)
+        return centers
+
+
+class AcornHealthDirectory(_DirectorySource):
+    """The Acorn Health directory (an explicit-owner source, MBF Healthcare Partners).
+
+    Acorn publishes its centres as a WordPress ``locations`` post type, so the roster
+    of 71 arrives in one call. The centre pages carry no schema.org address; the
+    address instead sits in the ``#address`` input the page hands to its own Google
+    Maps geocoder to place its pin. That input is a machine-readable contract in the
+    same sense the JSON-LD is (the site depends on it resolving to the right
+    building), not a scrape of rendered prose.
+
+    The address string does not reliably delimit the city ("890 Airport Park Road
+    Suite 100 Glen Burnie MD 21061"), but each post's title names it ("Glen Burnie,
+    MD"), so the split is a subtraction rather than a guess. See
+    ``parse_address_with_known_locality`` for why guessing here is actively unsafe.
+    """
+
+    key = "acorn"
+    host = "acornhealth.com"
+    base = "https://acornhealth.com"
+    owner_name = "Acorn Health"
+
+    _ADDRESS_INPUT_RE = re.compile(
+        r'<input[^>]+id="address"[^>]+value="([^"]+)"', re.I
+    )
+
+    def _posts(self, client: httpx.Client) -> list[dict[str, Any]]:
+        resp = client.get(
+            f"{self.base}/wp-json/wp/v2/locations?per_page=100",
+            headers={"Accept": "application/json"},
+        )
+        resp.raise_for_status()
+        return resp.json()
+
+    def _centers(self, client: httpx.Client) -> list[dict[str, Any]]:
+        centers: list[dict[str, Any]] = []
+        for post in self._posts(client):
+            url = post.get("link")
+            title = ((post.get("title") or {}).get("rendered") or "").strip()
+            if not url or not title:
+                continue
+            try:
+                resp = client.get(url)
+                resp.raise_for_status()
+            except Exception:
+                logger.exception("directory fetch failed for %s", url)
+                continue
+            m = self._ADDRESS_INPUT_RE.search(resp.text)
+            if m is None:
+                logger.warning("acorn: no address input on %s", url)
+                continue
+            parsed = parse_address_with_known_locality(m.group(1), title)
+            if parsed is None:
+                logger.warning("acorn: unparsed address on %s: %r", url, m.group(1))
+                continue
+            street, city, state, zip_code = parsed
+            centers.append(
+                {
+                    "url": url,
+                    "content": resp.content,
+                    "row": {
+                        "raw_name": f"Acorn Health - {html.unescape(title)}",
+                        "address_line1": street,
+                        "city": city,
+                        "state": state,
+                        "zip": zip_code,
+                        "npi": None,
+                    },
+                }
+            )
+            time.sleep(REQUEST_DELAY_SEC)
+        return centers
+
+
 _SOURCES: dict[str, type[_DirectorySource]] = {
     BlueSprigDirectory.key: BlueSprigDirectory,
     AcesDirectory.key: AcesDirectory,
     ProudMomentsDirectory.key: ProudMomentsDirectory,
     ActionBehaviorDirectory.key: ActionBehaviorDirectory,
+    AutismLearningPartnersDirectory.key: AutismLearningPartnersDirectory,
+    AcornHealthDirectory.key: AcornHealthDirectory,
 }
 
 

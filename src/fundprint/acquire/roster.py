@@ -49,6 +49,7 @@ Usage:
 
 from __future__ import annotations
 
+import html as html_lib
 import json
 import logging
 import re
@@ -61,6 +62,10 @@ import httpx
 
 from fundprint import db, fetch
 from fundprint.acquire.base import _find_existing_source_record, _insert_source_record
+from fundprint.acquire.directory import (
+    parse_address_with_known_locality,
+    parse_us_address,
+)
 from fundprint.storage import LocalFilesystemStore, SnapshotStore
 
 logger = logging.getLogger(__name__)
@@ -319,10 +324,79 @@ def parse_bi_roster(content: bytes) -> list[RosterCenter]:
     return [RosterCenter(**c) for c in data.get("centers", [])]
 
 
+# ---------------------------------------------------------------------------
+# Hopebridge (Arsenal Capital Partners)
+# ---------------------------------------------------------------------------
+
+HOPEBRIDGE_OWNER = "Hopebridge"
+HOPEBRIDGE_URL = "https://www.hopebridge.com/centers/"
+
+# Every centre is a card on the single /centers/ index, so the whole roster is one
+# request. Each card pairs a heading with an `address` list item.
+_HB_CARD_RE = re.compile(
+    r"<h3[^>]*>(?P<name>.*?)</h3>.*?<li class=\"address[^\"]*\">(?P<addr>[^<]+)</li>",
+    re.S | re.I,
+)
+_HB_TAG_RE = re.compile(r"<[^>]+>")
+# "Fort Wayne Autism Therapy Center" -> "Fort Wayne". The suffix is boilerplate on
+# every card; what is left is the city, which the address does not always delimit.
+_HB_NAME_SUFFIX_RE = re.compile(
+    r"\s*(?:-\s*\w+\s*)?(?:In-Home\s+)?Autism\s+Therapy(?:\s+Center)?\s*$", re.I
+)
+
+
+def parse_hopebridge_roster(content: bytes) -> list[RosterCenter]:
+    """Parse Hopebridge's /centers/ index. Pure; no I/O.
+
+    Two shapes have to survive here. Georgia writes the state as "Atlanta, Ga.,
+    30329"; Indiana drops the comma before the city ("4422 E State Blvd. Fort Wayne,
+    IN 46815"), where no rule can find the street's end unaided. The card's heading
+    names the city, so the city is subtracted rather than guessed, exactly as for
+    Acorn. See ``directory.parse_address_with_known_locality``.
+
+    In-home entries carry a "Serving areas: ..." list where the address goes and no
+    ZIP at all. They fall out here and they should: an in-home service area is not a
+    centre, which is the same trap Key Autism sets.
+    """
+    text = content.decode("utf-8", errors="replace")
+    centers: list[RosterCenter] = []
+    for m in _HB_CARD_RE.finditer(text):
+        raw_addr = html_lib.unescape(m.group("addr")).strip()
+        name = html_lib.unescape(_HB_TAG_RE.sub("", m.group("name"))).strip()
+        city = _HB_NAME_SUFFIX_RE.sub("", name).strip()
+        state_m = re.search(r"[,\s]([A-Za-z]{2})\.?[,\s]+\d{5}\b", raw_addr)
+        parsed = None
+        if city and state_m:
+            parsed = parse_address_with_known_locality(
+                raw_addr, f"{city} {state_m.group(1).upper()}"
+            )
+        parsed = parsed or parse_us_address(raw_addr)
+        if parsed is None:
+            logger.debug("hopebridge: no street address for %r (%r)", name, raw_addr)
+            continue
+        street, parsed_city, state, zip_code = parsed
+        centers.append(
+            RosterCenter(
+                owner_name=HOPEBRIDGE_OWNER,
+                address_line1=street,
+                city=parsed_city,
+                state=state,
+                zip=zip_code,
+            )
+        )
+    return centers
+
+
+def fetch_hopebridge(client: httpx.Client) -> tuple[bytes, str]:
+    """Fetch Hopebridge's centre index. One page, every centre."""
+    return fetch.get(HOPEBRIDGE_URL, client=client), HOPEBRIDGE_URL
+
+
 SOURCES = {
     "learn": (fetch_learn, parse_learn_roster),
     "caravel": (fetch_caravel, parse_caravel_roster),
     "behavioral-innovations": (fetch_bi, parse_bi_roster),
+    "hopebridge": (fetch_hopebridge, parse_hopebridge_roster),
 }
 
 

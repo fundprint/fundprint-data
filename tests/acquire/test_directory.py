@@ -3,8 +3,11 @@
 from __future__ import annotations
 
 from fundprint.acquire.directory import (
+    AutismLearningPartnersDirectory,
     BlueSprigDirectory,
     ProudMomentsDirectory,
+    _jsonld_address,
+    parse_address_with_known_locality,
     parse_drupal_address_field,
     parse_jsonld_location,
     parse_us_address,
@@ -168,3 +171,82 @@ class TestProudMomentsSlug:
         assert ProudMomentsDirectory._name_from_slug(
             "https://www.proudmomentsaba.com/albuquerque-coors-learning-center-aba-therapy"
         ) == "Proud Moments ABA - Albuquerque Coors Learning Center"
+
+
+# schema.org allows `address` to be a plain Text; Autism Learning Partners uses it.
+_PAGE_STRING_ADDRESS = """
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"LocalBusiness",
+ "name":"Autism Learning Partners San Leandro",
+ "address":"2406 Merced Street, San Leandro, CA 94577, USA"}
+</script>
+"""
+
+
+class TestStringAddress:
+    def test_reads_text_form_address(self):
+        assert _jsonld_address(_PAGE_STRING_ADDRESS) == {
+            "name": "Autism Learning Partners San Leandro",
+            "streetAddress": "2406 Merced Street, San Leandro, CA 94577, USA",
+        }
+
+    def test_country_suffix_does_not_defeat_the_state_zip_tail(self):
+        assert parse_us_address("2406 Merced Street, San Leandro, CA 94577, USA") == (
+            "2406 Merced Street",
+            "San Leandro",
+            "CA",
+            "94577",
+        )
+
+    def test_dict_form_still_wins(self):
+        # Regression: adding the Text form must not shadow PostalAddress.
+        assert _jsonld_address(_PAGE_WITH_JSONLD)["streetAddress"] == "5457 SW Canyon Ct."
+
+
+class TestAlpLeafDepth:
+    def test_only_leaf_pages_are_centres(self):
+        # State and county pages are service-area indexes, not centres, and they
+        # carry no address. Only the third level down is a physical site.
+        src = AutismLearningPartnersDirectory
+        urls = [
+            "https://autismlearningpartners.com/locations/california/",
+            "https://autismlearningpartners.com/locations/california/fresno-county/",
+            "https://autismlearningpartners.com/locations/california/fresno-county/fresno/",
+        ]
+        leaves = [u for u in urls if len(u.rstrip("/").split("/")) == src._LEAF_DEPTH]
+        assert leaves == [
+            "https://autismlearningpartners.com/locations/california/fresno-county/fresno/"
+        ]
+
+
+class TestKnownLocality:
+    def test_subtracts_a_multiword_city_a_guess_would_split(self):
+        # The failure this function exists to prevent: guessing yields the street
+        # "...Suite 100 Glen" in a city called "Burnie".
+        assert parse_address_with_known_locality(
+            "890 Airport Park Road Suite 100 Glen Burnie, MD 21061", "Glen Burnie, MD"
+        ) == ("890 Airport Park Road Suite 100", "Glen Burnie", "MD", "21061")
+
+    def test_city_that_starts_with_a_street_suffix_word(self):
+        assert parse_address_with_known_locality(
+            "31225 Jefferson Avenue St. Clair Shores, MI 48082", "St. Clair Shores, MI"
+        ) == ("31225 Jefferson Avenue", "St. Clair Shores", "MI", "48082")
+
+    def test_neighbourhood_suffix_and_html_entity(self):
+        assert parse_address_with_known_locality(
+            "644 Ferguson Drive Suite 200 Orlando, FL &#8211; Downtown 32805",
+            "Orlando, FL &#8211; Downtown",
+        ) == ("644 Ferguson Drive Suite 200", "Orlando", "FL", "32805")
+
+    def test_locality_without_a_comma(self):
+        assert parse_address_with_known_locality(
+            "42850 Garfield Road Suite 101 Clinton Township  MI 48038",
+            "Clinton Township  MI",
+        ) == ("42850 Garfield Road Suite 101", "Clinton Township", "MI", "48038")
+
+    def test_rejects_an_address_that_is_not_in_the_stated_locality(self):
+        # Better to drop the row than to stage a street sliced at the wrong place.
+        assert (
+            parse_address_with_known_locality("1 Main St Elsewhere, TX 70000", "Novi, MI")
+            is None
+        )
