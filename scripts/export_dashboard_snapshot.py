@@ -38,7 +38,7 @@ DATASET_VERSION = "2026.07-beta"
 # definition of a countable site is not, which is a methodology change under
 # section 12. The pin must move in the same commit as the numbers, or a reader who
 # follows it lands on a document describing different ones.
-METHODOLOGY_VERSION = "2026.07-sites-v1"
+METHODOLOGY_VERSION = "2026.07-no-threshold-v1"
 
 
 def _source_urls(conn, source_record_ids) -> list[str]:
