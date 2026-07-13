@@ -38,7 +38,7 @@ DATASET_VERSION = "2026.07-beta"
 # definition of a countable site is not, which is a methodology change under
 # section 12. The pin must move in the same commit as the numbers, or a reader who
 # follows it lands on a document describing different ones.
-METHODOLOGY_VERSION = "2026.07-directory-v1"
+METHODOLOGY_VERSION = "2026.07-directory-v2"
 
 
 def _source_urls(conn, source_record_ids) -> list[str]:
@@ -273,6 +273,21 @@ def build_snapshot(conn) -> dict:
     pe_clinics = sum(1 for c in clinics if c["firm_type"] == "private_equity")
     located_clinics = sum(1 for c in clinics if c["lat"] is not None)
 
+    # How many published clinics an owner's own directory or roster attests to. The
+    # site states this split, so it has to come from the data: a clinic the owner
+    # itself lists today cannot be a stale registration, and that is the single
+    # strongest thing we can say about the dataset's freshness.
+    directory_sourced = conn.execute(
+        """
+        SELECT count(*) FROM v_published_clinics c
+        WHERE EXISTS (
+            SELECT 1 FROM source_record sr
+            WHERE sr.id = ANY(c.source_record_ids)
+              AND sr.source_type = 'owner_location_directory'
+        )
+        """
+    ).fetchone()[0]
+
     # The national market denominator, computed by scripts/compute_market_share.py
     # from the same bulk registry. Optional: if it has not been computed, the
     # dashboard simply omits the share rather than inventing one.
@@ -302,6 +317,8 @@ def build_snapshot(conn) -> dict:
             # How many clinics carry a map coordinate (ZIP centroid). Disclosed
             # on the map so a reader knows the dot count vs the tracked count.
             "located_clinics": located_clinics,
+            "directory_sourced_clinics": directory_sourced,
+            "registry_only_clinics": len(clinics) - directory_sourced,
         },
         "market": market,
         "acquirers": acquirers,
