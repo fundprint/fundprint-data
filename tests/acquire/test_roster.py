@@ -5,8 +5,11 @@ from __future__ import annotations
 import json
 
 from fundprint.acquire.roster import (
+    BI_OWNER,
     CARAVEL_OWNER,
     LEARN_BRAND_TO_OWNER,
+    _bi_location_urls,
+    parse_bi_page,
     parse_caravel_page,
     parse_learn_roster,
 )
@@ -103,3 +106,52 @@ class TestParseCaravelPage:
     def test_malformed_json_ld_does_not_crash(self):
         html = '<script type="application/ld+json">{not json</script>'
         assert parse_caravel_page(html) is None
+
+
+BI_SITEMAP = """<?xml version="1.0"?><urlset>
+  <url><loc>https://behavioral-innovations.com/location/</loc></url>
+  <url><loc>https://behavioral-innovations.com/location/austin-tx/</loc></url>
+  <url><loc>https://behavioral-innovations.com/location/cockeysville-md/</loc></url>
+  <url><loc>https://behavioral-innovations.com/es/location/austin-tx/</loc></url>
+  <url><loc>https://behavioral-innovations.com/blog/opens-50th-location/</loc></url>
+</urlset>"""
+
+BI_HTML = """
+<script type="application/ld+json">
+{"@type":"MedicalClinic","name":"ABA Therapy in Cockeysville, MD",
+ "address":{"@type":"PostalAddress","streetAddress":"122 Cranbrook Rd, Suite 36",
+ "addressLocality":"Cockeysville","addressRegion":"MD","postalCode":"21030"}}
+</script>
+"""
+
+
+class TestBehavioralInnovations:
+    def test_picks_only_english_center_pages(self):
+        urls = _bi_location_urls(BI_SITEMAP)
+        assert urls == [
+            "https://behavioral-innovations.com/location/austin-tx/",
+            "https://behavioral-innovations.com/location/cockeysville-md/",
+        ]
+
+    def test_spanish_mirror_is_excluded(self):
+        # /es/ lists the SAME centers; including it would double-count every one.
+        assert not any("/es/" in u for u in _bi_location_urls(BI_SITEMAP))
+
+    def test_location_index_is_not_a_center(self):
+        urls = _bi_location_urls(BI_SITEMAP)
+        assert "https://behavioral-innovations.com/location/" not in urls
+
+    def test_blog_post_mentioning_location_is_not_a_center(self):
+        assert not any("/blog/" in u for u in _bi_location_urls(BI_SITEMAP))
+
+    def test_reads_the_center_address(self):
+        c = parse_bi_page(BI_HTML)
+        assert c is not None
+        assert c.owner_name == BI_OWNER
+        assert c.address_line1 == "122 Cranbrook Rd, Suite 36"
+        assert c.city == "Cockeysville"
+        assert c.state == "MD"
+        assert c.zip == "21030"
+
+    def test_page_without_an_address_yields_nothing(self):
+        assert parse_bi_page("<html>no schema</html>") is None

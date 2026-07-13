@@ -321,6 +321,183 @@ CURATED_ACQUISITIONS: list[CuratedAcquisition] = [
             "making Gryphon the ultimate private-equity owner."
         ),
     ),
+    # ---- Second discovery pass: ranked chains + known PE platforms -----------
+    #
+    # EXCLUDED on the controlling-interest rule (section 2 of the methodology:
+    # ownership means the parent acquired, controls, or holds a controlling
+    # interest). These have an institutional investor but the founders retain
+    # control, so they are not published as owned:
+    #   * My Favorite Therapists (22 sites) - 5th Century Partners took a MINORITY
+    #     strategic stake (Feb 2025); the founding Katari family retains
+    #     significant ownership and the founder remains CEO.
+    #   * Able Kids Services (22) - MKH Capital Partners describes its own
+    #     position as a "minority co-investment".
+    #   * Forta / Montera Health (24) - Insight Partners led a minority Series A.
+    #
+    # EXCLUDED as not institutionally owned: Golden Steps ABA (founder-owned),
+    # Verbal Beginnings (founder-owned), Applied ABC (clinician-owned), Cortica
+    # (venture syndicate, no controlling firm), Elemy/Tilly (venture-backed, and
+    # it exited direct clinical care entirely), Blue Balloon ABA (now Children's
+    # Specialized ABA under the RWJBarnabas nonprofit hospital system), Bierman,
+    # Stride, Intercare, Soar Health, Positive Behavior Supports Corp.
+    #
+    # EXCLUDED as not an autism/ABA chain: Elite DNA / DNA Comprehensive Therapy
+    # (general behavioral health; ABA is one line among several), Developmental
+    # Disabilities Resources (nonprofit I/DD residential and day supports).
+    #
+    # HELD for want of a confirmed CURRENT source: Kyo Autism Therapy (Norwest
+    # invested in 2019 and no exit is reported, but nothing since 2021 restates
+    # them as owner), Behavior Analysis Support Services (no investor found at
+    # all), Autism Care Partners (Coppermine Capital is confirmed, but its legal
+    # entity name could not be resolved, so its clinics cannot be matched),
+    # Invo Healthcare (Leonard Green via The Stepping Stones Group, but Invo is a
+    # multi-service school-staffing group and matching its legal name would
+    # over-capture non-ABA services).
+    CuratedAcquisition(
+        # The single largest chain Fundprint was missing. It was previously left
+        # out because trade chatter had it moving from FFL Partners to H.I.G.
+        # Capital and the current owner was ambiguous. That chatter does not hold
+        # up: FFL's own portfolio page still lists Autism Learning Partners among
+        # its current holdings, in a section distinct from its labelled exits, and
+        # H.I.G.'s portfolio does not list it at all. The primary source wins.
+        pe_firm_name="FFL Partners",
+        portfolio_name="Autism Learning Partners",
+        source_url="https://www.fflpartners.com/portfolio",
+        description=(
+            "Autism Learning Partners, one of the largest US ABA providers, was "
+            "acquired by FFL Partners in a $270M+ secondary buyout (Dec 2017) and "
+            "remains listed among FFL's current portfolio holdings, separately "
+            "from that page's exited companies. Reports of a sale to H.I.G. "
+            "Capital could not be substantiated against any primary source."
+        ),
+    ),
+    # NOTE on Autism Learning Partners' clinic count, which is 1 and looks broken.
+    # It is not. ALP registers a single organization NPI, and its own website
+    # publishes 199 "service area" pages rather than centers: each carries only a
+    # city ("Taunton, MA, USA"), never a street address, because ALP delivers much
+    # of its care in homes and schools. Ingesting those 199 as clinics is exactly
+    # the error we refused for Key Autism. So ALP's ownership is published (that
+    # is the sourced fact) while its center count stays at what public records
+    # actually establish. This is the clearest live example of the dataset's rule:
+    # coverage, not census.
+    CuratedAcquisition(
+        # Registers with the provider registry under its legal name, "VOCATIONAL
+        # DEVELOPMENT GROUP, LLC", though it trades as InBloom Autism Services.
+        # The legal name is stored so the name-prefix match finds its centers, the
+        # same pattern as ACES ("ACES 2020, LLC").
+        #
+        # Elysium Management is Leon Black's family office, not a buyout fund, so
+        # firm_type is family_office rather than private_equity.
+        pe_firm_name="Elysium Management",
+        portfolio_name="Vocational Development Group",
+        firm_type="family_office",
+        source_url=(
+            "https://bhbusiness.com/2026/01/14/"
+            "webster-equity-partners-sells-inbloom-autism-services/"
+        ),
+        description=(
+            "InBloom Autism Services, which registers as Vocational Development "
+            "Group, LLC, was sold by Webster Equity Partners to Elysium "
+            "Management (the family office of Leon Black) for a reported $75M, "
+            "announced January 2026. Elysium is a family office rather than a "
+            "private-equity fund, and is labelled as such."
+        ),
+    ),
+    CuratedAcquisition(
+        pe_firm_name="Pharos Capital Group",
+        portfolio_name="Behavior Care Specialists",
+        source_url=(
+            "https://www.bassberry.com/experience/"
+            "pharos-capitals-family-treatment-network-acquires-behavior-care-specialists/"
+        ),
+        description=(
+            "Behavior Care Specialists, a South Dakota ABA provider, was acquired "
+            "by Pharos Capital Group through its Family Treatment Network platform "
+            "(2018). Its centers now also carry the Catalyst Behavior Solutions "
+            "brand, another Family Treatment Network company, and no subsequent "
+            "sale of the platform is reported."
+        ),
+    ),
+    CuratedAcquisition(
+        pe_firm_name="Goldman Sachs Alternatives",
+        portfolio_name="Center for Social Dynamics",
+        source_url=(
+            "https://nms-capital.com/news/"
+            "goldman-sachs-alternatives-completes-acquisition-of-center-for-social-dynamics-"
+            "from-nms-capital/"
+        ),
+        description=(
+            "Center for Social Dynamics (CSD), a West Coast ABA provider, was "
+            "acquired from NMS Capital by Goldman Sachs Alternatives, which took "
+            "majority ownership in December 2024. NMS Capital re-invested and "
+            "retains a minority stake."
+        ),
+    ),
+    CuratedAcquisition(
+        # Registers as "CAROLINA CENTER FOR AUTISM SERVICES, LLC"; trades as Kind
+        # Behavioral Health. Trilogy Search Partners is a search-fund investor
+        # that takes control positions rather than a classic buyout fund, so the
+        # owner type is recorded as `other` rather than overclaiming private
+        # equity.
+        pe_firm_name="Trilogy Search Partners",
+        portfolio_name="Carolina Center for Autism Services",
+        firm_type="other",
+        source_url="https://trilogy-search.com/portfolio",
+        description=(
+            "Carolina Center for Autism Services (trading as Kind Behavioral "
+            "Health), a North Carolina ABA provider, is listed as a current "
+            "holding on the portfolio page of Trilogy Search Partners, a "
+            "search-fund investor. Recorded as `other` because a search fund is "
+            "neither a buyout fund, a pension, nor a family office."
+        ),
+    ),
+    CuratedAcquisition(
+        # Rolls up to Zenyth Partners, which Fundprint already tracks through
+        # Helping Hands Family. Mission is a separate registered brand, so it is
+        # its own owner entity under the same parent firm.
+        pe_firm_name="Zenyth Partners",
+        portfolio_name="Mission Autism Clinics",
+        source_url=(
+            "https://bhbusiness.com/2024/11/11/"
+            "helping-hands-family-acquires-mission-autism-clinics-grows-to-nearly-40-locations/"
+        ),
+        description=(
+            "Mission Autism Clinics was acquired by Helping Hands Family in "
+            "November 2024. Helping Hands Family is a portfolio company of Zenyth "
+            "Partners, making Zenyth the ultimate private-equity owner."
+        ),
+    ),
+    CuratedAcquisition(
+        # Rolls up to Goldman Sachs Alternatives through Center for Social
+        # Dynamics, added above.
+        pe_firm_name="Goldman Sachs Alternatives",
+        portfolio_name="Behavior Change Institute",
+        source_url=(
+            "https://www.prnewswire.com/news-releases/"
+            "csd-acquires-premier-new-mexico-provider-bci-advancing-access-to-breakthrough-"
+            "autism-and-behavioral-care-in-the-southwest-302692824.html"
+        ),
+        description=(
+            "Behavior Change Institute (BCI), a New Mexico autism and behavioral "
+            "care provider, was acquired by Center for Social Dynamics in "
+            "February 2026. CSD is majority-owned by Goldman Sachs Alternatives, "
+            "making it the ultimate owner."
+        ),
+    ),
+    # NOT INGESTED, deliberately:
+    #   * ABA Connect / Austin Connect to Wellness (16 sites, reported MBF
+    #     Healthcare Partners II, Dec 2022). The only source found is a
+    #     Businesswire release that returns 403 to every client we have, curl
+    #     included, so it cannot be fetched and content-hashed. Revisit when a
+    #     fetchable source (an MBF portfolio page, say) is found.
+    #   * Patterns Behavioral Services (15, reported Webster Equity Partners via
+    #     Redwood Family Care Network). Each hop is separately sourced but no
+    #     single current source states that Patterns is a Webster company, and a
+    #     three-hop inference is below the bar.
+    #   * Lolly Therapeutics / PatKids (16, JoyBridge Kids / Frontline Healthcare
+    #     Partners). Ownership is solid but its primary registry taxonomy is
+    #     occupational therapy: a multidisciplinary pediatric practice where ABA
+    #     is one service among several, not an ABA chain.
     # ---- Chains found by ranking the whole registry, then verifying owners ---
     # These were surfaced by ranking every ABA organization in the national
     # provider registry by site count and researching the owners of the largest

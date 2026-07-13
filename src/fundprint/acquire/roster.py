@@ -5,7 +5,10 @@ parsing its schema.org or Drupal address markup. Some owners do better than that
 they expose the whole roster as structured data in one place, because their site
 is driven by it.
 
-Two such rosters, both of chains the provider registry badly undercounts:
+Three such rosters, all of chains the provider registry badly undercounts. The
+undercount is not incidental: these chains bill under a handful of organization
+NPIs, so the registry can only ever see a handful of clinics, however hard we
+query it. The owner's own roster is the only public record of the rest.
 
 * **LEARN Behavioral** (Gryphon Investors) runs a WP Store Locator. Its search
   endpoint returns all 151 centers in a single JSON response, each with a street
@@ -13,12 +16,16 @@ Two such rosters, both of chains the provider registry badly undercounts:
   acquired brand's own name (Autism Spectrum Therapies, Total Spectrum, Wisconsin
   Early Autism Project, ...), so the roster attributes each center to the right
   owner rather than to a holding company. The registry sees 9 of these centers.
+* **Behavioral Innovations** (Tenex Capital Management) is the starkest case in
+  the dataset. It operates roughly 150 centers and the federal registry yields
+  **four**. Its sitemap lists every center page, and each carries a schema.org
+  ``MedicalClinic`` block with the address.
 * **Caravel Autism Health** (GTCR) exposes its centers as a WordPress custom post
-  type, and each center's page carries a schema.org ``MedicalClinic`` block with
-  the full address. The registry sees 2 of Caravel's 77 centers.
+  type, and each center page carries the same kind of schema.org block. The
+  registry sees 2 of Caravel's 77 centers.
 
-Both are read as *published structured data*, not scraped prose: a JSON endpoint
-and a machine-readable address block the site publishes for search engines.
+All three are read as *published structured data*, not scraped prose: a JSON
+endpoint and machine-readable address blocks the sites publish for search engines.
 
 ## Why rows are staged under the OWNER's name
 
@@ -243,9 +250,79 @@ def parse_caravel_roster(content: bytes) -> list[RosterCenter]:
 # Orchestration
 # ---------------------------------------------------------------------------
 
+# ---------------------------------------------------------------------------
+# Behavioral Innovations (Tenex Capital Management)
+# ---------------------------------------------------------------------------
+#
+# The starkest registry undercount in the dataset. Behavioral Innovations
+# operates roughly 150 centers and registers almost none of them as organization
+# NPIs, so the federal registry yields four. Its own sitemap lists every center,
+# and each center page carries a schema.org MedicalClinic block with the address.
+
+BI_OWNER = "Behavioral Innovations"
+BI_SITEMAP = "https://behavioral-innovations.com/sitemap-0.xml"
+_BI_LOC_RE = re.compile(r"<loc>([^<]+)</loc>", re.I)
+
+
+def _bi_location_urls(sitemap_xml: str) -> list[str]:
+    """English center pages from the sitemap. Pure, so it is testable."""
+    urls = _BI_LOC_RE.findall(sitemap_xml)
+    return [
+        u
+        for u in urls
+        # /es/ is the Spanish mirror of the same centers: same addresses, counted
+        # twice if included. The bare /location/ index is not a center.
+        if "/location/" in u and "/es/" not in u and not u.rstrip("/").endswith("/location")
+    ]
+
+
+def parse_bi_page(html: str) -> RosterCenter | None:
+    """Parse one Behavioral Innovations center page. Pure; no I/O."""
+    addr = _jsonld_address(html)
+    if not addr or not (addr.get("streetAddress") or "").strip():
+        return None
+    return RosterCenter(
+        owner_name=BI_OWNER,
+        address_line1=addr["streetAddress"].strip(),
+        city=(addr.get("addressLocality") or "").strip() or None,
+        state=((addr.get("addressRegion") or "").strip()[:2] or None),
+        zip=(addr.get("postalCode") or "").strip() or None,
+    )
+
+
+def fetch_bi(client: httpx.Client) -> tuple[bytes, str]:
+    """Enumerate BI's centers from its sitemap, then read each page's address."""
+    sitemap = fetch.get(BI_SITEMAP, client=client).decode("utf-8", errors="replace")
+    links = _bi_location_urls(sitemap)
+    logger.info("behavioral innovations: %d center page(s) in sitemap", len(links))
+
+    centers: list[dict] = []
+    for link in links:
+        try:
+            html = fetch.get(link, client=client).decode("utf-8", errors="replace")
+        except (httpx.HTTPError, fetch.FetchError) as exc:
+            logger.warning("bi page failed %s: %s", link, exc)
+            continue
+        center = parse_bi_page(html)
+        if center:
+            center.detail_url = link
+            centers.append(vars(center))
+        time.sleep(REQUEST_DELAY_SEC)
+
+    doc = json.dumps({"source": BI_SITEMAP, "centers": centers}).encode()
+    return doc, BI_SITEMAP
+
+
+def parse_bi_roster(content: bytes) -> list[RosterCenter]:
+    """Parse the merged Behavioral Innovations document produced by fetch_bi."""
+    data = json.loads(content)
+    return [RosterCenter(**c) for c in data.get("centers", [])]
+
+
 SOURCES = {
     "learn": (fetch_learn, parse_learn_roster),
     "caravel": (fetch_caravel, parse_caravel_roster),
+    "behavioral-innovations": (fetch_bi, parse_bi_roster),
 }
 
 
