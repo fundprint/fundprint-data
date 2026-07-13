@@ -33,7 +33,12 @@ logger = logging.getLogger(__name__)
 # The dashboard pins exactly one dataset_version per deploy. Bump this in step
 # with the Hugging Face release the snapshot is cut from.
 DATASET_VERSION = "2026.07-beta"
-METHODOLOGY_VERSION = "2026.06-floors-v0"
+# Bumped with the site-counting correction: one site is one clinic even when two
+# of a parent firm's brands are registered at it. The floors are unchanged; the
+# definition of a countable site is not, which is a methodology change under
+# section 12. The pin must move in the same commit as the numbers, or a reader who
+# follows it lands on a document describing different ones.
+METHODOLOGY_VERSION = "2026.07-sites-v1"
 
 
 def _source_urls(conn, source_record_ids) -> list[str]:

@@ -189,19 +189,36 @@ def main() -> int:
                 add(meta[0], meta[1], row[P_A1], row[P_ZIP])
 
     # ---- the numbers -------------------------------------------------------
-    all_sites = sum(len(s) for s in chain_sites.values())
+    # Every figure below is a count of DISTINCT sites: a union, never a sum of
+    # per-group sizes. This is the difference between the methodology's claim and
+    # its implementation, and it was wrong in the direction that flattered us.
+    #
+    # One address can carry more than one legal entity, and therefore more than one
+    # chain stem and more than one tracked brand. KKR registers BlueSprig and
+    # Florida Autism Center at the same Ocala suite; LEARN registers Total Spectrum
+    # and Wisconsin Early Autism Project at the same six Wisconsin streets. Summing
+    # `len()` across owners counted such a site once per brand, so the numerator was
+    # not the strict subset of the denominator this file claims it is: it was a
+    # multiset that could, in principle, exceed it. Unions make the claim true.
+    all_sites = len(set().union(*chain_sites.values())) if chain_sites else 0
     chains = {k: v for k, v in chain_sites.items() if len(v) >= CHAIN_MIN_SITES}
-    chain_site_total = sum(len(v) for v in chains.values())
+    chain_universe: set = set().union(*chains.values()) if chains else set()
+    chain_site_total = len(chain_universe)
 
-    tracked_sites = sum(len(s) for s in owner_sites.values())
-    pe_sites = sum(
-        len(s) for o, s in owner_sites.items() if firm_of[o][1] == "private_equity"
-    )
-    # Tracked sites that sit inside a chain (they all should; assert the overlap).
-    tracked_in_chains = 0
-    for owner, s in owner_sites.items():
-        for stem_, cs in chains.items():
-            tracked_in_chains += len(s & cs)
+    tracked_universe: set = set().union(*owner_sites.values()) if owner_sites else set()
+    tracked_sites = len(tracked_universe)
+    pe_owner_sets = [
+        s for o, s in owner_sites.items() if firm_of[o][1] == "private_equity"
+    ]
+    pe_universe: set = set().union(*pe_owner_sets) if pe_owner_sets else set()
+    pe_sites = len(pe_universe)
+    # Set intersection, so a tracked site inside a chain is counted exactly once no
+    # matter how many brands or chain stems that one address registers under.
+    tracked_in_chains = len(tracked_universe & chain_universe)
+    # Private equity ALONE, on the same basis. The tracked figure also contains a
+    # pension fund and a family office, so a headline that says "private equity"
+    # must be built on this number and not on that one.
+    pe_in_chains = len(pe_universe & chain_universe)
 
     market = {
         "meta": {
@@ -231,11 +248,15 @@ def main() -> int:
             "tracked_sites": tracked_sites,
             "private_equity_sites": pe_sites,
             "tracked_sites_within_chains": tracked_in_chains,
+            "private_equity_sites_within_chains": pe_in_chains,
         },
         "share": {
             "tracked_of_all_sites": round(100 * tracked_sites / all_sites, 1),
             "private_equity_of_all_sites": round(100 * pe_sites / all_sites, 1),
             "tracked_of_chain_sites": round(100 * tracked_in_chains / chain_site_total, 1),
+            "private_equity_of_chain_sites": round(
+                100 * pe_in_chains / chain_site_total, 1
+            ),
         },
         "context": {
             "published_clinics": published_clinics,
@@ -273,6 +294,10 @@ def main() -> int:
     logger.info(
         "  tracked share of CHAIN sites     : %5.1f%%  <-- the story",
         s["tracked_of_chain_sites"],
+    )
+    logger.info(
+        "  PE-only share of CHAIN sites     : %5.1f%%",
+        s["private_equity_of_chain_sites"],
     )
     logger.info("wrote %s", args.out)
     return 0

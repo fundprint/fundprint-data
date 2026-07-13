@@ -189,17 +189,30 @@ def _load_owners(conn: Any) -> list[tuple[str, str]]:
 
 
 def _load_existing_site_keys(conn: Any) -> set[tuple[str, str, str]]:
-    """Return the site_key of every live clinic, to de-duplicate new rows against.
+    """Return the site_key of every clinic ever promoted, live *or superseded*.
 
     Covers both directions the same key protects against: a directory center that
     is already present from NPPES, and a second NPI enumeration at an address the
     chain already has a clinic row for.
+
+    Superseded rows are deliberately included. `superseded_by` means one thing in
+    this schema -- "this row duplicates that row, which is the same physical site"
+    -- so a superseded site_key is a site we already count under another row, and
+    re-promoting it would resurrect the duplicate. This is not hypothetical: the
+    cross-brand correction (scripts/correct_cross_brand_sites.py) supersedes a site
+    registered under a second brand of the same parent, and that row keeps its own
+    owner_entity, hence its own site_key. Filtering to live rows here would let the
+    very next linker run write it back and silently reverse the correction.
+
+    A clinic held out for being a ghost or out of scope is quarantined instead, via
+    a validation decision, and never lands in superseded_by, so this does not
+    suppress anything the validator is entitled to reconsider.
     """
     rows = conn.execute(
         """
         SELECT owner_entity_id, address_line1, zip, city, state
         FROM clinic
-        WHERE superseded_by IS NULL AND owner_entity_id IS NOT NULL
+        WHERE owner_entity_id IS NOT NULL
         """
     ).fetchall()
     return {
@@ -487,9 +500,12 @@ def link_directory_owner(
         if row is None:
             raise ValueError(f"owner_entity {owner_entity_name!r} not found")
         owner_id = str(row[0])
+        # Superseded rows included, for the reason given in _load_existing_site_keys:
+        # a superseded site is a duplicate we already count elsewhere, and writing it
+        # back from a directory would undo a correction.
         existing = c.execute(
             "SELECT state, city, address_line1, zip FROM clinic "
-            "WHERE owner_entity_id = %s AND superseded_by IS NULL",
+            "WHERE owner_entity_id = %s",
             (owner_id,),
         ).fetchall()
         keys = {
