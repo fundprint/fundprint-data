@@ -98,13 +98,20 @@ def build_snapshot(conn) -> dict:
     # the published PE-links view, so every clinic carries its full chain and
     # the honest firm_type. A clinic with no published PE link simply does not
     # appear here (absence is a coverage statement, surfaced in the UI copy).
+    # The street comes from `clinic`, not the view, which carries only city/state/zip.
+    # Without it the site cannot tell one clinic from another: a chain names every
+    # site after the brand, so Behavioral Innovations' three Cypress TX centres all
+    # render as the identical string "Behavioral Innovations, Cypress, TX" (two even
+    # share a ZIP). The street is what a parent actually recognises, and it is the
+    # only field that distinguishes real sibling sites from a duplicate-row bug.
     clinic_rows = conn.execute(
         """
-        SELECT c.id, c.name, c.city, c.state, c.zip, c.npi,
+        SELECT c.id, c.name, addr.address_line1, c.city, c.state, c.zip, c.npi,
                c.confidence_score, c.confidence_method, c.source_record_ids,
                l.owner_entity_id, l.owner_entity_name,
                l.parent_pe_firm_id, l.parent_pe_firm_name, l.parent_pe_firm_type
         FROM v_published_clinics c
+        JOIN clinic addr ON addr.id = c.id
         JOIN owner_entity oe ON oe.id = c.owner_entity_id
         JOIN v_published_pe_links l ON l.owner_entity_id = oe.id
         ORDER BY c.name
@@ -114,13 +121,14 @@ def build_snapshot(conn) -> dict:
     exact_centroids, zip3_centroids = _load_centroids()
     clinics = []
     for r in clinic_rows:
-        (cid, name, city, state, zipc, npi, conf, method, srids,
+        (cid, name, address, city, state, zipc, npi, conf, method, srids,
          owner_id, owner_name, firm_id, firm_name, firm_type) = r
         lat, lng = _coords(zipc, exact_centroids, zip3_centroids)
         clinics.append(
             {
                 "id": str(cid),
                 "name": name,
+                "address": address,
                 "city": city,
                 "state": state,
                 "zip": zipc,

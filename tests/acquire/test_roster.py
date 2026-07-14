@@ -155,3 +155,35 @@ class TestBehavioralInnovations:
 
     def test_page_without_an_address_yields_nothing(self):
         assert parse_bi_page("<html>no schema</html>") is None
+
+    def test_whole_address_crammed_into_street_is_split(self):
+        # A third of BI's pages serve a PostalAddress with the entire address in
+        # streetAddress and no locality fields at all (only addressCountry). Staging
+        # that verbatim left city/state/zip null and put the city inside the street:
+        # the site key is built from the street, so the centre could never match the
+        # same building arriving from the registry, and the null state dropped it out
+        # of the state map and the per-state shares. The street must come out clean.
+        page = """<script type="application/ld+json">
+        {"@type": "MedicalClinic", "name": "Conroe", "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "1450 League Line Road, Suite 100, Conroe, Texas 77304",
+          "addressCountry": "US"}}
+        </script>"""
+        c = parse_bi_page(page)
+        assert c is not None
+        assert c.address_line1 == "1450 League Line Road, Suite 100"
+        assert c.city == "Conroe"
+        assert c.state == "TX"
+        assert c.zip == "77304"
+
+    def test_unsplittable_crammed_address_is_refused_not_mangled(self):
+        # A wrong street is worse than no street: it becomes a wrong site key, so the
+        # centre stops matching the same building from another source and is counted
+        # twice. Drop the row instead.
+        page = """<script type="application/ld+json">
+        {"@type": "MedicalClinic", "name": "Nowhere", "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "In-home services available now",
+          "addressCountry": "US"}}
+        </script>"""
+        assert parse_bi_page(page) is None

@@ -286,12 +286,31 @@ def parse_bi_page(html: str) -> RosterCenter | None:
     addr = _jsonld_address(html)
     if not addr or not (addr.get("streetAddress") or "").strip():
         return None
+    street = addr["streetAddress"].strip()
+    city = (addr.get("addressLocality") or "").strip() or None
+    state = (addr.get("addressRegion") or "").strip()[:2] or None
+    zip_code = (addr.get("postalCode") or "").strip() or None
+
+    # A third of BI's pages write the address as schema.org Text, one line, with no
+    # separate locality fields: "1450 League Line Road, Suite 100, Conroe, Texas
+    # 77304". Taking that whole string as the street put the city and state INSIDE
+    # address_line1 and left the columns null, which is worse than it looks: the site
+    # key is built from the street, so the centre could never match the same building
+    # arriving from the registry, and a null state dropped it from the state map and
+    # the per-state shares entirely. Split it, and refuse the row if it will not split
+    # rather than stage a mangled street.
+    if not city or not state:
+        parsed = parse_us_address(street)
+        if parsed is None:
+            return None
+        street, city, state, zip_code = parsed
+
     return RosterCenter(
         owner_name=BI_OWNER,
-        address_line1=addr["streetAddress"].strip(),
-        city=(addr.get("addressLocality") or "").strip() or None,
-        state=((addr.get("addressRegion") or "").strip()[:2] or None),
-        zip=(addr.get("postalCode") or "").strip() or None,
+        address_line1=street,
+        city=city,
+        state=state,
+        zip=zip_code,
     )
 
 
