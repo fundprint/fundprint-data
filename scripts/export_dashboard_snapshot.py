@@ -106,7 +106,7 @@ def build_snapshot(conn) -> dict:
     # only field that distinguishes real sibling sites from a duplicate-row bug.
     clinic_rows = conn.execute(
         """
-        SELECT c.id, c.name, addr.address_line1, c.city, c.state, c.zip, c.npi,
+        SELECT c.id, c.name, oe.trade_name, addr.address_line1, c.city, c.state, c.zip, c.npi,
                c.confidence_score, c.confidence_method, c.source_record_ids,
                l.owner_entity_id, l.owner_entity_name,
                l.parent_pe_firm_id, l.parent_pe_firm_name, l.parent_pe_firm_type
@@ -121,8 +121,18 @@ def build_snapshot(conn) -> dict:
     exact_centroids, zip3_centroids = _load_centroids()
     clinics = []
     for r in clinic_rows:
-        (cid, name, address, city, state, zipc, npi, conf, method, srids,
+        (cid, name, trade_name, address, city, state, zipc, npi, conf, method, srids,
          owner_id, owner_name, firm_id, firm_name, firm_type) = r
+        # Title every card with the brand families know, not the legal name the
+        # registry carries. Registry-sourced rows arrive in all caps (FLORIDA AUTISM
+        # CENTER, BUCK JACK LLC, HELPING HANDS FAMILY MARYLAND LLC) while an owner's
+        # own directory rows already carry the mixed-case brand. Two rules cover it:
+        # an explicit trade name wins (Buck Jack -> Woven Care), and otherwise an
+        # all-caps legal title falls back to the owner's brand. The address, always
+        # shown beneath the title, is what distinguishes sibling centres.
+        name = trade_name or name
+        if name and name == name.upper() and any(ch.isalpha() for ch in name):
+            name = owner_name
         lat, lng = _coords(zipc, exact_centroids, zip3_centroids)
         clinics.append(
             {
