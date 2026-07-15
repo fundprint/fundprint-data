@@ -92,7 +92,10 @@ WHERE c.superseded_by IS NULL
 CREATE OR REPLACE VIEW v_published_pe_links AS
 SELECT
     oe.id        AS owner_entity_id,
-    oe.name      AS owner_entity_name,
+    -- Display the brand families know, not the legal/holding name the registry
+    -- carries (Buck Jack -> Woven Care, Carolina Center -> Kind Behavioral Health).
+    -- The linker and audit trail still use the legal oe.name, display follows brand.
+    COALESCE(oe.trade_name, oe.name) AS owner_entity_name,
     oe.state_of_incorporation,
     ppf.id        AS parent_pe_firm_id,
     ppf.name      AS parent_pe_firm_name,

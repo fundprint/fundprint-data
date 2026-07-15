@@ -234,7 +234,8 @@ def build_snapshot(conn) -> dict:
     try:
         ev_rows = conn.execute(
             """
-            SELECT ae.id, ppf.name AS firm_name, oe.name AS brand_name,
+            SELECT ae.id, ppf.name AS firm_name,
+                   COALESCE(oe.trade_name, oe.name) AS brand_name,
                    ae.event_date, ae.event_date_circa, ae.event_type,
                    ae.deal_notes, ae.source_record_ids
             FROM acquisition_event ae

@@ -411,11 +411,87 @@ def fetch_hopebridge(client: httpx.Client) -> tuple[bytes, str]:
     return fetch.get(HOPEBRIDGE_URL, client=client), HOPEBRIDGE_URL
 
 
+# ---------------------------------------------------------------------------
+# Helping Hands Family (Zenyth Partners)
+# ---------------------------------------------------------------------------
+
+# HHF runs the same WP Store Locator plugin as LEARN, so one autoload call returns
+# every centre with a clean address/city/state/zip. The registry was giving us this
+# owner wrong in both directions: it had missed real HHF centres AND captured a pile
+# of name collisions ("HELPING HANDS FAMILY CHIROPRACTIC", "... HOMECARE LLC",
+# "... CARE HOMES") that share the brand prefix, exactly the Hope Bridge / Acorn
+# problem. HHF's own list is the fix; it operates only in PA, NJ, NY, MD, CT and VA.
+HHF_OWNER = "Helping Hands Family"
+HHF_HOST = "hhfamily.com"
+HHF_ROSTER_URL = (
+    "https://hhfamily.com/wp-admin/admin-ajax.php"
+    "?action=store_search&lat=39.8&lng=-98.5&max_results=500&search_radius=5000&autoload=1"
+)
+
+# The plugin returns the state as either the two-letter code or the full name. A
+# site key needs the code, so fold the names we actually see. Anything else is left
+# as-is and truncated, which surfaces as a bad key rather than a silent wrong state.
+_STATE_NAME_TO_CODE = {
+    "pennsylvania": "PA",
+    "new jersey": "NJ",
+    "new york": "NY",
+    "maryland": "MD",
+    "connecticut": "CT",
+    "virginia": "VA",
+    "delaware": "DE",
+}
+
+
+def _state_code(value: str | None) -> str | None:
+    v = (value or "").strip()
+    if not v:
+        return None
+    return _STATE_NAME_TO_CODE.get(v.lower(), v[:2].upper())
+
+
+def parse_hhf_roster(content: bytes) -> list[RosterCenter]:
+    """Parse Helping Hands Family's store-locator JSON into centers. Pure; no I/O."""
+    records = json.loads(content)
+    centers: list[RosterCenter] = []
+    for rec in records:
+        street = (rec.get("address") or "").strip()
+        if not street:
+            continue
+        city = (rec.get("city") or "").strip() or None
+        state = _state_code(rec.get("state"))
+        zip_code = (rec.get("zip") or "").strip() or None
+        # A few store rows carry the whole address in the street field ("275 Curry
+        # Hollow Rd Suite G100, Pittsburgh, PA 15236"). Left as-is it drags the city
+        # and ZIP into the site key and stops the centre matching the same building
+        # from the registry. Split it back out when it carries its own ST ZIP tail.
+        if re.search(r",\s*[A-Za-z]{2}\.?\s+\d{5}", street):
+            parsed = parse_us_address(street)
+            if parsed is not None:
+                street, city, state, zip_code = parsed
+        centers.append(
+            RosterCenter(
+                owner_name=HHF_OWNER,
+                address_line1=street,
+                city=city,
+                state=state,
+                zip=zip_code,
+                detail_url=(rec.get("url") or "").strip() or None,
+            )
+        )
+    return centers
+
+
+def fetch_hhf(client: httpx.Client) -> tuple[bytes, str]:
+    """Fetch HHF's full roster in one store-locator autoload call."""
+    return fetch.get(HHF_ROSTER_URL, client=client), HHF_ROSTER_URL
+
+
 SOURCES = {
     "learn": (fetch_learn, parse_learn_roster),
     "caravel": (fetch_caravel, parse_caravel_roster),
     "behavioral-innovations": (fetch_bi, parse_bi_roster),
     "hopebridge": (fetch_hopebridge, parse_hopebridge_roster),
+    "helping-hands-family": (fetch_hhf, parse_hhf_roster),
 }
 
 

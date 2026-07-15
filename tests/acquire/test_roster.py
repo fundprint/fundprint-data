@@ -7,10 +7,12 @@ import json
 from fundprint.acquire.roster import (
     BI_OWNER,
     CARAVEL_OWNER,
+    HHF_OWNER,
     LEARN_BRAND_TO_OWNER,
     _bi_location_urls,
     parse_bi_page,
     parse_caravel_page,
+    parse_hhf_roster,
     parse_learn_roster,
 )
 
@@ -187,3 +189,33 @@ class TestBehavioralInnovations:
           "addressCountry": "US"}}
         </script>"""
         assert parse_bi_page(page) is None
+
+
+class TestHelpingHandsFamily:
+    def test_normalizes_mixed_state_forms(self):
+        # The store locator returns the state as either the code or the full name,
+        # sometimes for the same state. A site key needs the code, so both fold.
+        doc = json.dumps(
+            [
+                {"address": "1 Iron Bridge Dr", "city": "Collegeville",
+                 "state": "Pennsylvania", "zip": "19426"},
+                {"address": "770 Miles Rd", "city": "West Chester",
+                 "state": "PA", "zip": "19380"},
+            ]
+        ).encode()
+        centers = parse_hhf_roster(doc)
+        assert [c.state for c in centers] == ["PA", "PA"]
+        assert all(c.owner_name == HHF_OWNER for c in centers)
+
+    def test_splits_a_crammed_street(self):
+        # A few store rows carry the whole address in the street field; left alone
+        # the city and ZIP land in the site key and stop the centre matching the
+        # same building from the registry.
+        doc = json.dumps(
+            [{"address": "275 Curry Hollow Rd Suite G100, Pittsburgh, PA 15236",
+              "city": "Pleasant Hills", "state": "PA", "zip": "15236"}]
+        ).encode()
+        (c,) = parse_hhf_roster(doc)
+        assert c.address_line1 == "275 Curry Hollow Rd Suite G100"
+        assert c.city == "Pittsburgh"
+        assert c.zip == "15236"
