@@ -435,20 +435,30 @@ CURATED_ACQUISITIONS: list[CuratedAcquisition] = [
     ),
     CuratedAcquisition(
         # Registers as "CAROLINA CENTER FOR AUTISM SERVICES, LLC"; trades as Kind
-        # Behavioral Health. Trilogy Search Partners is a search-fund investor
-        # that takes control positions rather than a classic buyout fund, so the
-        # owner type is recorded as `other` rather than overclaiming private
-        # equity.
-        pe_firm_name="Trilogy Search Partners",
+        # Behavioral Health. This is a search-fund (entrepreneurship-through-
+        # acquisition) deal with a syndicate of investors, not a single buyer:
+        # Highland Creek, Pacific Lake, Trilogy Search Partners and WSC & Company
+        # all hold it. We attribute a single controlling owner, and that is WSC:
+        # it describes itself as acquiring AND operating its companies, its own
+        # portfolio page carries Kind as an operating company, and third-party
+        # databases name WSC alone as the owner. An earlier version of this entry
+        # named Trilogy only because Trilogy's portfolio page was curated first;
+        # that named one minority co-investor out of four and understated the
+        # lead, which the methodology's controlling-interest bar does not allow.
+        # Recorded as `other` because a search-fund holding company is neither a
+        # classic buyout fund, a pension, nor a family office.
+        pe_firm_name="WSC & Company",
         portfolio_name="Carolina Center for Autism Services",
         firm_type="other",
-        source_url="https://trilogy-search.com/portfolio",
+        source_url="https://wscandcompany.com/portfolio/",
         description=(
             "Carolina Center for Autism Services (trading as Kind Behavioral "
-            "Health), a North Carolina ABA provider, is listed as a current "
-            "holding on the portfolio page of Trilogy Search Partners, a "
-            "search-fund investor. Recorded as `other` because a search fund is "
-            "neither a buyout fund, a pension, nor a family office."
+            "Health), a North Carolina ABA provider, is carried as an operating "
+            "company on the portfolio page of WSC & Company, a private investment "
+            "firm that acquires and operates its holdings and is the lead of the "
+            "search-fund syndicate behind Kind. Recorded as `other` because a "
+            "search-fund holding company is neither a buyout fund, a pension, nor "
+            "a family office."
         ),
     ),
     CuratedAcquisition(
