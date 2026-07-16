@@ -7,11 +7,13 @@ import json
 from fundprint.acquire.roster import (
     BI_OWNER,
     CARAVEL_OWNER,
+    CENTRIA_OWNER,
     HHF_OWNER,
     LEARN_BRAND_TO_OWNER,
     _bi_location_urls,
     parse_bi_page,
     parse_caravel_page,
+    parse_centria_page,
     parse_hhf_roster,
     parse_learn_roster,
 )
@@ -219,3 +221,42 @@ class TestHelpingHandsFamily:
         assert c.address_line1 == "275 Curry Hollow Rd Suite G100"
         assert c.city == "Pittsburgh"
         assert c.zip == "15236"
+
+
+# A Centria centre page, trimmed to the address block and the noise around it. The
+# first span.info is the centre's address; the rest carry no "City, ST ZIP" tail.
+CENTRIA_PAGE = """
+<html><body>
+  <ul class="location-details">
+    <li><span class="icon"><svg></svg></span>
+      <span class="info">5275 N. 59th Ave <br />Glendale, AZ, 85301
+        <span class="miles-away">&mdash; <span class="miles-away-output"></span>
+        miles away</span></span></li>
+    <li class="phone"><span class="info">Phone: (855) 772-8847</span></li>
+    <li class="hours"><span class="info">Hours: Mon: 8:00 am - 7:00 pm</span></li>
+  </ul>
+</body></html>
+"""
+
+
+class TestParseCentriaPage:
+    def test_reads_the_address_block(self):
+        c = parse_centria_page(CENTRIA_PAGE)
+        assert c is not None
+        assert c.owner_name == CENTRIA_OWNER
+        assert c.address_line1 == "5275 N. 59th Ave"
+        assert c.city == "Glendale"
+        assert c.state == "AZ"
+        assert c.zip == "85301"
+
+    def test_phone_and_hours_blocks_are_not_addresses(self):
+        # Only the block with a City, ST ZIP tail is an address; a page that has the
+        # info spans but none with that shape yields nothing rather than a bad row.
+        page = (
+            '<span class="info">Phone: (855) 772-8847</span>'
+            '<span class="info">Hours: Mon: 8:00 am - 7:00 pm</span>'
+        )
+        assert parse_centria_page(page) is None
+
+    def test_page_without_an_info_block_yields_nothing(self):
+        assert parse_centria_page("<html>no locator</html>") is None

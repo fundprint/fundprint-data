@@ -48,7 +48,10 @@ TRACKED_BRANDS: list[str] = [
     "Florida Autism Center",
     "Acorn Health",
     "Butterfly Effects",
-    "Centria",
+    # Centria is deliberately absent: it is an in-home provider whose "CENTRIA"
+    # registry rows are apartments, residential streets and the corporate HQ, not
+    # centres. Its real centres come from its own directory (roster source
+    # "centria"), and correct_directory_contradicted quarantines the registry rows.
     "Behavioral Innovations",
     # Behavioral Innovations operates its Maryland and Colorado centers under the
     # legal entity "Monarch Behavioral Therapy BII, LLC" (NPPES alternate name

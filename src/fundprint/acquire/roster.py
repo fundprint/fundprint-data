@@ -486,12 +486,107 @@ def fetch_hhf(client: httpx.Client) -> tuple[bytes, str]:
     return fetch.get(HHF_ROSTER_URL, client=client), HHF_ROSTER_URL
 
 
+# ---------------------------------------------------------------------------
+# Centria (Thomas H. Lee Partners)
+# ---------------------------------------------------------------------------
+#
+# Centria's registry footprint was in-home noise. The NPPES name-prefix match on
+# "CENTRIA" captured apartments and bare residential streets in Michigan (where an
+# in-home provider's therapy is delivered, not a centre) plus the corporate HQ, and
+# missed almost every real centre. Centria publishes its full centre list as a
+# WordPress custom post type at /wp-json/wp/v2/location; each centre's detail page
+# carries a clean "street <br> City, ST ZIP" block in a `span.info`. This is the
+# same directory-beats-registry lever used for ABC and Hopebridge.
+#
+# Centria runs two consumer brands (Life Skills Autism Academy in the South and
+# Southwest, Centria Autism in the Midwest and Northwest). They are one operator
+# sharing suites: two of the listed addresses appear under both brands. So every
+# centre stages under the single owner "Centria" and the site key collapses the
+# shared addresses on its own, exactly as one owner should. A per-brand split would
+# assert two operators at one suite, the claim the shared address contradicts.
+CENTRIA_OWNER = "Centria"
+CENTRIA_INDEX = "https://centriahealthcare.com/wp-json/wp/v2/location?per_page=100"
+_CENTRIA_INFO_RE = re.compile(r'<span class="info">(.*?)</span>', re.S)
+_TAG_RE = re.compile(r"<[^>]+>")
+
+
+def parse_centria_page(html: str) -> RosterCenter | None:
+    """Parse one Centria centre page's address block. Pure; no I/O.
+
+    Each detail page renders its own centre's address as
+    ``<span class="info">5275 N. 59th Ave <br /> Glendale, AZ, 85301 ...</span>``.
+    The first such block carrying a ZIP is the page's own centre; the others on the
+    page are phone, ages served and hours, which have no "City, ST ZIP" tail.
+    """
+    for block in _CENTRIA_INFO_RE.findall(html):
+        parts = re.split(r"<br\s*/?>", block, maxsplit=1)
+        if len(parts) != 2:
+            continue
+        street = html_lib.unescape(_TAG_RE.sub(" ", parts[0]))
+        street = re.sub(r"\s+", " ", street).strip().rstrip(",")
+        tail = html_lib.unescape(_TAG_RE.sub(" ", parts[1]))
+        m = re.search(r"([A-Za-z .'-]+),\s*([A-Za-z]{2}),?\s*(\d{5})", tail)
+        if not street or not m:
+            continue
+        return RosterCenter(
+            owner_name=CENTRIA_OWNER,
+            address_line1=street,
+            city=m.group(1).strip(),
+            state=m.group(2).upper(),
+            zip=m.group(3),
+        )
+    return None
+
+
+def fetch_centria(client: httpx.Client) -> tuple[bytes, str]:
+    """Enumerate Centria's centres from its location post type, then read each
+    centre page's address block."""
+    links: list[str] = []
+    page = 1
+    while True:
+        try:
+            body = fetch.get(f"{CENTRIA_INDEX}&page={page}", client=client)
+        except httpx.HTTPStatusError:
+            break  # WordPress returns 400 past the last page
+        batch = json.loads(body)
+        if not batch:
+            break
+        links.extend(c["link"] for c in batch if c.get("link"))
+        if len(batch) < 100:
+            break
+        page += 1
+        time.sleep(REQUEST_DELAY_SEC)
+
+    centers: list[dict] = []
+    for link in links:
+        try:
+            html = fetch.get(link, client=client).decode("utf-8", errors="replace")
+        except (httpx.HTTPError, fetch.FetchError) as exc:
+            logger.warning("centria page failed %s: %s", link, exc)
+            continue
+        center = parse_centria_page(html)
+        if center:
+            center.detail_url = link
+            centers.append(vars(center))
+        time.sleep(REQUEST_DELAY_SEC)
+
+    doc = json.dumps({"source": CENTRIA_INDEX, "centers": centers}).encode()
+    return doc, CENTRIA_INDEX
+
+
+def parse_centria_roster(content: bytes) -> list[RosterCenter]:
+    """Parse the merged Centria document produced by fetch_centria."""
+    data = json.loads(content)
+    return [RosterCenter(**c) for c in data.get("centers", [])]
+
+
 SOURCES = {
     "learn": (fetch_learn, parse_learn_roster),
     "caravel": (fetch_caravel, parse_caravel_roster),
     "behavioral-innovations": (fetch_bi, parse_bi_roster),
     "hopebridge": (fetch_hopebridge, parse_hopebridge_roster),
     "helping-hands-family": (fetch_hhf, parse_hhf_roster),
+    "centria": (fetch_centria, parse_centria_roster),
 }
 
 
