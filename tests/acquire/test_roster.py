@@ -9,12 +9,19 @@ from fundprint.acquire.roster import (
     CARAVEL_OWNER,
     CENTRIA_OWNER,
     HHF_OWNER,
+    INBLOOM_OWNER,
+    KBH_OWNER,
     LEARN_BRAND_TO_OWNER,
+    _abs_is_therapy,
     _bi_location_urls,
+    parse_bf_page,
     parse_bi_page,
     parse_caravel_page,
+    parse_catalyst_page,
     parse_centria_page,
     parse_hhf_roster,
+    parse_inbloom_roster,
+    parse_kbh_page,
     parse_learn_roster,
 )
 
@@ -260,3 +267,99 @@ class TestParseCentriaPage:
 
     def test_page_without_an_info_block_yields_nothing(self):
         assert parse_centria_page("<html>no locator</html>") is None
+
+
+# InBloom: cards are <h6> title then the address either as "STREET <br> City, ST
+# ZIP" or (a few cards) the street and locality in separate <p> tags.
+INBLOOM_PAGE = """
+<h6 class="x">Deer Valley Learning Center</h6><p>20601 N 19th Ave, Suite 100<br>
+Phoenix, AZ 85027</p><p><a href=x>More About This Learning Center</a></p>
+<h6 class="x">Wallingford Learning Center</h6><p>860 North Main Street Ext, Suite 101A</p>
+<p>Wallingford, CT 06492-2449</p><div class=centerBtn></div>
+<h6 class="x">Coming Soon Center</h6><p>Opening in 2027</p><div class=centerBtn></div>
+"""
+
+
+class TestParseInbloom:
+    def test_reads_both_card_layouts(self):
+        centers = parse_inbloom_roster(INBLOOM_PAGE.encode())
+        by_city = {c.city: c for c in centers}
+        assert set(by_city) == {"Phoenix", "Wallingford"}
+        assert by_city["Phoenix"].address_line1 == "20601 N 19th Ave, Suite 100"
+        assert by_city["Phoenix"].zip == "85027"
+        # Two <p> tags, ZIP+4 trimmed to five.
+        assert by_city["Wallingford"].address_line1 == "860 North Main Street Ext, Suite 101A"
+        assert by_city["Wallingford"].zip == "06492"
+        assert all(c.owner_name == INBLOOM_OWNER for c in centers)
+
+    def test_a_card_without_a_house_number_is_dropped(self):
+        # "Opening in 2027" is not a street; a card with no digits in the street is
+        # not an address and must not become a clinic.
+        assert all("Coming Soon" not in c.address_line1 for c in
+                   parse_inbloom_roster(INBLOOM_PAGE.encode()))
+
+
+class TestAbsKidsFilter:
+    def test_diagnosis_only_excluded_therapy_kept(self):
+        assert _abs_is_therapy("Randolph Rd ABA Therapy Center")
+        assert _abs_is_therapy("Downtown ABA Therapy Center & Autism Diagnosis Clinic")
+        assert not _abs_is_therapy("Autism Diagnosis Clinic")
+
+
+# Behavior Frontiers: heading names the city, so the street is a subtraction. A
+# COMING SOON block is a leased-not-open site and must be excluded.
+BF_PAGE = (
+    "Detroit, MI (Center) Behavior Frontiers Autism Center "
+    "7375 Woodward Ave, Suite 2800 Detroit, MI 48202 Phone: 734 "
+    "Rogers, MN (Center) - COMING SOON! Behavior Frontiers Autism Center "
+    "14020 Northdale Blvd, Ste B Rogers, MN 55374 Phone: 734 "
+    "San Antonio, TX, West Side (Center) Behavior Frontiers Autism Center "
+    "5282 Medical Drive, Suite 104 San Antonio, TX 78229 Hours: 8"
+)
+
+
+class TestParseBfPage:
+    def test_open_centers_kept_coming_soon_dropped(self):
+        centers = parse_bf_page(BF_PAGE)
+        cities = sorted(c.city for c in centers)
+        assert cities == ["Detroit", "San Antonio"]  # Rogers (coming soon) excluded
+        det = next(c for c in centers if c.city == "Detroit")
+        assert det.address_line1 == "7375 Woodward Ave, Suite 2800"
+        assert det.state == "MI" and det.zip == "48202"
+
+    def test_sub_labelled_heading_still_parses(self):
+        sa = next(c for c in parse_bf_page(BF_PAGE) if c.city == "San Antonio")
+        assert sa.address_line1 == "5282 Medical Drive, Suite 104"
+
+
+class TestParseKbhPage:
+    def test_json_ld_postal_address(self):
+        html = (
+            '<script type="application/ld+json">'
+            '{"@graph":[{"address":{"@type":"PostalAddress",'
+            '"streetAddress":"1641 Matthews Township Parkway",'
+            '"addressLocality":"Matthews","addressRegion":"NC","postalCode":"28105"}}]}'
+            "</script>"
+        )
+        c = parse_kbh_page(html)
+        assert c is not None
+        assert c.address_line1 == "1641 Matthews Township Parkway"
+        assert c.state == "NC" and c.zip == "28105" and c.owner_name == KBH_OWNER
+
+    def test_text_label_fallback(self):
+        c = parse_kbh_page("<p>Address: 5703 Waters Ave, Savannah, GA 31404</p>")
+        assert c is not None
+        assert c.state == "GA" and c.zip == "31404"
+
+
+class TestParseCatalystPage:
+    def test_marker_content_block(self):
+        html = (
+            '<script>var m={"markers":[{"address":"x","content":'
+            '"<strong>Sioux Falls, SD</strong><br> 1105 W. Russell St.<br> '
+            'Sioux Falls, SD 57104<br> Phone: (866) 569-7395"}]};</script>'
+        )
+        c = parse_catalyst_page(html)
+        assert c is not None
+        assert c.address_line1 == "1105 W. Russell St."
+        assert c.city == "Sioux Falls" and c.state == "SD" and c.zip == "57104"

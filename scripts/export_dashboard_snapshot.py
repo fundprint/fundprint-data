@@ -22,7 +22,7 @@ from __future__ import annotations
 import argparse
 import json
 import logging
-from datetime import UTC, datetime
+from datetime import UTC, date, datetime
 from pathlib import Path
 
 logging.basicConfig(
@@ -38,18 +38,127 @@ DATASET_VERSION = "2026.07-beta"
 # definition of a countable site is not, which is a methodology change under
 # section 12. The pin must move in the same commit as the numbers, or a reader who
 # follows it lands on a document describing different ones.
-METHODOLOGY_VERSION = "2026.07-directory-v2"
+METHODOLOGY_VERSION = "2026.07-confidence-v1"
+
+
+# source_record_id -> (url, type), loaded once. The snapshot resolves provenance
+# for ~1,800 clinics plus events; one round-trip per clinic (times two, for URL and
+# type) turned a few-second export into minutes, so the whole table is read once.
+_SRC_INDEX: dict[str, tuple[str | None, str | None]] = {}
+
+
+def _prime_source_cache(conn) -> None:
+    _SRC_INDEX.clear()
+    for sid, url, stype in conn.execute(
+        "SELECT id, source_url, source_type FROM source_record"
+    ).fetchall():
+        _SRC_INDEX[str(sid)] = (url, stype)
 
 
 def _source_urls(conn, source_record_ids) -> list[str]:
     """Resolve an array of source_record ids to their public URLs, de-duped."""
     if not source_record_ids:
         return []
+    if not _SRC_INDEX:
+        _prime_source_cache(conn)
+    return sorted(
+        {
+            url
+            for sid in source_record_ids
+            if (url := _SRC_INDEX.get(str(sid), (None, None))[0])
+        }
+    )
+
+
+def _source_types(conn, source_record_ids) -> set[str]:
+    """The distinct source_type values behind a clinic's source_record ids."""
+    if not source_record_ids:
+        return set()
+    if not _SRC_INDEX:
+        _prime_source_cache(conn)
+    return {
+        t
+        for sid in source_record_ids
+        if (t := _SRC_INDEX.get(str(sid), (None, None))[1])
+    }
+
+
+# The four confidence dimensions, each derived, not asserted. The single old label
+# ("Strong name match") answered one question the reader was never asking and hid
+# the four they were: is this clinic open, is it at this address, is it a centre or
+# in-home, and who owns it. Every value below is reproducible from the published
+# dataset alone: the clinic's own source URLs (is one an owner directory?), its
+# registry freshness date, its owner's service model, and the type of the ownership
+# link. No staging table, no judgement call, nothing a reader with the Hugging Face
+# download could not recompute.
+_DIRECTORY_TYPE = "owner_location_directory"
+_REGISTRY_TYPES = {"nppes", "nppes_bulk"}
+# A registry registration reports existence-EVER, never existence-NOW; the last time
+# the provider touched it is the only freshness signal it carries. Under three years
+# is current; six years cold is a likely-closed ghost. These match section 9.
+_REGISTRY_CURRENT_YEARS = 3
+_REGISTRY_STALE_YEARS = 6
+
+
+def _ownership_basis(conn) -> dict[str, str]:
+    """Per owner: 'curated' if a dated acquisition announcement backs the ownership
+    link, else 'portfolio' (the PE firm's own portfolio page lists the company).
+    Both are direct assertions of ownership; a curated announcement is the stronger,
+    dated grade."""
     rows = conn.execute(
-        "SELECT DISTINCT source_url FROM source_record WHERE id = ANY(%s::uuid[])",
-        (list(source_record_ids),),
+        """
+        SELECT l.owner_entity_id,
+               bool_or(sr.source_type LIKE 'curated%%') AS curated
+        FROM v_published_pe_links l
+        JOIN resolution_claim rc
+          ON rc.owner_entity_id = l.owner_entity_id
+         AND rc.claim_type = 'owner_to_pe_firm'
+        JOIN source_record sr ON sr.id = ANY(rc.source_record_ids)
+        GROUP BY l.owner_entity_id
+        """
     ).fetchall()
-    return sorted(u for (u,) in rows if u)
+    return {str(oid): ("curated" if curated else "portfolio") for oid, curated in rows}
+
+
+def _confidence(
+    *,
+    source_types: set[str],
+    registry_last_updated: date | None,
+    service_model: str | None,
+    firm_type: str | None,
+    ownership_basis: str,
+    today: date,
+) -> dict:
+    """Grade one clinic on the four dimensions and an overall (its weakest link)."""
+    owner_listed = _DIRECTORY_TYPE in source_types
+    in_home = service_model == "in_home"
+
+    if owner_listed:
+        # The owner names this site today: it is open, at this address, a centre.
+        open_basis, overall = "owner_listed", "owner_verified"
+    elif in_home:
+        open_basis, overall = "in_home", "in_home"
+    elif registry_last_updated is None:
+        open_basis, overall = "registry_undated", "registry_undated"
+    else:
+        years = (today - registry_last_updated).days / 365.25
+        if years < _REGISTRY_CURRENT_YEARS:
+            open_basis, overall = "registry_current", "registry_current"
+        elif years < _REGISTRY_STALE_YEARS:
+            open_basis, overall = "registry_aging", "registry_aging"
+        else:
+            open_basis, overall = "registry_stale", "registry_stale"
+
+    return {
+        "overall": overall,
+        "open": open_basis,
+        "address": "owner_stated" if owner_listed else "registry_filed",
+        "site_type": "center" if owner_listed else ("in_home" if in_home else "unverified"),
+        "ownership": {"firm_type": firm_type, "basis": ownership_basis},
+        "registry_last_updated": (
+            registry_last_updated.isoformat() if registry_last_updated else None
+        ),
+    }
 
 
 # ZIP-level geocoding for the map. Coordinates are ZIP Code Tabulation Area
@@ -109,7 +218,8 @@ def build_snapshot(conn) -> dict:
         SELECT c.id, c.name, oe.trade_name, addr.address_line1, c.city, c.state, c.zip, c.npi,
                c.confidence_score, c.confidence_method, c.source_record_ids,
                l.owner_entity_id, l.owner_entity_name,
-               l.parent_pe_firm_id, l.parent_pe_firm_name, l.parent_pe_firm_type
+               l.parent_pe_firm_id, l.parent_pe_firm_name, l.parent_pe_firm_type,
+               addr.registry_last_updated, oe.service_model
         FROM v_published_clinics c
         JOIN clinic addr ON addr.id = c.id
         JOIN owner_entity oe ON oe.id = c.owner_entity_id
@@ -118,11 +228,14 @@ def build_snapshot(conn) -> dict:
         """
     ).fetchall()
 
+    ownership_basis = _ownership_basis(conn)
+    today = datetime.now(UTC).date()
     exact_centroids, zip3_centroids = _load_centroids()
     clinics = []
     for r in clinic_rows:
         (cid, name, trade_name, address, city, state, zipc, npi, conf, method, srids,
-         owner_id, owner_name, firm_id, firm_name, firm_type) = r
+         owner_id, owner_name, firm_id, firm_name, firm_type,
+         registry_last_updated, service_model) = r
         # Title every card with the brand families know, not the legal name the
         # registry carries. Registry-sourced rows arrive in all caps (FLORIDA AUTISM
         # CENTER, BUCK JACK LLC, HELPING HANDS FAMILY MARYLAND LLC) while an owner's
@@ -152,6 +265,14 @@ def build_snapshot(conn) -> dict:
                 "firm_type": firm_type,
                 "confidence_score": float(conf) if conf is not None else None,
                 "confidence_method": method,
+                "confidence": _confidence(
+                    source_types=_source_types(conn, srids),
+                    registry_last_updated=registry_last_updated,
+                    service_model=service_model,
+                    firm_type=firm_type,
+                    ownership_basis=ownership_basis.get(str(owner_id), "portfolio"),
+                    today=today,
+                ),
                 "sources": _source_urls(conn, srids),
             }
         )
@@ -292,6 +413,15 @@ def build_snapshot(conn) -> dict:
     pe_clinics = sum(1 for c in clinics if c["firm_type"] == "private_equity")
     located_clinics = sum(1 for c in clinics if c["lat"] is not None)
 
+    # The dataset graded by its strongest-to-weakest confidence. This is the honest
+    # answer to "how do you know?" at the level of the whole dataset, and it is what
+    # the old single label could never give: the share of clinics an owner's own
+    # directory attests versus the share resting on a registry record alone.
+    confidence_counts: dict[str, int] = {}
+    for c in clinics:
+        overall = c["confidence"]["overall"]
+        confidence_counts[overall] = confidence_counts.get(overall, 0) + 1
+
     # How many published clinics an owner's own directory or roster attests to. The
     # site states this split, so it has to come from the data: a clinic the owner
     # itself lists today cannot be a stale registration, and that is the single
@@ -338,6 +468,10 @@ def build_snapshot(conn) -> dict:
             "located_clinics": located_clinics,
             "directory_sourced_clinics": directory_sourced,
             "registry_only_clinics": len(clinics) - directory_sourced,
+            # Every clinic bucketed by its overall confidence (owner_verified,
+            # registry_current, registry_aging, registry_undated, registry_stale,
+            # in_home). The dashboard reads this for the dataset-level breakdown.
+            "confidence": confidence_counts,
         },
         "market": market,
         "acquirers": acquirers,

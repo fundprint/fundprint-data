@@ -580,6 +580,391 @@ def parse_centria_roster(content: bytes) -> list[RosterCenter]:
     return [RosterCenter(**c) for c in data.get("centers", [])]
 
 
+# ---------------------------------------------------------------------------
+# A shared address-block splitter
+# ---------------------------------------------------------------------------
+#
+# Three owners below publish the same shape: the street on one line, the locality
+# on the next, separated by a <br>. That is the friendliest case in this file,
+# because the <br> removes the guesswork of where the street ends. It is the same
+# split Centria uses; factored out so InBloom, ABS Kids and Catalyst share it.
+_CITY_ST_ZIP_RE = re.compile(r"([A-Za-z .'\-]+),\s*([A-Za-z]{2}),?\s*(\d{5})(?:-\d{4})?")
+
+
+def _center_from_br_block(owner: str, block: str) -> RosterCenter | None:
+    """Parse a ``STREET <br> City, ST ZIP`` block into a RosterCenter. Pure."""
+    parts = re.split(r"<br\s*/?>", block, maxsplit=1)
+    if len(parts) != 2:
+        return None
+    street = re.sub(r"\s+", " ", html_lib.unescape(_TAG_RE.sub(" ", parts[0])))
+    street = street.strip().rstrip(",").strip()
+    tail = html_lib.unescape(_TAG_RE.sub(" ", parts[1]))
+    m = _CITY_ST_ZIP_RE.search(tail)
+    # A street must carry a house number: a card with no digits is a heading or a
+    # "coming soon" placeholder, not an address, and a wrong street is worse than none.
+    if not street or not m or not any(ch.isdigit() for ch in street):
+        return None
+    return RosterCenter(
+        owner_name=owner,
+        address_line1=street,
+        city=m.group(1).strip(),
+        state=m.group(2).upper(),
+        zip=m.group(3),
+    )
+
+
+# ---------------------------------------------------------------------------
+# InBloom Autism Services (Elysium Management)
+# ---------------------------------------------------------------------------
+#
+# The registry name is the search vehicle "Vocational Development Group"; the ABA
+# brand families know is InBloom. Its /wp-json/ is robots-disallowed, but the one
+# public /aba-therapy-learning-centers/ page carries every Learning Center as a
+# card: an <h6> title, then the address as either "STREET <br> City, ST ZIP" or,
+# on a few cards, the street and locality in two separate <p> tags. So rather than
+# split on <br>, take the text between each <h6> and the next heading or button and
+# peel the "City, ST ZIP" off the end; the remainder is the street. Stages under the
+# legal name so the linker attaches it to the existing owner_entity.
+INBLOOM_OWNER = "Vocational Development Group"
+INBLOOM_URL = "https://inbloomautism.com/aba-therapy-learning-centers/"
+_INBLOOM_CARD_RE = re.compile(
+    r"<h6[^>]*>([^<]+)</h6>(.*?)"
+    r"(?=<h6|<a class=\"fusion-button|<div class=centerBtn|More About This Learning Center)",
+    re.S,
+)
+_INBLOOM_TAIL_RE = re.compile(
+    r"^(.*?)[,\s]+([A-Za-z .'\-]+),\s*([A-Z]{2})\s+(\d{5})(?:-\d{4})?$"
+)
+
+
+def parse_inbloom_roster(content: bytes) -> list[RosterCenter]:
+    """Parse the InBloom locations page. Pure; no I/O."""
+    html = content.decode("utf-8", "replace")
+    out: list[RosterCenter] = []
+    for _name, block in _INBLOOM_CARD_RE.findall(html):
+        text = re.sub(r"\s+", " ", html_lib.unescape(_TAG_RE.sub(" ", block)))
+        text = text.strip().rstrip(",").strip()
+        m = _INBLOOM_TAIL_RE.match(text)
+        if not m:
+            continue
+        street = m.group(1).strip().rstrip(",").strip()
+        if not any(ch.isdigit() for ch in street):
+            continue
+        out.append(
+            RosterCenter(
+                owner_name=INBLOOM_OWNER,
+                address_line1=street,
+                city=m.group(2).strip(),
+                state=m.group(3),
+                zip=m.group(4),
+            )
+        )
+    return out
+
+
+def fetch_inbloom(client: httpx.Client) -> tuple[bytes, str]:
+    """Snapshot InBloom's single locations page (the fetchable source)."""
+    return fetch.get(INBLOOM_URL, client=client), INBLOOM_URL
+
+
+# ---------------------------------------------------------------------------
+# ABS Kids / Alternative Behavior Strategies (Petra Capital Partners)
+# ---------------------------------------------------------------------------
+#
+# The registry sees a handful of ABS Kids NPIs; the owner lists ~75 therapy
+# centres. Its /wp-json/wp/v2/locations post type enumerates the leaf pages but
+# carries no address (acf and content are prose), so the address is read from each
+# leaf page, where every centre is a <h3 class="loc-meta-address-title"> title
+# followed by an <address>STREET <br> City, ST ZIP</address>. One page can hold
+# many centres (Charlotte has thirteen), so all cards on a page are taken.
+#
+# A stand-alone "Autism Diagnosis Clinic" is an evaluation site, not an ABA therapy
+# centre, and is out of scope; a combined "ABA Therapy Center & Autism Diagnosis
+# Clinic" is a therapy centre and stays. State-index hub pages carry no <address>
+# tags, so they contribute nothing without special-casing.
+ABS_OWNER = "Alternative Behavior Strategies"
+ABS_INDEX = "https://www.abskids.com/wp-json/wp/v2/locations?per_page=100"
+_ABS_CARD_RE = re.compile(
+    r'<h3 class="loc-meta-address-title">(.*?)</h3>.*?<address>(.*?)</address>', re.S
+)
+
+
+def _abs_is_therapy(title: str) -> bool:
+    t = title.lower()
+    return not ("diagnosis" in t and "therapy" not in t and "aba" not in t)
+
+
+def fetch_abs(client: httpx.Client) -> tuple[bytes, str]:
+    """Enumerate ABS Kids leaf pages, then read each page's <address> cards."""
+    index = json.loads(fetch.get(ABS_INDEX, client=client))
+    centers: list[dict] = []
+    seen: set[str] = set()
+    for item in index:
+        link = item.get("link")
+        if not link or link in seen:
+            continue
+        seen.add(link)
+        try:
+            html = fetch.get(link, client=client).decode("utf-8", "replace")
+        except (httpx.HTTPError, fetch.FetchError) as exc:
+            logger.warning("abs page failed %s: %s", link, exc)
+            continue
+        for title, block in _ABS_CARD_RE.findall(html):
+            if not _abs_is_therapy(html_lib.unescape(_TAG_RE.sub(" ", title))):
+                continue
+            center = _center_from_br_block(ABS_OWNER, block)
+            if center:
+                center.detail_url = link
+                centers.append(vars(center))
+        time.sleep(REQUEST_DELAY_SEC)
+    return json.dumps({"source": ABS_INDEX, "centers": centers}).encode(), ABS_INDEX
+
+
+def parse_abs_roster(content: bytes) -> list[RosterCenter]:
+    return [RosterCenter(**c) for c in json.loads(content).get("centers", [])]
+
+
+# ---------------------------------------------------------------------------
+# Behavior Frontiers (NexPhase Capital)
+# ---------------------------------------------------------------------------
+#
+# A Squarespace site with no structured endpoint. The /bf-locations index links to
+# per-region pages; roughly half are pure in-home service areas with no street and
+# are skipped by construction. On the rest, each centre is a block headed
+# "City, ST (Center)[- STATUS]", then "Behavior Frontiers Autism Center", then the
+# address up to "Phone:". The heading names the city, so the street is a
+# subtraction, not a guess. "COMING SOON" sites are leased-but-not-open and are
+# excluded: a clinic must be operating. "NOW ENROLLING" is open and kept.
+BF_OWNER = "Behavior Frontiers"
+BF_INDEX = "https://www.behaviorfrontiers.com/bf-locations"
+# The heading is "City, ST[, sub-label] (Center)[- STATUS]", and the address that
+# follows runs to the first of Phone:/Hours:/Fax: (pages vary in which comes first;
+# stopping only at Phone: swallowed the hours text into the street and lost every
+# page that lists Hours: first, e.g. all of Minnesota).
+_BF_BLOCK_RE = re.compile(
+    r"([A-Za-z .'\-]+,\s*[A-Za-z]{2})(?:,\s*[A-Za-z ]+?)?\s*\(Center\)\s*(-\s*[A-Za-z !]+)?\s*"
+    r"Behavior Frontiers Autism Center\s+(.*?)\s+(?:Phone|Hours|Fax):",
+    re.S,
+)
+
+
+def _bf_region_links(index_html: str) -> list[str]:
+    slugs = sorted(set(re.findall(r'href="(/[a-z0-9][a-z0-9-]+-[a-z]{2})"', index_html)))
+    return [f"https://www.behaviorfrontiers.com{s}" for s in slugs]
+
+
+def parse_bf_page(html: str) -> list[RosterCenter]:
+    """Parse one Behavior Frontiers region page. Pure; no I/O."""
+    text = re.sub(r"\s+", " ", html_lib.unescape(_TAG_RE.sub(" ", html)))
+    out: list[RosterCenter] = []
+    for locality, status, addr in _BF_BLOCK_RE.findall(text):
+        if status and "COMING SOON" in status.upper():
+            continue
+        parsed = parse_address_with_known_locality(addr.strip(), locality.strip())
+        if parsed is None:  # no ZIP, or address does not end with the heading's city
+            continue
+        street, city, state, zipc = parsed
+        out.append(
+            RosterCenter(
+                owner_name=BF_OWNER,
+                address_line1=street,
+                city=city,
+                state=state,
+                zip=zipc,
+            )
+        )
+    return out
+
+
+def fetch_bf(client: httpx.Client) -> tuple[bytes, str]:
+    """Read the /bf-locations index, then each region page's centre blocks."""
+    index_html = fetch.get(BF_INDEX, client=client).decode("utf-8", "replace")
+    centers: list[dict] = []
+    seen_keys: set[tuple] = set()
+    for link in _bf_region_links(index_html):
+        try:
+            html = fetch.get(link, client=client).decode("utf-8", "replace")
+        except (httpx.HTTPError, fetch.FetchError) as exc:
+            logger.warning("bf page failed %s: %s", link, exc)
+            continue
+        for center in parse_bf_page(html):
+            # One centre can be reached from two region slugs (Boston lists the
+            # Chelmsford centre too); dedupe on the address before staging.
+            key = (center.address_line1, center.zip)
+            if key in seen_keys:
+                continue
+            seen_keys.add(key)
+            center.detail_url = link
+            centers.append(vars(center))
+        time.sleep(REQUEST_DELAY_SEC)
+    return json.dumps({"source": BF_INDEX, "centers": centers}).encode(), BF_INDEX
+
+
+def parse_bf_roster(content: bytes) -> list[RosterCenter]:
+    return [RosterCenter(**c) for c in json.loads(content).get("centers", [])]
+
+
+# ---------------------------------------------------------------------------
+# Kind Behavioral Health / Carolina Center for Autism Services (WSC & Company)
+# ---------------------------------------------------------------------------
+#
+# The registry legal name is Carolina Center for Autism Services; the brand is Kind
+# Behavioral Health, which absorbed it (carolinacenterforaba.com now redirects to
+# kindbh.com). location-sitemap.xml lists the leaf pages; every real centre is a
+# "<slug>-clinic/" page (the region hubs have no "-clinic" suffix). The address is
+# in a schema.org PostalAddress on most pages and a plain "Address: ..." text line
+# on the rest, so both paths are tried.
+KBH_OWNER = "Carolina Center for Autism Services"
+KBH_SITEMAP = "https://kindbh.com/location-sitemap.xml"
+_KBH_LEAF_RE = re.compile(r"<loc>(https://kindbh\.com/our-locations/[^<]+-clinic/)</loc>")
+_KBH_TEXT_RE = re.compile(
+    r"Address:\s*([0-9][^<]{6,90}?,\s*[A-Za-z .'\-]+,\s*[A-Z]{2}\s+\d{5})"
+)
+
+
+def _find_postal(node: Any) -> dict | None:
+    """Depth-first search for a schema.org PostalAddress with a street."""
+    if isinstance(node, dict):
+        if node.get("streetAddress") and node.get("postalCode"):
+            return node
+        for v in node.values():
+            found = _find_postal(v)
+            if found:
+                return found
+    elif isinstance(node, list):
+        for v in node:
+            found = _find_postal(v)
+            if found:
+                return found
+    return None
+
+
+def parse_kbh_page(html: str) -> RosterCenter | None:
+    """Parse one kindbh clinic page via JSON-LD then a text-label fallback. Pure."""
+    for ld in _JSONLD_RE.findall(html):
+        try:
+            pa = _find_postal(json.loads(ld))
+        except (json.JSONDecodeError, TypeError):
+            continue
+        if pa:
+            region = str(pa.get("addressRegion", "")).strip()
+            # Accept a two-letter region as-is or map a spelled-out state; anything
+            # else falls through to the text-label path rather than being guessed
+            # (truncating "North Carolina" to "NO" is the wrong-street failure).
+            state = region.upper() if len(region) == 2 else _STATE_NAME_TO_CODE.get(region.lower())
+            zipc = re.match(r"(\d{5})", str(pa.get("postalCode", "")).strip())
+            if state and zipc:
+                return RosterCenter(
+                    owner_name=KBH_OWNER,
+                    address_line1=str(pa["streetAddress"]).strip(),
+                    city=str(pa.get("addressLocality", "")).strip() or None,
+                    state=state,
+                    zip=zipc.group(1),
+                )
+    m = _KBH_TEXT_RE.search(html)
+    if m:
+        parsed = parse_us_address(m.group(1))
+        if parsed and parsed[3]:
+            return RosterCenter(
+                owner_name=KBH_OWNER,
+                address_line1=parsed[0],
+                city=parsed[1],
+                state=parsed[2],
+                zip=parsed[3],
+            )
+    return None
+
+
+def fetch_kbh(client: httpx.Client) -> tuple[bytes, str]:
+    """Read kindbh's location sitemap, then each -clinic/ leaf page. Honours the
+    site's Crawl-delay: 1 (its robots.txt disallows named AI-training crawlers, not
+    FundprintBot, and allows the clinic pages)."""
+    sitemap = fetch.get(KBH_SITEMAP, client=client).decode("utf-8", "replace")
+    centers: list[dict] = []
+    for link in _KBH_LEAF_RE.findall(sitemap):
+        try:
+            html = fetch.get(link, client=client).decode("utf-8", "replace")
+        except (httpx.HTTPError, fetch.FetchError) as exc:
+            logger.warning("kbh page failed %s: %s", link, exc)
+            continue
+        center = parse_kbh_page(html)
+        if center:
+            center.detail_url = link
+            centers.append(vars(center))
+        time.sleep(1.0)
+    return json.dumps({"source": KBH_SITEMAP, "centers": centers}).encode(), KBH_SITEMAP
+
+
+def parse_kbh_roster(content: bytes) -> list[RosterCenter]:
+    return [RosterCenter(**c) for c in json.loads(content).get("centers", [])]
+
+
+# ---------------------------------------------------------------------------
+# Behavior Care Specialists / Catalyst Behavior Solutions (Pharos Capital Group)
+# ---------------------------------------------------------------------------
+#
+# Behavior Care Specialists rebranded to Catalyst Behavior Solutions
+# (behaviorcarespecialists.com redirects to catalystbehavior.com). Its
+# locations_place post type lists the current centres; each leaf page carries a
+# `markers` JS object whose content block is a "STREET <br> City, ST ZIP". Stages
+# under the registry legal name "Behavior Care Specialists". NOTE: the current list
+# is 7 centres where the registry carried ~20; several old South Dakota pages
+# (Aberdeen, Rapid City, Brookings, Sisseton) now redirect away, so those look
+# closed. The extra registry rows are left published at their honest, lower
+# confidence rather than quarantined on a rebrand, until the closures are confirmed.
+CATALYST_OWNER = "Behavior Care Specialists"
+CATALYST_INDEX = (
+    "https://www.catalystbehavior.com/wp-json/wp/v2/locations_place?per_page=100"
+)
+_CATALYST_MARKERS_RE = re.compile(r'"markers"\s*:\s*(\[.*?\])', re.S)
+
+
+def parse_catalyst_page(html: str) -> RosterCenter | None:
+    """Parse one Catalyst location page's marker content block. Pure."""
+    m = _CATALYST_MARKERS_RE.search(html)
+    if not m:
+        return None
+    try:
+        markers = json.loads(m.group(1))
+    except json.JSONDecodeError:
+        return None
+    for marker in markers:
+        content = marker.get("content") or ""
+        # The content is "<strong>City, ST</strong><br> STREET <br> City, ST ZIP
+        # <br> Phone:"; take the block between the heading and the phone line.
+        body = re.split(r"Phone:", content, maxsplit=1)[0]
+        body = re.split(r"</strong>", body, maxsplit=1)[-1]
+        center = _center_from_br_block(CATALYST_OWNER, body.lstrip("<br>/ \r\n"))
+        if center:
+            return center
+    return None
+
+
+def fetch_catalyst(client: httpx.Client) -> tuple[bytes, str]:
+    """Enumerate Catalyst's locations_place entries, then read each marker block."""
+    index = json.loads(fetch.get(CATALYST_INDEX, client=client))
+    centers: list[dict] = []
+    for item in index:
+        link = item.get("link")
+        if not link:
+            continue
+        try:
+            html = fetch.get(link, client=client).decode("utf-8", "replace")
+        except (httpx.HTTPError, fetch.FetchError) as exc:
+            logger.warning("catalyst page failed %s: %s", link, exc)
+            continue
+        center = parse_catalyst_page(html)
+        if center:
+            center.detail_url = link
+            centers.append(vars(center))
+        time.sleep(REQUEST_DELAY_SEC)
+    return json.dumps({"source": CATALYST_INDEX, "centers": centers}).encode(), CATALYST_INDEX
+
+
+def parse_catalyst_roster(content: bytes) -> list[RosterCenter]:
+    return [RosterCenter(**c) for c in json.loads(content).get("centers", [])]
+
+
 SOURCES = {
     "learn": (fetch_learn, parse_learn_roster),
     "caravel": (fetch_caravel, parse_caravel_roster),
@@ -587,6 +972,11 @@ SOURCES = {
     "hopebridge": (fetch_hopebridge, parse_hopebridge_roster),
     "helping-hands-family": (fetch_hhf, parse_hhf_roster),
     "centria": (fetch_centria, parse_centria_roster),
+    "inbloom": (fetch_inbloom, parse_inbloom_roster),
+    "abs-kids": (fetch_abs, parse_abs_roster),
+    "behavior-frontiers": (fetch_bf, parse_bf_roster),
+    "kind-behavioral-health": (fetch_kbh, parse_kbh_roster),
+    "behavior-care-specialists": (fetch_catalyst, parse_catalyst_roster),
 }
 
 

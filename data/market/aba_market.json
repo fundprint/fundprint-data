@@ -4,7 +4,7 @@
     "source": "NPPES monthly bulk dissemination file",
     "archive": "monthly.zip",
     "archive_sha256": "e73068bbafb9ed72bb9303b36a1091ddce66f6e510a99fa1ca3339a04954cfea",
-    "computed_at": "2026-07-16T21:48:42.642751+00:00",
+    "computed_at": "2026-07-18T21:44:47.430455+00:00",
     "min_state_sites": 25,
     "note": "Numerator and denominator are computed in one pass over one universe with one site key, so the numerator is a strict subset of the denominator. Clinics Fundprint sources from an owner's own location directory are excluded from BOTH sides, because the registry cannot see them. The published clinic count is therefore larger than the numerator here and is not interchangeable with it. No chain threshold is applied anywhere: the operator-size distribution is published instead, so any cut is the reader's and is stated out loud."
   },
@@ -13,11 +13,11 @@
     "aba_sites": 21083
   },
   "numerator": {
-    "tracked_sites": 705,
-    "private_equity_sites": 592
+    "tracked_sites": 685,
+    "private_equity_sites": 583
   },
   "share": {
-    "tracked_of_all_sites": 3.3,
+    "tracked_of_all_sites": 3.2,
     "private_equity_of_all_sites": 2.8
   },
   "size_distribution": [
@@ -75,18 +75,10 @@
     {
       "state": "CO",
       "aba_sites": 688,
-      "tracked_sites": 71,
+      "tracked_sites": 68,
       "private_equity_sites": 55,
       "private_equity_share": 8.0,
-      "tracked_share": 10.3
-    },
-    {
-      "state": "UT",
-      "aba_sites": 215,
-      "tracked_sites": 17,
-      "private_equity_sites": 17,
-      "private_equity_share": 7.9,
-      "tracked_share": 7.9
+      "tracked_share": 9.9
     },
     {
       "state": "PA",
@@ -145,6 +137,14 @@
       "tracked_share": 7.4
     },
     {
+      "state": "UT",
+      "aba_sites": 215,
+      "tracked_sites": 10,
+      "private_equity_sites": 10,
+      "private_equity_share": 4.7,
+      "tracked_share": 4.7
+    },
+    {
       "state": "OH",
       "aba_sites": 383,
       "tracked_sites": 13,
@@ -155,10 +155,10 @@
     {
       "state": "CA",
       "aba_sites": 1762,
-      "tracked_sites": 59,
-      "private_equity_sites": 59,
-      "private_equity_share": 3.3,
-      "tracked_share": 3.3
+      "tracked_sites": 55,
+      "private_equity_sites": 55,
+      "private_equity_share": 3.1,
+      "tracked_share": 3.1
     },
     {
       "state": "TN",
@@ -185,19 +185,19 @@
       "tracked_share": 2.4
     },
     {
+      "state": "TX",
+      "aba_sites": 1463,
+      "tracked_sites": 36,
+      "private_equity_sites": 34,
+      "private_equity_share": 2.3,
+      "tracked_share": 2.5
+    },
+    {
       "state": "AL",
       "aba_sites": 131,
       "tracked_sites": 3,
       "private_equity_sites": 3,
       "private_equity_share": 2.3,
-      "tracked_share": 2.3
-    },
-    {
-      "state": "TX",
-      "aba_sites": 1463,
-      "tracked_sites": 34,
-      "private_equity_sites": 32,
-      "private_equity_share": 2.2,
       "tracked_share": 2.3
     },
     {
@@ -235,10 +235,10 @@
     {
       "state": "FL",
       "aba_sites": 5360,
-      "tracked_sites": 92,
+      "tracked_sites": 88,
       "private_equity_sites": 69,
       "private_equity_share": 1.3,
-      "tracked_share": 1.7
+      "tracked_share": 1.6
     },
     {
       "state": "VA",
@@ -267,10 +267,10 @@
     {
       "state": "MA",
       "aba_sites": 412,
-      "tracked_sites": 7,
+      "tracked_sites": 6,
       "private_equity_sites": 5,
       "private_equity_share": 1.2,
-      "tracked_share": 1.7
+      "tracked_share": 1.5
     },
     {
       "state": "IA",
@@ -315,10 +315,10 @@
     {
       "state": "CT",
       "aba_sites": 216,
-      "tracked_sites": 6,
+      "tracked_sites": 4,
       "private_equity_sites": 1,
       "private_equity_share": 0.5,
-      "tracked_share": 2.8
+      "tracked_share": 1.9
     },
     {
       "state": "DE",
@@ -363,10 +363,10 @@
     {
       "state": "NH",
       "aba_sites": 82,
-      "tracked_sites": 1,
+      "tracked_sites": 0,
       "private_equity_sites": 0,
       "private_equity_share": 0.0,
-      "tracked_share": 1.2
+      "tracked_share": 0.0
     },
     {
       "state": "RI",
@@ -450,7 +450,7 @@
     }
   ],
   "context": {
-    "published_clinics": 1738,
+    "published_clinics": 1797,
     "why_larger": "The published clinic count also includes centers read from owners' own public location directories, which the registry does not list."
   }
 }
