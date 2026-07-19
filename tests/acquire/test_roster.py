@@ -14,6 +14,7 @@ from fundprint.acquire.roster import (
     LEARN_BRAND_TO_OWNER,
     _abs_is_therapy,
     _bi_location_urls,
+    _bluesprig_address,
     parse_bf_page,
     parse_bi_page,
     parse_caravel_page,
@@ -363,3 +364,83 @@ class TestParseCatalystPage:
         assert c is not None
         assert c.address_line1 == "1105 W. Russell St."
         assert c.city == "Sioux Falls" and c.state == "SD" and c.zip == "57104"
+
+
+class TestBluesprigAddress:
+    """The BlueSprig leaf-page address reader: strict JSON-LD, a regex fallback
+    for pages whose JSON-LD is malformed, and refusal on non-addresses."""
+
+    def _page(self, ld: str) -> str:
+        return f'<html><head><script type="application/ld+json">{ld}</script></head></html>'
+
+    def test_strict_jsonld(self):
+        ld = json.dumps(
+            {
+                "@type": "MedicalClinic",
+                "address": {
+                    "@type": "PostalAddress",
+                    "streetAddress": "5457 SW Canyon Ct.",
+                    "addressLocality": "Portland",
+                    "addressRegion": "OR",
+                    "postalCode": "97221",
+                },
+            }
+        )
+        got = _bluesprig_address(self._page(ld))
+        assert got == ("5457 SW Canyon Ct.", "Portland", "OR", "97221")
+
+    def test_graph_wrapped(self):
+        ld = json.dumps(
+            {
+                "@graph": [
+                    {"@type": "FAQPage"},
+                    {
+                        "@type": "MedicalClinic",
+                        "address": {
+                            "streetAddress": "23 Hospital Dr. Suite 102",
+                            "addressLocality": "Abilene",
+                            "addressRegion": "TX",
+                            "postalCode": "79606",
+                        },
+                    },
+                ]
+            }
+        )
+        got = _bluesprig_address(self._page(ld))
+        assert got == ("23 Hospital Dr. Suite 102", "Abilene", "TX", "79606")
+
+    def test_malformed_jsonld_regex_fallback(self):
+        # An unquoted openingHours value breaks a strict parse; the well-formed
+        # address fields must still be recovered rather than the row lost.
+        ld = (
+            '{"@type":"MedicalClinic",'
+            '"openingHours": Mo-Fr: 08:00-18:00,'
+            '"address":{"streetAddress":"8650 Brentwood Blvd Suite G",'
+            '"addressLocality":"Brentwood","addressRegion":"CA","postalCode":"94513"}}'
+        )
+        assert _bluesprig_address(self._page(ld)) == (
+            "8650 Brentwood Blvd Suite G",
+            "Brentwood",
+            "CA",
+            "94513",
+        )
+
+    def test_in_home_is_refused(self):
+        # The site files an in-home service as streetAddress "In Home Services";
+        # with no house number it is not an address and must be dropped.
+        ld = json.dumps(
+            {
+                "@type": "MedicalClinic",
+                "address": {
+                    "streetAddress": "In Home Services",
+                    "addressLocality": "Capitola",
+                    "addressRegion": "CA",
+                    "postalCode": "95010",
+                },
+            }
+        )
+        assert _bluesprig_address(self._page(ld)) is None
+
+    def test_no_address_block_is_refused(self):
+        ld = json.dumps({"@type": "MedicalClinic", "telephone": "555-1212"})
+        assert _bluesprig_address(self._page(ld)) is None

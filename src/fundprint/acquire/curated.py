@@ -145,6 +145,27 @@ CURATED_ACQUISITIONS: list[CuratedAcquisition] = [
         ),
     ),
     CuratedAcquisition(
+        # Therapeutic Pathways is a Modesto, California ABA brand and one of the two
+        # sub-brands (with The Behavior Center) that came with Trumpet Behavioral
+        # Health when KKR-backed BlueSprig rolled Trumpet up in October 2023, so KKR
+        # is the ultimate PE owner. Its centres are published only from BlueSprig's
+        # own directory (they are not otherwise in the registry under this brand),
+        # and the name is generic enough that it is marked directory_only so it is
+        # never used to name-match the registry.
+        pe_firm_name="KKR",
+        portfolio_name="Therapeutic Pathways",
+        source_url=(
+            "https://bhbusiness.com/2023/10/18/"
+            "kkr-backed-bluesprig-rolls-up-trumpet-behavioral-health-adds-nearly-40-"
+            "locations-to-footprint/"
+        ),
+        description=(
+            "Therapeutic Pathways, a California ABA provider, is a sub-brand of "
+            "Trumpet Behavioral Health, which KKR-backed BlueSprig Pediatrics "
+            "acquired in October 2023. KKR is the ultimate private-equity owner."
+        ),
+    ),
+    CuratedAcquisition(
         pe_firm_name="Ontario Teachers' Pension Plan",
         portfolio_name="Acorn Health",
         firm_type="pension_fund",

@@ -38,7 +38,7 @@ DATASET_VERSION = "2026.07-beta"
 # definition of a countable site is not, which is a methodology change under
 # section 12. The pin must move in the same commit as the numbers, or a reader who
 # follows it lands on a document describing different ones.
-METHODOLOGY_VERSION = "2026.07-confidence-v1"
+METHODOLOGY_VERSION = "2026.07-bluesprig-v1"
 
 
 # source_record_id -> (url, type), loaded once. The snapshot resolves provenance

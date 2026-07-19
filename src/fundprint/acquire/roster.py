@@ -965,6 +965,144 @@ def parse_catalyst_roster(content: bytes) -> list[RosterCenter]:
     return [RosterCenter(**c) for c in json.loads(content).get("centers", [])]
 
 
+# ---------------------------------------------------------------------------
+# BlueSprig family (KKR): BlueSprig, Florida Autism Center, Trumpet Behavioral
+# Health, Therapeutic Pathways, The Behavior Center
+# ---------------------------------------------------------------------------
+#
+# KKR-backed BlueSprig operates five consumer brands off ONE site: its own
+# BlueSprig centres, Florida Autism Center (acquired 2020), and Trumpet
+# Behavioral Health with its sub-brands Therapeutic Pathways and The Behavior
+# Center (rolled up 2023). All five publish through one WordPress `center` post
+# type: the REST index carries each leaf URL and a `center-brand-*` class, and
+# each leaf page carries a schema.org PostalAddress. The brand class maps each
+# centre to the owner_entity it belongs to, exactly as LEARN's roster does.
+#
+# Attribution is by owner-and-site, never by brand label, so a centre rebranded
+# in the merger (a Florida Autism Center that now shows the BlueSprig shingle) is
+# still one clinic. Therapeutic Pathways is its own owner_entity because its
+# centres are not otherwise in the dataset; The Behavior Center's centres are
+# already published under BlueSprig, so they map to Blue Sprig and corroborate.
+#
+# DELIBERATELY NOT in SOURCES. The generic roster.run stages every row into
+# staging_bacb_provider, and standard link_clinics would then mint a NEW clinic
+# for every directory row whose owner-scoped site_key differs from the published
+# registry row by a suite marker (the registry files "1330 S Potomac St", the
+# directory "1330 S Potomac St Suite 111") or by a rebranded owner. That is the
+# double-count the site key exists to prevent. scripts/run_bluesprig_family.py is
+# the only entry point: it stages ONLY genuinely net-new buildings and attaches
+# the directory as a corroborating source to the rest, at building level.
+BLUESPRIG_INDEX = "https://www.bluesprigautism.com/wp-json/wp/v2/center?per_page=100"
+BLUESPRIG_BRAND_TO_OWNER = {
+    "bluesprig": "Blue Sprig",
+    "florida-autism-center": "Florida Autism Center",
+    "trumpet-behavioral-health": "Trumpet Behavioral Health",
+    "therapeutic-pathways": "Therapeutic Pathways",
+    "the-behavior-center": "Blue Sprig",
+}
+_BLUESPRIG_BRAND_RE = re.compile(r"center-brand-([a-z0-9-]+)")
+
+
+def _bluesprig_address(html: str) -> tuple[str, str | None, str, str] | None:
+    """Return (street, city, state, zip) from a leaf page's PostalAddress, or None.
+
+    Tries strict JSON-LD first, then a field-level regex for the pages whose
+    JSON-LD is malformed (an unquoted `openingHours` or `postalCode: #N/A` breaks
+    a strict parse, but the address fields themselves are well formed and must not
+    be lost). Refuses rather than guesses: a street with no house number (one page
+    literally files "In Home Services" as the streetAddress) and a page with no
+    address block at all both return None.
+    """
+    for block in _JSONLD_RE.findall(html):
+        pa: dict | None = None
+        try:
+            pa = _find_postal(json.loads(block))
+        except (json.JSONDecodeError, TypeError):
+            if '"streetAddress"' in block:
+                def _field(key: str) -> str:
+                    m = re.search(rf'"{key}"\s*:\s*"([^"]*)"', block)
+                    return m.group(1).strip() if m else ""
+
+                pa = {
+                    "streetAddress": _field("streetAddress"),
+                    "addressLocality": _field("addressLocality"),
+                    "addressRegion": _field("addressRegion"),
+                    "postalCode": _field("postalCode"),
+                }
+        if not pa:
+            continue
+        street = str(pa.get("streetAddress", "")).strip()
+        region = str(pa.get("addressRegion", "")).strip()
+        state = region.upper() if len(region) == 2 else _STATE_NAME_TO_CODE.get(region.lower())
+        zm = re.match(r"(\d{5})", str(pa.get("postalCode", "")).strip())
+        if street and any(c.isdigit() for c in street) and state and zm:
+            city = str(pa.get("addressLocality", "")).strip() or None
+            return street, city, state, zm.group(1)
+    return None
+
+
+def fetch_bluesprig(client: httpx.Client) -> tuple[bytes, str]:
+    """Enumerate the BlueSprig `center` post type, then read each leaf address.
+
+    The REST index gives the leaf URL and the brand class; the address lives in a
+    schema.org block on the leaf page, so each centre is one further fetch.
+    """
+    items: list[tuple[str, str]] = []
+    page = 1
+    while True:
+        try:
+            body = fetch.get(f"{BLUESPRIG_INDEX}&page={page}", client=client)
+        except httpx.HTTPStatusError:
+            break  # WordPress returns 400 past the last page
+        batch = json.loads(body)
+        if not batch:
+            break
+        for c in batch:
+            link = c.get("link")
+            if not link:
+                continue
+            classes = " ".join(c.get("class_list") or [])
+            m = _BLUESPRIG_BRAND_RE.search(classes)
+            # An unbranded centre (BlueSprig Adolescent Center carries only a region
+            # class) is a BlueSprig centre; default rather than drop it.
+            items.append((link, m.group(1) if m else "bluesprig"))
+        if len(batch) < 100:
+            break
+        page += 1
+        time.sleep(REQUEST_DELAY_SEC)
+
+    centers: list[dict] = []
+    for link, brand in items:
+        owner = BLUESPRIG_BRAND_TO_OWNER.get(brand, "Blue Sprig")
+        try:
+            html = fetch.get(link, client=client).decode("utf-8", "replace")
+        except (httpx.HTTPError, fetch.FetchError) as exc:
+            logger.warning("bluesprig page failed %s: %s", link, exc)
+            continue
+        addr = _bluesprig_address(html)
+        if addr:
+            street, city, state, zipc = addr
+            centers.append(
+                vars(
+                    RosterCenter(
+                        owner_name=owner,
+                        address_line1=street,
+                        city=city,
+                        state=state,
+                        zip=zipc,
+                        detail_url=link,
+                    )
+                )
+            )
+        time.sleep(REQUEST_DELAY_SEC)
+    return json.dumps({"source": BLUESPRIG_INDEX, "centers": centers}).encode(), BLUESPRIG_INDEX
+
+
+def parse_bluesprig_roster(content: bytes) -> list[RosterCenter]:
+    """Parse the merged BlueSprig document produced by fetch_bluesprig."""
+    return [RosterCenter(**c) for c in json.loads(content).get("centers", [])]
+
+
 SOURCES = {
     "learn": (fetch_learn, parse_learn_roster),
     "caravel": (fetch_caravel, parse_caravel_roster),

@@ -4,17 +4,17 @@
     "source": "NPPES monthly bulk dissemination file",
     "archive": "monthly.zip",
     "archive_sha256": "e73068bbafb9ed72bb9303b36a1091ddce66f6e510a99fa1ca3339a04954cfea",
-    "computed_at": "2026-07-18T21:44:47.430455+00:00",
+    "computed_at": "2026-07-19T18:00:10.079694+00:00",
     "min_state_sites": 25,
     "note": "Numerator and denominator are computed in one pass over one universe with one site key, so the numerator is a strict subset of the denominator. Clinics Fundprint sources from an owner's own location directory are excluded from BOTH sides, because the registry cannot see them. The published clinic count is therefore larger than the numerator here and is not interchangeable with it. No chain threshold is applied anywhere: the operator-size distribution is published instead, so any cut is the reader's and is stated out loud."
   },
   "denominator": {
-    "aba_organizations": 17567,
-    "aba_sites": 21083
+    "aba_organizations": 17569,
+    "aba_sites": 21088
   },
   "numerator": {
-    "tracked_sites": 685,
-    "private_equity_sites": 583
+    "tracked_sites": 682,
+    "private_equity_sites": 580
   },
   "share": {
     "tracked_of_all_sites": 3.2,
@@ -23,8 +23,8 @@
   "size_distribution": [
     {
       "sites_per_operator": "1",
-      "operators": 15141,
-      "sites": 13939
+      "operators": 15142,
+      "sites": 13940
     },
     {
       "sites_per_operator": "2-4",
@@ -33,8 +33,8 @@
     },
     {
       "sites_per_operator": "5-9",
-      "operators": 191,
-      "sites": 1137
+      "operators": 192,
+      "sites": 1142
     },
     {
       "sites_per_operator": "10-24",
@@ -75,10 +75,10 @@
     {
       "state": "CO",
       "aba_sites": 688,
-      "tracked_sites": 68,
-      "private_equity_sites": 55,
-      "private_equity_share": 8.0,
-      "tracked_share": 9.9
+      "tracked_sites": 67,
+      "private_equity_sites": 54,
+      "private_equity_share": 7.8,
+      "tracked_share": 9.7
     },
     {
       "state": "PA",
@@ -154,11 +154,11 @@
     },
     {
       "state": "CA",
-      "aba_sites": 1762,
-      "tracked_sites": 55,
-      "private_equity_sites": 55,
-      "private_equity_share": 3.1,
-      "tracked_share": 3.1
+      "aba_sites": 1763,
+      "tracked_sites": 56,
+      "private_equity_sites": 56,
+      "private_equity_share": 3.2,
+      "tracked_share": 3.2
     },
     {
       "state": "TN",
@@ -194,7 +194,7 @@
     },
     {
       "state": "AL",
-      "aba_sites": 131,
+      "aba_sites": 132,
       "tracked_sites": 3,
       "private_equity_sites": 3,
       "private_equity_share": 2.3,
@@ -210,11 +210,11 @@
     },
     {
       "state": "WI",
-      "aba_sites": 101,
+      "aba_sites": 102,
       "tracked_sites": 5,
       "private_equity_sites": 2,
       "private_equity_share": 2.0,
-      "tracked_share": 5.0
+      "tracked_share": 4.9
     },
     {
       "state": "NV",
@@ -233,14 +233,6 @@
       "tracked_share": 1.4
     },
     {
-      "state": "FL",
-      "aba_sites": 5360,
-      "tracked_sites": 88,
-      "private_equity_sites": 69,
-      "private_equity_share": 1.3,
-      "tracked_share": 1.6
-    },
-    {
       "state": "VA",
       "aba_sites": 698,
       "tracked_sites": 17,
@@ -255,6 +247,14 @@
       "private_equity_sites": 3,
       "private_equity_share": 1.3,
       "tracked_share": 1.3
+    },
+    {
+      "state": "FL",
+      "aba_sites": 5360,
+      "tracked_sites": 85,
+      "private_equity_sites": 66,
+      "private_equity_share": 1.2,
+      "tracked_share": 1.6
     },
     {
       "state": "MI",
@@ -314,11 +314,11 @@
     },
     {
       "state": "CT",
-      "aba_sites": 216,
+      "aba_sites": 217,
       "tracked_sites": 4,
       "private_equity_sites": 1,
       "private_equity_share": 0.5,
-      "tracked_share": 1.9
+      "tracked_share": 1.8
     },
     {
       "state": "DE",
@@ -402,7 +402,7 @@
     },
     {
       "state": "SC",
-      "aba_sites": 230,
+      "aba_sites": 231,
       "tracked_sites": 0,
       "private_equity_sites": 0,
       "private_equity_share": 0.0,
@@ -450,7 +450,7 @@
     }
   ],
   "context": {
-    "published_clinics": 1797,
+    "published_clinics": 1755,
     "why_larger": "The published clinic count also includes centers read from owners' own public location directories, which the registry does not list."
   }
 }
