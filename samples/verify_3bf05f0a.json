@@ -1,0 +1,2901 @@
+{
+  "run_id": "3bf05f0a",
+  "seed": 913063207,
+  "drawn_at": "2026-07-19T21:21:57.587677+00:00",
+  "total_drawn": 150,
+  "plan": {
+    "pe": 110,
+    "non_pe": 20,
+    "unclaimed": 20
+  },
+  "note": "Stratified random sample for hand verification. `pe` and `non_pe` measure precision (are the claims we publish true). `unclaimed` measures recall (are there financial owners we are missing) and is the only stratum that can ever detect a false negative. Redraw the identical sample with --seed.",
+  "rows": [
+    {
+      "clinic_id": "9927f823-ea27-420c-91fd-41c24de80eb3",
+      "name": "Action Behavior Centers - Mesquite",
+      "address": "125 E Grubb Dr",
+      "city": "Mesquite",
+      "state": "TX",
+      "zip": "75149",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Action Behavior Centers",
+      "claimed_firm": "Charlesbank",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.actionbehavior.com/location/texas/mesquite"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "13835e4c-f405-4723-8df7-7fa95ad9bcfe",
+      "name": "Action Behavior Centers - Spring Klein",
+      "address": "7202 North Grand Parkway, Suite 700",
+      "city": "Spring",
+      "state": "TX",
+      "zip": "77379",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Action Behavior Centers",
+      "claimed_firm": "Charlesbank",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.actionbehavior.com/location/texas/spring-klein"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "0907bd80-d958-498a-bb15-6cd40ad5f401",
+      "name": "CAROLINA CENTER FOR AUTISM SERVICES, LLC",
+      "address": "1018 Carolina St",
+      "city": "Greensboro",
+      "state": "NC",
+      "zip": "274011409",
+      "npi": "1912069303",
+      "registry_last_updated": "2025-11-04",
+      "claimed_owner": "Carolina Center for Autism Services",
+      "claimed_firm": "WSC & Company",
+      "claimed_firm_type": "other",
+      "source_urls": [
+        "https://download.cms.gov/nppes/NPPES_Data_Dissemination_June_2026_V2.zip",
+        "https://kindbh.com/location-sitemap.xml"
+      ],
+      "source": "registry",
+      "stratum": "non_pe",
+      "sub_stratum": "non_pe/registry"
+    },
+    {
+      "clinic_id": "b76eca32-0b90-4d3d-bcb2-632ee18cec5c",
+      "name": "Behavioral Innovations",
+      "address": "10789 Bradford Rd, Suite 150",
+      "city": "Littleton",
+      "state": "CO",
+      "zip": "80127",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Behavioral Innovations",
+      "claimed_firm": "Tenex Capital Management",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://behavioral-innovations.com/sitemap-0.xml"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "6a9f5df1-6a85-4f4c-b498-ae599a1590e8",
+      "name": "Trellis Services",
+      "address": "1001 Cromwell Bridge Road",
+      "city": "Towson",
+      "state": "MD",
+      "zip": "21286",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Trellis Services",
+      "claimed_firm": "Gryphon Investors",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://learnbehavioral.com/wp-admin/admin-ajax.php?action=store_search&lat=39.8&lng=-98.5&max_results=500&search_radius=5000&autoload=1"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "27dfaf90-0106-459e-bbcc-78a01737bfae",
+      "name": "Behavior Analysis Center for Autism",
+      "address": "515 North Lafayette Blvd",
+      "city": "South Bend",
+      "state": "IN",
+      "zip": "46601",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Behavior Analysis Center for Autism",
+      "claimed_firm": "Gryphon Investors",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://learnbehavioral.com/wp-admin/admin-ajax.php?action=store_search&lat=39.8&lng=-98.5&max_results=500&search_radius=5000&autoload=1"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "32447c2d-1352-4ce2-8ea6-34c39c7f7a0a",
+      "name": "ACES ABA - Otay Ranch",
+      "address": "2576 Catamaran Way",
+      "city": "Chula Vista",
+      "state": "CA",
+      "zip": "91914",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "ACES 2020",
+      "claimed_firm": "General Atlantic",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.acesaba.com/locations/otay-ranch"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "9ae769c2-acba-49e2-a475-1a9135d0557f",
+      "name": "ACTION BEHAVIOR CENTERS, LLC",
+      "address": "1401 E 120TH AVE",
+      "city": "THORNTON",
+      "state": "CO",
+      "zip": "802335715",
+      "npi": "1043109390",
+      "registry_last_updated": "2025-07-01",
+      "claimed_owner": "Action Behavior Centers",
+      "claimed_firm": "Charlesbank",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://npiregistry.cms.hhs.gov/api/?version=2.1&organization_name=action+behavior*&enumeration_type=NPI-2&country_code=US",
+        "https://www.actionbehavior.com/location/colorado/north-thornton"
+      ],
+      "source": "registry",
+      "stratum": "pe",
+      "sub_stratum": "pe/registry"
+    },
+    {
+      "clinic_id": "94e5778a-2c73-42d6-a91c-8089c745010f",
+      "name": "ACTION BEHAVIOR CENTERS THERAPY LLC",
+      "address": "3100 Highwoods Blvd Ste 115",
+      "city": "Raleigh",
+      "state": "NC",
+      "zip": "276041033",
+      "npi": "1699475509",
+      "registry_last_updated": "2025-09-24",
+      "claimed_owner": "Action Behavior Centers",
+      "claimed_firm": "Charlesbank",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://download.cms.gov/nppes/NPPES_Data_Dissemination_June_2026_V2.zip",
+        "https://www.actionbehavior.com/location/north-carolina/raleigh-brentwood"
+      ],
+      "source": "registry",
+      "stratum": "pe",
+      "sub_stratum": "pe/registry"
+    },
+    {
+      "clinic_id": "94ad131e-852b-46a6-9199-5da150b112e3",
+      "name": "HELPING HANDS FAMILY VIRGINIA LLC",
+      "address": "4545 DAISY REID RD",
+      "city": "WOODBRIDGE",
+      "state": "VA",
+      "zip": "221925598",
+      "npi": "1881317675",
+      "registry_last_updated": "2026-03-04",
+      "claimed_owner": "Helping Hands Family",
+      "claimed_firm": "Zenyth Partners",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://download.cms.gov/nppes/NPPES_Data_Dissemination_June_2026_V2.zip",
+        "https://hhfamily.com/wp-admin/admin-ajax.php?action=store_search&lat=39.8&lng=-98.5&max_results=500&search_radius=5000&autoload=1"
+      ],
+      "source": "registry",
+      "stratum": "pe",
+      "sub_stratum": "pe/registry"
+    },
+    {
+      "clinic_id": "a982a17d-94fd-473c-8c9e-444d4c8894bd",
+      "name": "Vocational Development Group",
+      "address": "421",
+      "city": "Windchime Place Colorado Springs",
+      "state": "CO",
+      "zip": "80919",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Vocational Development Group",
+      "claimed_firm": "Elysium Management",
+      "claimed_firm_type": "family_office",
+      "source_urls": [
+        "https://inbloomautism.com/aba-therapy-learning-centers/"
+      ],
+      "source": "directory",
+      "stratum": "non_pe",
+      "sub_stratum": "non_pe/directory"
+    },
+    {
+      "clinic_id": "e807df13-44f4-4666-9f4c-43644db7bb75",
+      "name": "Helping Hands Family",
+      "address": "1000 Integrity Drive",
+      "city": "Pittsburgh",
+      "state": "PA",
+      "zip": "15236",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Helping Hands Family",
+      "claimed_firm": "Zenyth Partners",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://hhfamily.com/wp-admin/admin-ajax.php?action=store_search&lat=39.8&lng=-98.5&max_results=500&search_radius=5000&autoload=1"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "ec3f8f51-7f06-4eae-a68d-2a2e898b4d2e",
+      "name": "Autism Learning Partners Orlando North",
+      "address": "3210 Corrine Dr",
+      "city": "Orlando",
+      "state": "FL",
+      "zip": "32803",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Autism Learning Partners",
+      "claimed_firm": "FFL Partners",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://autismlearningpartners.com/locations/florida/orange-county/orlando-north/"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "unclaimed:1659006278",
+      "name": "THE LIGHTHOUSE PROJECT, LLC",
+      "address": "3507 LEE BLVD STE 280",
+      "city": "LEHIGH ACRES",
+      "state": "FL",
+      "zip": "339711314",
+      "npi": "1659006278",
+      "registry_last_updated": null,
+      "claimed_owner": null,
+      "claimed_firm": null,
+      "claimed_firm_type": null,
+      "source_urls": [
+        "https://npiregistry.cms.hhs.gov/provider-view/1659006278"
+      ],
+      "source": "registry",
+      "stratum": "unclaimed",
+      "sub_stratum": "unclaimed/registry"
+    },
+    {
+      "clinic_id": "unclaimed:1568186088",
+      "name": "NESTORABA, LLC",
+      "address": "7901 4TH ST N STE 10393",
+      "city": "ST PETERSBURG",
+      "state": "FL",
+      "zip": "337024305",
+      "npi": "1568186088",
+      "registry_last_updated": null,
+      "claimed_owner": null,
+      "claimed_firm": null,
+      "claimed_firm_type": null,
+      "source_urls": [
+        "https://npiregistry.cms.hhs.gov/provider-view/1568186088"
+      ],
+      "source": "registry",
+      "stratum": "unclaimed",
+      "sub_stratum": "unclaimed/registry"
+    },
+    {
+      "clinic_id": "5e4f15f4-a3c2-43f4-8800-d83772eb5e05",
+      "name": "CAROLINA CENTER FOR AUTISM SERVICES, LLC",
+      "address": "3820 Randolph Heights Dr Ste 100",
+      "city": "Charlotte",
+      "state": "NC",
+      "zip": "282057566",
+      "npi": "1912069303",
+      "registry_last_updated": "2025-11-04",
+      "claimed_owner": "Carolina Center for Autism Services",
+      "claimed_firm": "WSC & Company",
+      "claimed_firm_type": "other",
+      "source_urls": [
+        "https://download.cms.gov/nppes/NPPES_Data_Dissemination_June_2026_V2.zip"
+      ],
+      "source": "registry",
+      "stratum": "non_pe",
+      "sub_stratum": "non_pe/registry"
+    },
+    {
+      "clinic_id": "35c32217-f4d9-484e-b67c-b4a7cb92e7c7",
+      "name": "Behavioral Innovations",
+      "address": "3012 East Hebron Parkway, Suite 118",
+      "city": "Carrollton",
+      "state": "TX",
+      "zip": "75010",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Behavioral Innovations",
+      "claimed_firm": "Tenex Capital Management",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://behavioral-innovations.com/sitemap-0.xml"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "unclaimed:1669187241",
+      "name": "PRO-HEALTH BEHAVIORAL CENTER CORPORATION",
+      "address": "13205 SW 137TH AVE STE 212",
+      "city": "MIAMI",
+      "state": "FL",
+      "zip": "331865335",
+      "npi": "1669187241",
+      "registry_last_updated": null,
+      "claimed_owner": null,
+      "claimed_firm": null,
+      "claimed_firm_type": null,
+      "source_urls": [
+        "https://npiregistry.cms.hhs.gov/provider-view/1669187241"
+      ],
+      "source": "registry",
+      "stratum": "unclaimed",
+      "sub_stratum": "unclaimed/registry"
+    },
+    {
+      "clinic_id": "unclaimed:1922708155",
+      "name": "CLEAR MINDS THERAPY LLC",
+      "address": "31 TAMIAMI CANAL RD",
+      "city": "MIAMI",
+      "state": "FL",
+      "zip": "331442538",
+      "npi": "1922708155",
+      "registry_last_updated": null,
+      "claimed_owner": null,
+      "claimed_firm": null,
+      "claimed_firm_type": null,
+      "source_urls": [
+        "https://npiregistry.cms.hhs.gov/provider-view/1922708155"
+      ],
+      "source": "registry",
+      "stratum": "unclaimed",
+      "sub_stratum": "unclaimed/registry"
+    },
+    {
+      "clinic_id": "cf4d72eb-f4b1-4cfa-8b86-d0b276259359",
+      "name": "Autism Learning Partners Lincoln",
+      "address": "24 Albion Rd Building 300, Suite 320",
+      "city": "Lincoln",
+      "state": "RI",
+      "zip": "02865",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Autism Learning Partners",
+      "claimed_firm": "FFL Partners",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://autismlearningpartners.com/locations/rhode-island/providence-county/lincoln/"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "cc2f3e87-c29c-4b00-add0-1c42063c7b39",
+      "name": "Trumpet Behavioral Health - San Jose",
+      "address": "1835 Park Ave",
+      "city": "San Jose",
+      "state": "CA",
+      "zip": "95126",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Trumpet Behavioral Health",
+      "claimed_firm": "KKR",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.bluesprigautism.com/centers/california/san-jose/",
+        "https://www.bluesprigautism.com/wp-json/wp/v2/center?per_page=100"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "597d40a6-00eb-4227-9189-f439407b4740",
+      "name": "ACES ABA - Live Oak",
+      "address": "8304 Pat Booker Rd.",
+      "city": "Live Oak",
+      "state": "TX",
+      "zip": "78233",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "ACES 2020",
+      "claimed_firm": "General Atlantic",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.acesaba.com/locations/live-oak"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "f1a51075-e683-4a43-acc5-fb8ee626469c",
+      "name": "BlueSprig - Weatherford",
+      "address": "937 Hilltop Dr.",
+      "city": "Weatherford",
+      "state": "TX",
+      "zip": "76086",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Blue Sprig",
+      "claimed_firm": "KKR",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.bluesprigautism.com/centers/texas/bluesprig-weatherford/",
+        "https://www.bluesprigautism.com/wp-json/wp/v2/center?per_page=100"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "1b816815-6c56-4b07-9bb5-d7a13315cde8",
+      "name": "ACORN HEALTH OF FLORIDA, LLC",
+      "address": "5020 GUNN HWY STE 250",
+      "city": "TAMPA",
+      "state": "FL",
+      "zip": "336246361",
+      "npi": "1225767940",
+      "registry_last_updated": "2024-10-31",
+      "claimed_owner": "Acorn Health",
+      "claimed_firm": "Ontario Teachers' Pension Plan",
+      "claimed_firm_type": "pension_fund",
+      "source_urls": [
+        "https://acornhealth.com/locations/tampa-fl/",
+        "https://npiregistry.cms.hhs.gov/api/?version=2.1&organization_name=Acorn+Health*&enumeration_type=NPI-2&country_code=US"
+      ],
+      "source": "registry",
+      "stratum": "non_pe",
+      "sub_stratum": "non_pe/registry"
+    },
+    {
+      "clinic_id": "e872cb84-ecca-4597-9287-d81b6a013c13",
+      "name": "Behavioral Concepts",
+      "address": "345A Greenwood Street",
+      "city": "Worcester",
+      "state": "MA",
+      "zip": "01607",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Behavioral Concepts",
+      "claimed_firm": "Gryphon Investors",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://learnbehavioral.com/wp-admin/admin-ajax.php?action=store_search&lat=39.8&lng=-98.5&max_results=500&search_radius=5000&autoload=1"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "unclaimed:1063282846",
+      "name": "BEST BEHAVIOR SERVICES INC",
+      "address": "14642 SW 22ND TER",
+      "city": "MIAMI",
+      "state": "FL",
+      "zip": "331756384",
+      "npi": "1063282846",
+      "registry_last_updated": null,
+      "claimed_owner": null,
+      "claimed_firm": null,
+      "claimed_firm_type": null,
+      "source_urls": [
+        "https://npiregistry.cms.hhs.gov/provider-view/1063282846"
+      ],
+      "source": "registry",
+      "stratum": "unclaimed",
+      "sub_stratum": "unclaimed/registry"
+    },
+    {
+      "clinic_id": "6a0f415c-4cc1-4f86-99c8-5e89cdcb76f5",
+      "name": "ACORN HEALTH OF MARYLAND LLC",
+      "address": "9140 GUILFORD RD STE O",
+      "city": "COLUMBIA",
+      "state": "MD",
+      "zip": "210462584",
+      "npi": "1366100513",
+      "registry_last_updated": "2021-12-06",
+      "claimed_owner": "Acorn Health",
+      "claimed_firm": "Ontario Teachers' Pension Plan",
+      "claimed_firm_type": "pension_fund",
+      "source_urls": [
+        "https://acornhealth.com/locations/columbia-md/",
+        "https://npiregistry.cms.hhs.gov/api/?version=2.1&organization_name=Acorn+Health*&enumeration_type=NPI-2&country_code=US"
+      ],
+      "source": "registry",
+      "stratum": "non_pe",
+      "sub_stratum": "non_pe/registry"
+    },
+    {
+      "clinic_id": "unclaimed:1225513096",
+      "name": "COMPREHENSIVE EARLY AUTISM SERVICES",
+      "address": "32100 TELEGRAPH RD STE 205",
+      "city": "BINGHAM FARMS",
+      "state": "MI",
+      "zip": "48025",
+      "npi": "1225513096",
+      "registry_last_updated": null,
+      "claimed_owner": null,
+      "claimed_firm": null,
+      "claimed_firm_type": null,
+      "source_urls": [
+        "https://npiregistry.cms.hhs.gov/provider-view/1225513096"
+      ],
+      "source": "registry",
+      "stratum": "unclaimed",
+      "sub_stratum": "unclaimed/registry"
+    },
+    {
+      "clinic_id": "d14d1af7-ef01-4e02-9ecb-ae7185ffd0c5",
+      "name": "BlueSprig - Norman",
+      "address": "2801 Washington Dr.",
+      "city": "Norman",
+      "state": "OK",
+      "zip": "73069",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Blue Sprig",
+      "claimed_firm": "KKR",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.bluesprigautism.com/wp-json/wp/v2/center?per_page=100",
+        "https://www.bluesprigautism.com/centers/oklahoma/bluesprig-norman/"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "a6fa0b6a-8f40-487e-b6e5-491c2bdf233e",
+      "name": "Action Behavior Centers - Colleyville",
+      "address": "8260 Precinct Line Rd",
+      "city": "North Richland Hills",
+      "state": "TX",
+      "zip": "76182",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Action Behavior Centers",
+      "claimed_firm": "Charlesbank",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.actionbehavior.com/location/texas/colleyville"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "36660246-782b-4011-b6dc-180432cdd865",
+      "name": "BEHAVIOR CHANGE INSTITUTE, LLC.",
+      "address": "2705 S Alma School Rd Ste 2",
+      "city": "Chandler",
+      "state": "AZ",
+      "zip": "852864400",
+      "npi": "1730517889",
+      "registry_last_updated": "2026-02-26",
+      "claimed_owner": "Behavior Change Institute",
+      "claimed_firm": "Goldman Sachs Alternatives",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://download.cms.gov/nppes/NPPES_Data_Dissemination_June_2026_V2.zip"
+      ],
+      "source": "registry",
+      "stratum": "pe",
+      "sub_stratum": "pe/registry"
+    },
+    {
+      "clinic_id": "db60bd3a-89aa-467d-92af-1e999584fd93",
+      "name": "Action Behavior Centers - Waco Mountainview",
+      "address": "5301 Bosque Blvd, Suite 190",
+      "city": "Waco",
+      "state": "TX",
+      "zip": "76710",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Action Behavior Centers",
+      "claimed_firm": "Charlesbank",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.actionbehavior.com/location/texas/waco-mountainview"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "df254f96-4ad6-46e9-aa3b-112d0e12868a",
+      "name": "VOCATIONAL DEVELOPMENT GROUP, LLC",
+      "address": "1050 S ACADEMY BLVD STE 140",
+      "city": "COLORADO SPRINGS",
+      "state": "CO",
+      "zip": "809103922",
+      "npi": "1225676760",
+      "registry_last_updated": "2023-02-27",
+      "claimed_owner": "Vocational Development Group",
+      "claimed_firm": "Elysium Management",
+      "claimed_firm_type": "family_office",
+      "source_urls": [
+        "https://download.cms.gov/nppes/NPPES_Data_Dissemination_June_2026_V2.zip",
+        "https://inbloomautism.com/aba-therapy-learning-centers/"
+      ],
+      "source": "registry",
+      "stratum": "non_pe",
+      "sub_stratum": "non_pe/registry"
+    },
+    {
+      "clinic_id": "2cafe215-cbb7-43b8-bff7-e5ac5e214563",
+      "name": "Hopebridge",
+      "address": "4655 Rosebud Lane",
+      "city": "Newburgh",
+      "state": "IN",
+      "zip": "47630",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Hopebridge",
+      "claimed_firm": "Arsenal Capital Partners",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.hopebridge.com/centers/"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "fc747c9a-3a6b-4a32-b09c-3d9b3ed68018",
+      "name": "Alternative Behavior Strategies",
+      "address": "120 Broadus Ave. Suite 100",
+      "city": "Greenville",
+      "state": "SC",
+      "zip": "29601",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Alternative Behavior Strategies",
+      "claimed_firm": "Petra Capital Partners",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.abskids.com/wp-json/wp/v2/locations?per_page=100"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "734d138c-50a5-451a-853b-eec011d6f0a8",
+      "name": "PROUD MOMENTS ABA OF NEVADA LLC",
+      "address": "1707 Village Center Cir Ste 140",
+      "city": "Las Vegas",
+      "state": "NV",
+      "zip": "891340577",
+      "npi": "1043780695",
+      "registry_last_updated": "2025-03-05",
+      "claimed_owner": "Proud Moments",
+      "claimed_firm": "Nautic Partners",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://download.cms.gov/nppes/NPPES_Data_Dissemination_June_2026_V2.zip"
+      ],
+      "source": "registry",
+      "stratum": "pe",
+      "sub_stratum": "pe/registry"
+    },
+    {
+      "clinic_id": "d45cc24d-de43-43a4-bac8-31cb8df8cbfa",
+      "name": "Behavior Analysis Center for Autism",
+      "address": "6919 Hillsdale Court",
+      "city": "Indianapolis",
+      "state": "IN",
+      "zip": "46250",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Behavior Analysis Center for Autism",
+      "claimed_firm": "Gryphon Investors",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://learnbehavioral.com/wp-admin/admin-ajax.php?action=store_search&lat=39.8&lng=-98.5&max_results=500&search_radius=5000&autoload=1"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "ebec7b8b-3605-4ce0-932a-760ebfaed1ff",
+      "name": "BlueSprig - Central Dallas",
+      "address": "5510 Abrams Rd. Suite 112",
+      "city": "Dallas",
+      "state": "TX",
+      "zip": "75214",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Blue Sprig",
+      "claimed_firm": "KKR",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.bluesprigautism.com/centers/texas/bluesprig-central-dallas/",
+        "https://www.bluesprigautism.com/wp-json/wp/v2/center?per_page=100"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "ff8236c9-c0d7-4e81-84ca-efd6fe840917",
+      "name": "ACES ABA - Dallas",
+      "address": "5022 Tennyson Parkway",
+      "city": "Plano",
+      "state": "TX",
+      "zip": "75024",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "ACES 2020",
+      "claimed_firm": "General Atlantic",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.acesaba.com/locations/dallas"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "ab6a148c-a759-4366-8459-fef017a1b85e",
+      "name": "Behavioral Innovations",
+      "address": "8620 Spring Cypress Road, Suite D",
+      "city": "Spring",
+      "state": "TX",
+      "zip": "77379",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Behavioral Innovations",
+      "claimed_firm": "Tenex Capital Management",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://behavioral-innovations.com/sitemap-0.xml"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "unclaimed:1295690204",
+      "name": "SERENITY SPACE 4 KIDS CORP",
+      "address": "7700 N KENDALL DR STE 610B",
+      "city": "MIAMI",
+      "state": "FL",
+      "zip": "331567567",
+      "npi": "1295690204",
+      "registry_last_updated": null,
+      "claimed_owner": null,
+      "claimed_firm": null,
+      "claimed_firm_type": null,
+      "source_urls": [
+        "https://npiregistry.cms.hhs.gov/provider-view/1295690204"
+      ],
+      "source": "registry",
+      "stratum": "unclaimed",
+      "sub_stratum": "unclaimed/registry"
+    },
+    {
+      "clinic_id": "28d09393-be07-4085-89f2-ac2258f44535",
+      "name": "Little Leaves Behavioral Services",
+      "address": "11459 Cronhill Drive",
+      "city": "Owings Mills",
+      "state": "MD",
+      "zip": "21117",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Little Leaves Behavioral Services",
+      "claimed_firm": "Gryphon Investors",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://learnbehavioral.com/wp-admin/admin-ajax.php?action=store_search&lat=39.8&lng=-98.5&max_results=500&search_radius=5000&autoload=1"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "2d7532b4-822c-4fd5-b5f0-2b0f0c251daf",
+      "name": "VOCATIONAL DEVELOPMENT GROUP, LLC",
+      "address": "20601 N 19th Ave Ste 100",
+      "city": "Phoenix",
+      "state": "AZ",
+      "zip": "850272666",
+      "npi": "1811352099",
+      "registry_last_updated": "2025-02-05",
+      "claimed_owner": "Vocational Development Group",
+      "claimed_firm": "Elysium Management",
+      "claimed_firm_type": "family_office",
+      "source_urls": [
+        "https://download.cms.gov/nppes/NPPES_Data_Dissemination_June_2026_V2.zip",
+        "https://inbloomautism.com/aba-therapy-learning-centers/"
+      ],
+      "source": "registry",
+      "stratum": "non_pe",
+      "sub_stratum": "non_pe/registry"
+    },
+    {
+      "clinic_id": "47434f89-b446-4be8-8b47-246202e82727",
+      "name": "Vocational Development Group",
+      "address": "101 Merritt Blvd., Suite 25",
+      "city": "Trumbull",
+      "state": "CT",
+      "zip": "06611",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Vocational Development Group",
+      "claimed_firm": "Elysium Management",
+      "claimed_firm_type": "family_office",
+      "source_urls": [
+        "https://inbloomautism.com/aba-therapy-learning-centers/"
+      ],
+      "source": "directory",
+      "stratum": "non_pe",
+      "sub_stratum": "non_pe/directory"
+    },
+    {
+      "clinic_id": "dc7d5cc9-ddb2-4eea-b8fd-cf1a5a8107eb",
+      "name": "ACES ABA - Stockton",
+      "address": "2453 Grand Canal Blvd., Suite A",
+      "city": "Stockton",
+      "state": "CA",
+      "zip": "95207",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "ACES 2020",
+      "claimed_firm": "General Atlantic",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.acesaba.com/locations/stockton"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "fa5b80c4-35bb-4f33-81ab-cafd5294528d",
+      "name": "Autism Learning Partners Albany",
+      "address": "2 Computer Drive West suite 106",
+      "city": "Albany",
+      "state": "NY",
+      "zip": "12205",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Autism Learning Partners",
+      "claimed_firm": "FFL Partners",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://autismlearningpartners.com/locations/new-york/albany-county/albany/"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "4df1bbe1-a470-45c7-9222-9c53af805ed4",
+      "name": "BEHAVIOR CARE SPECIALISTS, INC",
+      "address": "1101 W Russell St",
+      "city": "Sioux Falls",
+      "state": "SD",
+      "zip": "571041322",
+      "npi": "1336427392",
+      "registry_last_updated": "2024-01-03",
+      "claimed_owner": "Behavior Care Specialists",
+      "claimed_firm": "Pharos Capital Group",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://download.cms.gov/nppes/NPPES_Data_Dissemination_June_2026_V2.zip"
+      ],
+      "source": "registry",
+      "stratum": "pe",
+      "sub_stratum": "pe/registry"
+    },
+    {
+      "clinic_id": "unclaimed:1720778228",
+      "name": "THRIVING MINDS ACADEMY LLC",
+      "address": "42 S SUNSET RD",
+      "city": "APACHE JUNCTION",
+      "state": "AZ",
+      "zip": "851197823",
+      "npi": "1720778228",
+      "registry_last_updated": null,
+      "claimed_owner": null,
+      "claimed_firm": null,
+      "claimed_firm_type": null,
+      "source_urls": [
+        "https://npiregistry.cms.hhs.gov/provider-view/1720778228"
+      ],
+      "source": "registry",
+      "stratum": "unclaimed",
+      "sub_stratum": "unclaimed/registry"
+    },
+    {
+      "clinic_id": "e07ad8f2-0bf6-4c04-8cd6-f395ffb282dc",
+      "name": "Carolina Center for Autism Services",
+      "address": "625 Morehead Ave",
+      "city": "Durham",
+      "state": "NC",
+      "zip": "27707",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Carolina Center for Autism Services",
+      "claimed_firm": "WSC & Company",
+      "claimed_firm_type": "other",
+      "source_urls": [
+        "https://kindbh.com/location-sitemap.xml"
+      ],
+      "source": "directory",
+      "stratum": "non_pe",
+      "sub_stratum": "non_pe/directory"
+    },
+    {
+      "clinic_id": "fa9d4b76-53b1-4676-92bd-fef766207c59",
+      "name": "Acorn Health - Novi, MI",
+      "address": "44000 W. 12 Mile Road Suite 113",
+      "city": "Novi",
+      "state": "MI",
+      "zip": "48377",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Acorn Health",
+      "claimed_firm": "Ontario Teachers' Pension Plan",
+      "claimed_firm_type": "pension_fund",
+      "source_urls": [
+        "https://acornhealth.com/locations/novi-mi/"
+      ],
+      "source": "directory",
+      "stratum": "non_pe",
+      "sub_stratum": "non_pe/directory"
+    },
+    {
+      "clinic_id": "c9bcbba2-de3c-4c7b-bbba-8de6689d2679",
+      "name": "Acorn Health - Upper Marlboro, MD",
+      "address": "9440 Marlboro Pike Suite 100",
+      "city": "Upper Marlboro",
+      "state": "MD",
+      "zip": "20772",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Acorn Health",
+      "claimed_firm": "Ontario Teachers' Pension Plan",
+      "claimed_firm_type": "pension_fund",
+      "source_urls": [
+        "https://acornhealth.com/locations/upper-marlboro-md/"
+      ],
+      "source": "directory",
+      "stratum": "non_pe",
+      "sub_stratum": "non_pe/directory"
+    },
+    {
+      "clinic_id": "659a8f6f-7f6e-4d47-8885-77b64654d77b",
+      "name": "Proud Moments ABA - Fredericksburg Va",
+      "address": "1071 Care Way Suite 100",
+      "city": "Fredericksburg",
+      "state": "VA",
+      "zip": "22401",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Proud Moments",
+      "claimed_firm": "Nautic Partners",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.proudmomentsaba.com/fredericksburg-va-aba-therapy"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "27ab06df-efc6-4c7a-9c69-127f5b42650b",
+      "name": "Action Behavior Centers - North Phoenix",
+      "address": "16620 N 40th St, Building I",
+      "city": "Phoenix",
+      "state": "AZ",
+      "zip": "85032",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Action Behavior Centers",
+      "claimed_firm": "Charlesbank",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.actionbehavior.com/location/arizona/north-phoenix"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "e9253b83-66b8-4c93-9090-4bdbe9054763",
+      "name": "Hopebridge",
+      "address": "2700 X Ray Dr #120",
+      "city": "Gastonia",
+      "state": "NC",
+      "zip": "28054",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Hopebridge",
+      "claimed_firm": "Arsenal Capital Partners",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.hopebridge.com/centers/"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "7fa80ac6-7634-4904-bda5-3017ec607873",
+      "name": "Action Behavior Centers - Cary Carpenter",
+      "address": "7535 Carpenter Fire Station Rd, Suite 105",
+      "city": "Cary",
+      "state": "NC",
+      "zip": "27519",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Action Behavior Centers",
+      "claimed_firm": "Charlesbank",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.actionbehavior.com/location/north-carolina/cary-carpenter"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "c1a306fd-f626-481d-8df5-de7c5e0d2fe5",
+      "name": "MONARCH BEHAVIORAL THERAPY BII, LLC",
+      "address": "19585 HESS RD STE C6",
+      "city": "PARKER",
+      "state": "CO",
+      "zip": "801343891",
+      "npi": "1760089270",
+      "registry_last_updated": "2024-12-17",
+      "claimed_owner": "Monarch Behavioral Therapy",
+      "claimed_firm": "Tenex Capital Management",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://npiregistry.cms.hhs.gov/api/?version=2.1&organization_name=Monarch+Behavioral+Therapy*&enumeration_type=NPI-2&country_code=US"
+      ],
+      "source": "registry",
+      "stratum": "pe",
+      "sub_stratum": "pe/registry"
+    },
+    {
+      "clinic_id": "unclaimed:1649133166",
+      "name": "BUILD A BLOCK",
+      "address": "7990 SW 117TH AVE STE 134",
+      "city": "MIAMI",
+      "state": "FL",
+      "zip": "331833835",
+      "npi": "1649133166",
+      "registry_last_updated": null,
+      "claimed_owner": null,
+      "claimed_firm": null,
+      "claimed_firm_type": null,
+      "source_urls": [
+        "https://npiregistry.cms.hhs.gov/provider-view/1649133166"
+      ],
+      "source": "registry",
+      "stratum": "unclaimed",
+      "sub_stratum": "unclaimed/registry"
+    },
+    {
+      "clinic_id": "cdf6b431-e11d-414d-af04-a8c0f00a5734",
+      "name": "Alternative Behavior Strategies",
+      "address": "10545 Blair Rd. Suite 100",
+      "city": "Mint Hill",
+      "state": "NC",
+      "zip": "28227",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Alternative Behavior Strategies",
+      "claimed_firm": "Petra Capital Partners",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.abskids.com/wp-json/wp/v2/locations?per_page=100"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "d6c66c76-d3c9-4bdf-8e00-625075ed7d75",
+      "name": "Proud Moments ABA - Glen Burnie Md",
+      "address": "806 Landmark Dr. Suites 117-121",
+      "city": "Glen Burnie",
+      "state": "MD",
+      "zip": "21061",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Proud Moments",
+      "claimed_firm": "Nautic Partners",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.proudmomentsaba.com/glen-burnie-md-aba-therapy"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "0c74319e-ba46-41a9-9cc4-b99a7714908f",
+      "name": "ALTERNATIVE BEHAVIOR STRATEGIES, LLC",
+      "address": "1159 E 200 N Ste 100",
+      "city": "American Fork",
+      "state": "UT",
+      "zip": "840032053",
+      "npi": "1962765693",
+      "registry_last_updated": "2026-02-23",
+      "claimed_owner": "Alternative Behavior Strategies",
+      "claimed_firm": "Petra Capital Partners",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.abskids.com/wp-json/wp/v2/locations?per_page=100",
+        "https://download.cms.gov/nppes/NPPES_Data_Dissemination_June_2026_V2.zip"
+      ],
+      "source": "registry",
+      "stratum": "pe",
+      "sub_stratum": "pe/registry"
+    },
+    {
+      "clinic_id": "c80be1f2-b22a-452c-85c5-094a04da7f92",
+      "name": "PROUD MOMENTS ABA OF NEW JERSEY LLC",
+      "address": "118 Talmadge Rd",
+      "city": "Edison",
+      "state": "NJ",
+      "zip": "088172812",
+      "npi": "1770190621",
+      "registry_last_updated": "2025-02-13",
+      "claimed_owner": "Proud Moments",
+      "claimed_firm": "Nautic Partners",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://download.cms.gov/nppes/NPPES_Data_Dissemination_June_2026_V2.zip"
+      ],
+      "source": "registry",
+      "stratum": "pe",
+      "sub_stratum": "pe/registry"
+    },
+    {
+      "clinic_id": "5dab2547-fa7b-4a6c-b9f6-090cc7a82a0f",
+      "name": "SPARKS ABA",
+      "address": "5501 Backlick Road",
+      "city": "Springfield",
+      "state": "VA",
+      "zip": "22151",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "SPARKS ABA",
+      "claimed_firm": "Gryphon Investors",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://learnbehavioral.com/wp-admin/admin-ajax.php?action=store_search&lat=39.8&lng=-98.5&max_results=500&search_radius=5000&autoload=1"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "a644d4a8-370a-42da-810c-d3bef58bb251",
+      "name": "Acorn Health - Ashburn, VA",
+      "address": "44933 George Washington Parkway Suite 110",
+      "city": "Ashburn",
+      "state": "VA",
+      "zip": "20147",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Acorn Health",
+      "claimed_firm": "Ontario Teachers' Pension Plan",
+      "claimed_firm_type": "pension_fund",
+      "source_urls": [
+        "https://acornhealth.com/locations/ashburn-va/"
+      ],
+      "source": "directory",
+      "stratum": "non_pe",
+      "sub_stratum": "non_pe/directory"
+    },
+    {
+      "clinic_id": "7d430a66-0683-4e48-99b6-eb9cd66e2ec2",
+      "name": "FLORIDA AUTISM CENTER",
+      "address": "1237 AUGUSTA WEST PKWY",
+      "city": "AUGUSTA",
+      "state": "GA",
+      "zip": "309091807",
+      "npi": "1225593205",
+      "registry_last_updated": "2022-11-07",
+      "claimed_owner": "Florida Autism Center",
+      "claimed_firm": "KKR",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.bluesprigautism.com/wp-json/wp/v2/center?per_page=100",
+        "https://npiregistry.cms.hhs.gov/api/?version=2.1&organization_name=Florida+Autism+Center*&enumeration_type=NPI-2&country_code=US"
+      ],
+      "source": "registry",
+      "stratum": "pe",
+      "sub_stratum": "pe/registry"
+    },
+    {
+      "clinic_id": "unclaimed:1699587584",
+      "name": "SPECIAL EFFECTS ABA LTD",
+      "address": "4301 STRETTON FARM CT",
+      "city": "WOODBRIDGE",
+      "state": "VA",
+      "zip": "221925564",
+      "npi": "1699587584",
+      "registry_last_updated": null,
+      "claimed_owner": null,
+      "claimed_firm": null,
+      "claimed_firm_type": null,
+      "source_urls": [
+        "https://npiregistry.cms.hhs.gov/provider-view/1699587584"
+      ],
+      "source": "registry",
+      "stratum": "unclaimed",
+      "sub_stratum": "unclaimed/registry"
+    },
+    {
+      "clinic_id": "74db585a-7dd3-4f65-a4ed-74cc05c3e748",
+      "name": "BLUE SPRIGS PEDIACTRICS",
+      "address": "1750 COMMERCE CENTER BLVD",
+      "city": "FAIRBORN",
+      "state": "OH",
+      "zip": "453246333",
+      "npi": "1427987882",
+      "registry_last_updated": "2026-05-13",
+      "claimed_owner": "Blue Sprig",
+      "claimed_firm": "KKR",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.bluesprigautism.com/wp-json/wp/v2/center?per_page=100",
+        "https://npiregistry.cms.hhs.gov/api/?version=2.1&organization_name=Blue+Sprig*&enumeration_type=NPI-2&country_code=US"
+      ],
+      "source": "registry",
+      "stratum": "pe",
+      "sub_stratum": "pe/registry"
+    },
+    {
+      "clinic_id": "2986117d-fc87-4022-b796-d2bfe91fb7b9",
+      "name": "Behavioral Innovations",
+      "address": "555 William D. Fitch Pkwy",
+      "city": "College Station",
+      "state": "TX",
+      "zip": "77845",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Behavioral Innovations",
+      "claimed_firm": "Tenex Capital Management",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://behavioral-innovations.com/sitemap-0.xml"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "9f7e062f-c891-498f-a502-31f00d8efdac",
+      "name": "BlueSprig - Hendersonville",
+      "address": "101 Tennessee Way Suite 400",
+      "city": "Hendersonville",
+      "state": "TN",
+      "zip": "37075",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Blue Sprig",
+      "claimed_firm": "KKR",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.bluesprigautism.com/wp-json/wp/v2/center?per_page=100",
+        "https://www.bluesprigautism.com/centers/tennessee/bluesprig-hendersonville/"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "unclaimed:1104619212",
+      "name": "ASMG VENTURES, LLC",
+      "address": "7827 CONVOY CT STE 406",
+      "city": "SAN DIEGO",
+      "state": "CA",
+      "zip": "921111218",
+      "npi": "1104619212",
+      "registry_last_updated": null,
+      "claimed_owner": null,
+      "claimed_firm": null,
+      "claimed_firm_type": null,
+      "source_urls": [
+        "https://npiregistry.cms.hhs.gov/provider-view/1104619212"
+      ],
+      "source": "registry",
+      "stratum": "unclaimed",
+      "sub_stratum": "unclaimed/registry"
+    },
+    {
+      "clinic_id": "85bee453-adc8-4497-815c-db2593c677e4",
+      "name": "Action Behavior Centers - Rowlett",
+      "address": "7700 Lakeview Pkwy Suite 100A",
+      "city": "Rowlett",
+      "state": "TX",
+      "zip": "75088",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Action Behavior Centers",
+      "claimed_firm": "Charlesbank",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.actionbehavior.com/location/texas/rowlett"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "63dffc51-c2e9-4a9c-8b62-83b8c1db3f68",
+      "name": "Action Behavior Centers - Leander",
+      "address": "1667 N. US-183, Building 1",
+      "city": "Leander",
+      "state": "TX",
+      "zip": "78641",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Action Behavior Centers",
+      "claimed_firm": "Charlesbank",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.actionbehavior.com/location/texas/leander"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "unclaimed:1306551809",
+      "name": "EMPATH BEHAVIORAL CONSULTING, LLC",
+      "address": "25 1/2 SEVILLA ST",
+      "city": "ST AUGUSTINE",
+      "state": "FL",
+      "zip": "320843550",
+      "npi": "1306551809",
+      "registry_last_updated": null,
+      "claimed_owner": null,
+      "claimed_firm": null,
+      "claimed_firm_type": null,
+      "source_urls": [
+        "https://npiregistry.cms.hhs.gov/provider-view/1306551809"
+      ],
+      "source": "registry",
+      "stratum": "unclaimed",
+      "sub_stratum": "unclaimed/registry"
+    },
+    {
+      "clinic_id": "ae256fae-a9d9-4274-a4d9-b508b61e6c1a",
+      "name": "Behavioral Innovations",
+      "address": "3501 W Kenosha Street",
+      "city": "Broken Arrow",
+      "state": "OK",
+      "zip": "74012",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Behavioral Innovations",
+      "claimed_firm": "Tenex Capital Management",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://behavioral-innovations.com/sitemap-0.xml"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "68749120-53b6-4ae3-8482-46d6db6b6328",
+      "name": "BLUE SPRIG PEDIATRICS",
+      "address": "1737 E CORTEZ DR",
+      "city": "GILBERT",
+      "state": "AZ",
+      "zip": "852344962",
+      "npi": "1285311266",
+      "registry_last_updated": "2023-06-30",
+      "claimed_owner": "Blue Sprig",
+      "claimed_firm": "KKR",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://npiregistry.cms.hhs.gov/api/?version=2.1&organization_name=Blue+Sprig*&enumeration_type=NPI-2&country_code=US"
+      ],
+      "source": "registry",
+      "stratum": "pe",
+      "sub_stratum": "pe/registry"
+    },
+    {
+      "clinic_id": "fd36e6f2-91d6-4e75-b669-2ec3781d63e1",
+      "name": "HOPEBRIDGE, LLC",
+      "address": "1026 Pathfinder Way",
+      "city": "Rockledge",
+      "state": "FL",
+      "zip": "329553216",
+      "npi": "1891820668",
+      "registry_last_updated": "2025-09-24",
+      "claimed_owner": "Hopebridge",
+      "claimed_firm": "Arsenal Capital Partners",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://download.cms.gov/nppes/NPPES_Data_Dissemination_June_2026_V2.zip",
+        "https://www.hopebridge.com/centers/"
+      ],
+      "source": "registry",
+      "stratum": "pe",
+      "sub_stratum": "pe/registry"
+    },
+    {
+      "clinic_id": "4219baaf-0570-444c-8399-e86e2326ba8a",
+      "name": "BUCK JACK LLC",
+      "address": "2761 JANITELL RD",
+      "city": "COLORADO SPRINGS",
+      "state": "CO",
+      "zip": "809064102",
+      "npi": "1386239861",
+      "registry_last_updated": "2024-02-28",
+      "claimed_owner": "Buck Jack",
+      "claimed_firm": "Anacapa Partners",
+      "claimed_firm_type": "other",
+      "source_urls": [
+        "https://download.cms.gov/nppes/NPPES_Data_Dissemination_June_2026_V2.zip"
+      ],
+      "source": "registry",
+      "stratum": "non_pe",
+      "sub_stratum": "non_pe/registry"
+    },
+    {
+      "clinic_id": "f51b6fd6-f3bd-4a9e-8db8-78903169800d",
+      "name": "BEHAVIOR FRONTIERS, LLC",
+      "address": "7806 Uplands Way Ste A",
+      "city": "Citrus Heights",
+      "state": "CA",
+      "zip": "956107567",
+      "npi": "1245539394",
+      "registry_last_updated": "2025-08-22",
+      "claimed_owner": "Behavior Frontiers",
+      "claimed_firm": "NexPhase Capital",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://download.cms.gov/nppes/NPPES_Data_Dissemination_June_2026_V2.zip"
+      ],
+      "source": "registry",
+      "stratum": "pe",
+      "sub_stratum": "pe/registry"
+    },
+    {
+      "clinic_id": "ef5224e5-895b-48bb-a5e3-a2581bf57f89",
+      "name": "Action Behavior Centers - Far West",
+      "address": "9002 Culebra Road, Suite 100",
+      "city": "San Antonio",
+      "state": "TX",
+      "zip": "78251",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Action Behavior Centers",
+      "claimed_firm": "Charlesbank",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.actionbehavior.com/location/texas/far-west"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "25273574-5a0e-4210-b1c2-c0daae1373dc",
+      "name": "Autism Learning Partners Turlock",
+      "address": "2925 Niagara St. Suite 7 & 8",
+      "city": "Turlock",
+      "state": "CA",
+      "zip": "95382",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Autism Learning Partners",
+      "claimed_firm": "FFL Partners",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://autismlearningpartners.com/locations/california/stanislaus-county/turlock/"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "c4a76f40-0728-4a8f-a4dd-96aa92eb5af5",
+      "name": "ACORN HEALTH OF FLORIDA, LLC",
+      "address": "600 LAKE HOLLINGSWORTH DR",
+      "city": "LAKELAND",
+      "state": "FL",
+      "zip": "338032364",
+      "npi": "1245976026",
+      "registry_last_updated": "2024-10-31",
+      "claimed_owner": "Acorn Health",
+      "claimed_firm": "Ontario Teachers' Pension Plan",
+      "claimed_firm_type": "pension_fund",
+      "source_urls": [
+        "https://npiregistry.cms.hhs.gov/api/?version=2.1&organization_name=Acorn+Health*&enumeration_type=NPI-2&country_code=US",
+        "https://acornhealth.com/locations/lakeland-fl/"
+      ],
+      "source": "registry",
+      "stratum": "non_pe",
+      "sub_stratum": "non_pe/registry"
+    },
+    {
+      "clinic_id": "5a2a14ef-33ec-4e38-b120-73ffda95ccd7",
+      "name": "ACORN HEALTH OF FLORIDA, LLC",
+      "address": "1160 S SEMORAN BLVD STE A&B",
+      "city": "ORLANDO",
+      "state": "FL",
+      "zip": "328071461",
+      "npi": "1578136875",
+      "registry_last_updated": "2024-10-31",
+      "claimed_owner": "Acorn Health",
+      "claimed_firm": "Ontario Teachers' Pension Plan",
+      "claimed_firm_type": "pension_fund",
+      "source_urls": [
+        "https://acornhealth.com/locations/orlando-fl/",
+        "https://npiregistry.cms.hhs.gov/api/?version=2.1&organization_name=Acorn+Health*&enumeration_type=NPI-2&country_code=US"
+      ],
+      "source": "registry",
+      "stratum": "non_pe",
+      "sub_stratum": "non_pe/registry"
+    },
+    {
+      "clinic_id": "a8d0afe2-999a-4397-97b6-ee4a7852eb62",
+      "name": "HOPEBRIDGE LLC",
+      "address": "1185 S REDONDO CENTER DR STE 1",
+      "city": "YUMA",
+      "state": "AZ",
+      "zip": "853652036",
+      "npi": "1861064479",
+      "registry_last_updated": "2021-07-13",
+      "claimed_owner": "Hopebridge",
+      "claimed_firm": "Arsenal Capital Partners",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.hopebridge.com/centers/",
+        "https://npiregistry.cms.hhs.gov/api/?version=2.1&organization_name=hopebridge*&enumeration_type=NPI-2&country_code=US"
+      ],
+      "source": "registry",
+      "stratum": "pe",
+      "sub_stratum": "pe/registry"
+    },
+    {
+      "clinic_id": "3fa5b36d-3b93-4f25-b24a-ba8dbbe21ea8",
+      "name": "Centria",
+      "address": "6948 East Hampton Road Suite N-055",
+      "city": "Mesa",
+      "state": "AZ",
+      "zip": "85206",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Centria",
+      "claimed_firm": "Thomas H. Lee Partners",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://centriahealthcare.com/wp-json/wp/v2/location?per_page=100"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "565f578d-b278-40ff-984c-ca3b3706199f",
+      "name": "ALTERNATIVE BEHAVIOR STRATEGIES, LLC",
+      "address": "9245 Activity Rd Ste 106",
+      "city": "San Diego",
+      "state": "CA",
+      "zip": "921264442",
+      "npi": "1962765693",
+      "registry_last_updated": "2026-02-23",
+      "claimed_owner": "Alternative Behavior Strategies",
+      "claimed_firm": "Petra Capital Partners",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.abskids.com/wp-json/wp/v2/locations?per_page=100",
+        "https://download.cms.gov/nppes/NPPES_Data_Dissemination_June_2026_V2.zip"
+      ],
+      "source": "registry",
+      "stratum": "pe",
+      "sub_stratum": "pe/registry"
+    },
+    {
+      "clinic_id": "b80d4675-9e56-460b-bcec-71827a998618",
+      "name": "Caravel Autism Health",
+      "address": "1511 West Main Avenue, Suite 200",
+      "city": "De Pere",
+      "state": "WI",
+      "zip": "54115",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Caravel Autism Health",
+      "claimed_firm": "GTCR",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.caravelautism.com/wp-json/wp/v2/autism-center?per_page=100"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "080718de-c460-4c6f-b027-7c3bdd0f12e9",
+      "name": "Proud Moments ABA - Detroit Southfield Mi Aba Therapy 0",
+      "address": "23800 W 10 Mile Rd. Suite 105",
+      "city": "Southfield",
+      "state": "MI",
+      "zip": "48033",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Proud Moments",
+      "claimed_firm": "Nautic Partners",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.proudmomentsaba.com/detroit-southfield-mi-aba-therapy-0"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "bd35a527-acaf-4630-a91a-59fc2f940ea1",
+      "name": "ACORN HEALTH OF VIRGINIA II, LLC",
+      "address": "923 Gardens Blvd",
+      "city": "Charlottesville",
+      "state": "VA",
+      "zip": "229011472",
+      "npi": "1255980629",
+      "registry_last_updated": "2023-05-17",
+      "claimed_owner": "Acorn Health",
+      "claimed_firm": "Ontario Teachers' Pension Plan",
+      "claimed_firm_type": "pension_fund",
+      "source_urls": [
+        "https://download.cms.gov/nppes/NPPES_Data_Dissemination_June_2026_V2.zip",
+        "https://acornhealth.com/locations/charlottesville-va/"
+      ],
+      "source": "registry",
+      "stratum": "non_pe",
+      "sub_stratum": "non_pe/registry"
+    },
+    {
+      "clinic_id": "3be27ff9-2f01-4e37-a87a-8b1459197076",
+      "name": "ACORN HEALTH OF MICHIGAN, LLC",
+      "address": "6510 Town Center Dr Ste E",
+      "city": "Clarkston",
+      "state": "MI",
+      "zip": "483464822",
+      "npi": "1558841163",
+      "registry_last_updated": "2024-07-10",
+      "claimed_owner": "Acorn Health",
+      "claimed_firm": "Ontario Teachers' Pension Plan",
+      "claimed_firm_type": "pension_fund",
+      "source_urls": [
+        "https://download.cms.gov/nppes/NPPES_Data_Dissemination_June_2026_V2.zip",
+        "https://acornhealth.com/locations/clarkston-mi/"
+      ],
+      "source": "registry",
+      "stratum": "non_pe",
+      "sub_stratum": "non_pe/registry"
+    },
+    {
+      "clinic_id": "unclaimed:1932079779",
+      "name": "BRIGHT OAK BEHAVIORAL HEALTH LLC",
+      "address": "3335 BROAD ST APT 11",
+      "city": "SAN LUIS OBISPO",
+      "state": "CA",
+      "zip": "934016752",
+      "npi": "1932079779",
+      "registry_last_updated": null,
+      "claimed_owner": null,
+      "claimed_firm": null,
+      "claimed_firm_type": null,
+      "source_urls": [
+        "https://npiregistry.cms.hhs.gov/provider-view/1932079779"
+      ],
+      "source": "registry",
+      "stratum": "unclaimed",
+      "sub_stratum": "unclaimed/registry"
+    },
+    {
+      "clinic_id": "d455a526-62a3-47ae-8270-c3d72f6b0280",
+      "name": "PROUD MOMENTS ABA OF NEVADA LLC",
+      "address": "8020 W Sahara Ave Ste 125",
+      "city": "Las Vegas",
+      "state": "NV",
+      "zip": "891177917",
+      "npi": "1043780695",
+      "registry_last_updated": "2025-03-05",
+      "claimed_owner": "Proud Moments",
+      "claimed_firm": "Nautic Partners",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://download.cms.gov/nppes/NPPES_Data_Dissemination_June_2026_V2.zip"
+      ],
+      "source": "registry",
+      "stratum": "pe",
+      "sub_stratum": "pe/registry"
+    },
+    {
+      "clinic_id": "unclaimed:1659081529",
+      "name": "REGIONAL BEHAVIOR CARE INC",
+      "address": "7775 NW 48TH ST STE 100",
+      "city": "DORAL",
+      "state": "FL",
+      "zip": "331665408",
+      "npi": "1659081529",
+      "registry_last_updated": null,
+      "claimed_owner": null,
+      "claimed_firm": null,
+      "claimed_firm_type": null,
+      "source_urls": [
+        "https://npiregistry.cms.hhs.gov/provider-view/1659081529"
+      ],
+      "source": "registry",
+      "stratum": "unclaimed",
+      "sub_stratum": "unclaimed/registry"
+    },
+    {
+      "clinic_id": "11fcf7d1-c275-4dd3-a73d-221eeb7af4a7",
+      "name": "Behavioral Innovations",
+      "address": "719 E. Belt Line Road, Suite 200",
+      "city": "Cedar Hill",
+      "state": "TX",
+      "zip": "75104",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Behavioral Innovations",
+      "claimed_firm": "Tenex Capital Management",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://behavioral-innovations.com/sitemap-0.xml"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "6612df6e-2758-4c26-a27f-09139114825c",
+      "name": "FLORIDA AUTISM CENTER",
+      "address": "5454 LITHIA PINECREST RD",
+      "city": "LITHIA",
+      "state": "FL",
+      "zip": "335472853",
+      "npi": "1851875041",
+      "registry_last_updated": "2022-11-10",
+      "claimed_owner": "Florida Autism Center",
+      "claimed_firm": "KKR",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://npiregistry.cms.hhs.gov/api/?version=2.1&organization_name=Florida+Autism+Center*&enumeration_type=NPI-2&country_code=US",
+        "https://www.bluesprigautism.com/centers/florida/florida-autism-center-fish-hawk/",
+        "https://www.bluesprigautism.com/wp-json/wp/v2/center?per_page=100"
+      ],
+      "source": "registry",
+      "stratum": "pe",
+      "sub_stratum": "pe/registry"
+    },
+    {
+      "clinic_id": "6beffaee-fc05-4468-b8bd-fc435b5d0e5f",
+      "name": "Action Behavior Centers - East Mesa",
+      "address": "6335 E Main St, Suite E4",
+      "city": "Mesa",
+      "state": "AZ",
+      "zip": "85205",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Action Behavior Centers",
+      "claimed_firm": "Charlesbank",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.actionbehavior.com/location/arizona/east-mesa"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "fdb6082f-d228-4a60-8950-74ba098be2db",
+      "name": "Alternative Behavior Strategies",
+      "address": "3740 Fernandina Rd.",
+      "city": "Columbia",
+      "state": "SC",
+      "zip": "29210",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Alternative Behavior Strategies",
+      "claimed_firm": "Petra Capital Partners",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.abskids.com/wp-json/wp/v2/locations?per_page=100"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "5bade2ea-32ce-4e0c-9191-fb6d22d52bf1",
+      "name": "Autism Spectrum Therapies",
+      "address": "500 River Highlands Boulevard",
+      "city": "Covington",
+      "state": "LA",
+      "zip": "70433",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Autism Spectrum Therapies",
+      "claimed_firm": "Gryphon Investors",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://learnbehavioral.com/wp-admin/admin-ajax.php?action=store_search&lat=39.8&lng=-98.5&max_results=500&search_radius=5000&autoload=1"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "6c2630f7-d0f0-4c98-ac24-f3e5e03f7b14",
+      "name": "ACTION BEHAVIOR CENTERS THERAPY LLC",
+      "address": "500 Wayland Grove Ln",
+      "city": "Apex",
+      "state": "NC",
+      "zip": "27523",
+      "npi": "1699475509",
+      "registry_last_updated": "2025-09-24",
+      "claimed_owner": "Action Behavior Centers",
+      "claimed_firm": "Charlesbank",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://download.cms.gov/nppes/NPPES_Data_Dissemination_June_2026_V2.zip",
+        "https://www.actionbehavior.com/location/north-carolina/apex-beaver-creek"
+      ],
+      "source": "registry",
+      "stratum": "pe",
+      "sub_stratum": "pe/registry"
+    },
+    {
+      "clinic_id": "e7bfcbcc-fd8e-45f8-ab4d-391db4b4e7cc",
+      "name": "Action Behavior Centers - The Academy At Gilbert",
+      "address": "1580 North Fiesta Blvd",
+      "city": "Gilbert",
+      "state": "AZ",
+      "zip": "85233",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Action Behavior Centers",
+      "claimed_firm": "Charlesbank",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.actionbehavior.com/location/arizona/the-academy-at-gilbert"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "unclaimed:1659229482",
+      "name": "ST BASIL ABA SERVICES LLC",
+      "address": "1067 CARLISLE PL",
+      "city": "MOUNT JULIET",
+      "state": "TN",
+      "zip": "371221033",
+      "npi": "1659229482",
+      "registry_last_updated": null,
+      "claimed_owner": null,
+      "claimed_firm": null,
+      "claimed_firm_type": null,
+      "source_urls": [
+        "https://npiregistry.cms.hhs.gov/provider-view/1659229482"
+      ],
+      "source": "registry",
+      "stratum": "unclaimed",
+      "sub_stratum": "unclaimed/registry"
+    },
+    {
+      "clinic_id": "98f1e140-0a2a-4345-b5e3-2deb752fb057",
+      "name": "ACES ABA - San Jose",
+      "address": "1887 Monterey Road, Suite 225",
+      "city": "San Jose",
+      "state": "CA",
+      "zip": "95112",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "ACES 2020",
+      "claimed_firm": "General Atlantic",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.acesaba.com/locations/san-jose"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "b45f231a-ed78-4e29-a465-ac3a60487172",
+      "name": "Action Behavior Centers - Mansfield",
+      "address": "1703 Fountainview Dr",
+      "city": "Mansfield",
+      "state": "TX",
+      "zip": "76063",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Action Behavior Centers",
+      "claimed_firm": "Charlesbank",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.actionbehavior.com/location/texas/mansfield"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "8528f8b8-c3af-4545-bd6e-6c5e9c607d18",
+      "name": "Action Behavior Centers - Copperfield",
+      "address": "8590 Highway 6 North",
+      "city": "Houston",
+      "state": "TX",
+      "zip": "77095",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Action Behavior Centers",
+      "claimed_firm": "Charlesbank",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.actionbehavior.com/location/texas/copperfield"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "unclaimed:1922847383",
+      "name": "HARBOR ABA",
+      "address": "3519 65TH AVENUE CT NW",
+      "city": "GIG HARBOR",
+      "state": "WA",
+      "zip": "983357242",
+      "npi": "1922847383",
+      "registry_last_updated": null,
+      "claimed_owner": null,
+      "claimed_firm": null,
+      "claimed_firm_type": null,
+      "source_urls": [
+        "https://npiregistry.cms.hhs.gov/provider-view/1922847383"
+      ],
+      "source": "registry",
+      "stratum": "unclaimed",
+      "sub_stratum": "unclaimed/registry"
+    },
+    {
+      "clinic_id": "77b5356d-4e97-4c6f-98fb-8db96367d439",
+      "name": "Behavioral Innovations",
+      "address": "24 SW 89th Street",
+      "city": "Oklahoma City",
+      "state": "OK",
+      "zip": "73139",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Behavioral Innovations",
+      "claimed_firm": "Tenex Capital Management",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://behavioral-innovations.com/sitemap-0.xml"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "d736cc3c-dfe3-4637-8992-8d4c926a4b53",
+      "name": "Centria",
+      "address": "4177 Rainbow Dr",
+      "city": "Atlanta",
+      "state": "GA",
+      "zip": "30034",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Centria",
+      "claimed_firm": "Thomas H. Lee Partners",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://centriahealthcare.com/wp-json/wp/v2/location?per_page=100"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "972a881b-dd5b-41f4-8786-71cd1bf3e15c",
+      "name": "VOCATIONAL DEVELOPMENT GROUP, LLC",
+      "address": "5400 S UNIVERSITY DR STE 502",
+      "city": "DAVIE",
+      "state": "FL",
+      "zip": "333285313",
+      "npi": "1811352099",
+      "registry_last_updated": "2025-02-05",
+      "claimed_owner": "Vocational Development Group",
+      "claimed_firm": "Elysium Management",
+      "claimed_firm_type": "family_office",
+      "source_urls": [
+        "https://download.cms.gov/nppes/NPPES_Data_Dissemination_June_2026_V2.zip",
+        "https://inbloomautism.com/aba-therapy-learning-centers/"
+      ],
+      "source": "registry",
+      "stratum": "non_pe",
+      "sub_stratum": "non_pe/registry"
+    },
+    {
+      "clinic_id": "76bc2a44-e7a5-4486-8d0b-3e30b7e8887a",
+      "name": "ACTION BEHAVIOR CENTERS THERAPY LLC",
+      "address": "565 Lakeview Pkwy Ste 110",
+      "city": "Vernon Hills",
+      "state": "IL",
+      "zip": "600611839",
+      "npi": "1699475509",
+      "registry_last_updated": "2025-09-24",
+      "claimed_owner": "Action Behavior Centers",
+      "claimed_firm": "Charlesbank",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.actionbehavior.com/location/illinois/vernon-hills-lakeview-pkwy",
+        "https://download.cms.gov/nppes/NPPES_Data_Dissemination_June_2026_V2.zip"
+      ],
+      "source": "registry",
+      "stratum": "pe",
+      "sub_stratum": "pe/registry"
+    },
+    {
+      "clinic_id": "2b498733-8012-48f0-ad1f-1701b497b476",
+      "name": "Helping Hands Family",
+      "address": "1 Brookhill Square South",
+      "city": "Sugarloaf",
+      "state": "PA",
+      "zip": "18249",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Helping Hands Family",
+      "claimed_firm": "Zenyth Partners",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://hhfamily.com/wp-admin/admin-ajax.php?action=store_search&lat=39.8&lng=-98.5&max_results=500&search_radius=5000&autoload=1"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "be897ab3-8b58-41a9-9474-a8e31330c0d6",
+      "name": "ACTION BEHAVIOR CENTERS THERAPY LLC",
+      "address": "820 Parkview Blvd",
+      "city": "Lombard",
+      "state": "IL",
+      "zip": "601483200",
+      "npi": "1699475509",
+      "registry_last_updated": "2025-09-24",
+      "claimed_owner": "Action Behavior Centers",
+      "claimed_firm": "Charlesbank",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://download.cms.gov/nppes/NPPES_Data_Dissemination_June_2026_V2.zip",
+        "https://www.actionbehavior.com/location/illinois/lombard"
+      ],
+      "source": "registry",
+      "stratum": "pe",
+      "sub_stratum": "pe/registry"
+    },
+    {
+      "clinic_id": "ebb6b566-06ef-48f2-ba32-0531abb10c1a",
+      "name": "Little Leaves Behavioral Services",
+      "address": "7435 New Technology Way",
+      "city": "Frederick",
+      "state": "MD",
+      "zip": "21703",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Little Leaves Behavioral Services",
+      "claimed_firm": "Gryphon Investors",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://learnbehavioral.com/wp-admin/admin-ajax.php?action=store_search&lat=39.8&lng=-98.5&max_results=500&search_radius=5000&autoload=1"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "d6fa96bd-870a-45f8-93ec-c1f5e032efcb",
+      "name": "PROUD MOMENTS ABA OF FLORIDA PLLC",
+      "address": "6800 W Highway 98",
+      "city": "Pensacola",
+      "state": "FL",
+      "zip": "325068969",
+      "npi": "1962156083",
+      "registry_last_updated": "2025-02-13",
+      "claimed_owner": "Proud Moments",
+      "claimed_firm": "Nautic Partners",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://download.cms.gov/nppes/NPPES_Data_Dissemination_June_2026_V2.zip"
+      ],
+      "source": "registry",
+      "stratum": "pe",
+      "sub_stratum": "pe/registry"
+    },
+    {
+      "clinic_id": "be326d1c-b30f-49f4-a88f-2abd1a07e044",
+      "name": "FLORIDA AUTISM CENTER",
+      "address": "3662 CEDARCREST RD STE 220",
+      "city": "ACWORTH",
+      "state": "GA",
+      "zip": "301018765",
+      "npi": "1699322321",
+      "registry_last_updated": "2022-11-10",
+      "claimed_owner": "Florida Autism Center",
+      "claimed_firm": "KKR",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://npiregistry.cms.hhs.gov/api/?version=2.1&organization_name=Florida+Autism+Center*&enumeration_type=NPI-2&country_code=US"
+      ],
+      "source": "registry",
+      "stratum": "pe",
+      "sub_stratum": "pe/registry"
+    },
+    {
+      "clinic_id": "173edde0-33c3-4098-868b-b5b90b5ba787",
+      "name": "Action Behavior Centers - Chandler Tumbleweed",
+      "address": "1850 East Northrop Boulevard, Suite 110",
+      "city": "Chandler",
+      "state": "AZ",
+      "zip": "85286",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Action Behavior Centers",
+      "claimed_firm": "Charlesbank",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.actionbehavior.com/location/arizona/chandler-tumbleweed"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "e072e832-9fb7-407c-be40-36243b31234d",
+      "name": "Autism Learning Partners Norwell",
+      "address": "293R Washington St",
+      "city": "Norwell",
+      "state": "MA",
+      "zip": "02061",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Autism Learning Partners",
+      "claimed_firm": "FFL Partners",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://autismlearningpartners.com/locations/massachusetts/plymouth-county/norwell/"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "279ea06f-1797-4e4e-897b-f634c1e4c404",
+      "name": "Hopebridge",
+      "address": "2311 Energy Dr Building #9",
+      "city": "Apex",
+      "state": "NC",
+      "zip": "27502",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Hopebridge",
+      "claimed_firm": "Arsenal Capital Partners",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.hopebridge.com/centers/"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "83b20c5e-cc79-4bfd-b9a4-4c560e233f25",
+      "name": "Caravel Autism Health",
+      "address": "460 Midland Road",
+      "city": "Janesville",
+      "state": "WI",
+      "zip": "53546",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Caravel Autism Health",
+      "claimed_firm": "GTCR",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.caravelautism.com/wp-json/wp/v2/autism-center?per_page=100"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "148b7bbf-a681-4dbb-a554-7389a44b70bf",
+      "name": "BlueSprig - MAC (Multi-Assistance Center)",
+      "address": "5210 Thousand Oaks Dr STE 1301",
+      "city": "San Antonio",
+      "state": "TX",
+      "zip": "78233",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Blue Sprig",
+      "claimed_firm": "KKR",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.bluesprigautism.com/wp-json/wp/v2/center?per_page=100",
+        "https://www.bluesprigautism.com/centers/texas/bluesprig-mac-multi-assistance-center/"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "dc250cde-b8f0-4df8-b49b-e8a3b3876f17",
+      "name": "ACTION BEHAVIOR CENTERS THERAPY LLC",
+      "address": "9516 FEDERAL DRIVE",
+      "city": "COLORADO SPRINGS",
+      "state": "CO",
+      "zip": "809214319",
+      "npi": "1083560668",
+      "registry_last_updated": "2026-03-06",
+      "claimed_owner": "Action Behavior Centers",
+      "claimed_firm": "Charlesbank",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.actionbehavior.com/location/colorado/northgate-federal-drive",
+        "https://npiregistry.cms.hhs.gov/api/?version=2.1&organization_name=action+behavior*&enumeration_type=NPI-2&country_code=US"
+      ],
+      "source": "registry",
+      "stratum": "pe",
+      "sub_stratum": "pe/registry"
+    },
+    {
+      "clinic_id": "231858b2-34f0-494e-9281-75d4a19ca00a",
+      "name": "ACES ABA - New Bern",
+      "address": "2805 Trent Road",
+      "city": "New Bern",
+      "state": "NC",
+      "zip": "28562",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "ACES 2020",
+      "claimed_firm": "General Atlantic",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.acesaba.com/locations/new-bern"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "4e856ae0-9aae-4994-98f9-c6418d639b63",
+      "name": "Action Behavior Centers - Timberwood Park",
+      "address": "1605 East Borgfeld Drive",
+      "city": "San Antonio",
+      "state": "TX",
+      "zip": "78260",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Action Behavior Centers",
+      "claimed_firm": "Charlesbank",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.actionbehavior.com/location/texas/timberwood-park"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "d3a12bde-2f85-4450-8ebc-6f06712a62c7",
+      "name": "Autism Spectrum Therapies",
+      "address": "338 Via Vera Cruz",
+      "city": "San Marcos",
+      "state": "CA",
+      "zip": "92078",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Autism Spectrum Therapies",
+      "claimed_firm": "Gryphon Investors",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://learnbehavioral.com/wp-admin/admin-ajax.php?action=store_search&lat=39.8&lng=-98.5&max_results=500&search_radius=5000&autoload=1"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "04ce0437-d4fa-41cc-96ad-ac4039ef441c",
+      "name": "Action Behavior Centers - The Sugar Land Academy",
+      "address": "18810 West Airport Blvd Building A Suite 100",
+      "city": "Richmond",
+      "state": "TX",
+      "zip": "77046",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Action Behavior Centers",
+      "claimed_firm": "Charlesbank",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.actionbehavior.com/location/texas/the-sugar-land-academy"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "f1de09d4-90da-4175-b456-37dbefa340f9",
+      "name": "Behavioral Innovations",
+      "address": "19701 Kingwood Drive, Building 8",
+      "city": "Kingwood",
+      "state": "TX",
+      "zip": "77339",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Behavioral Innovations",
+      "claimed_firm": "Tenex Capital Management",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://behavioral-innovations.com/sitemap-0.xml"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "4201319d-543f-4e73-918b-d37b58ed5d3d",
+      "name": "Acorn Health - Kalamazoo,  MI",
+      "address": "5943 Stadium Dr.",
+      "city": "Kalamazoo",
+      "state": "MI",
+      "zip": "49009",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Acorn Health",
+      "claimed_firm": "Ontario Teachers' Pension Plan",
+      "claimed_firm_type": "pension_fund",
+      "source_urls": [
+        "https://acornhealth.com/locations/kalamazoo-mi/"
+      ],
+      "source": "directory",
+      "stratum": "non_pe",
+      "sub_stratum": "non_pe/directory"
+    },
+    {
+      "clinic_id": "unclaimed:1649913831",
+      "name": "BALANCED MIND BEHAVIORAL SERVICES, CORP.",
+      "address": "13139 LAVER LN",
+      "city": "ORLANDO",
+      "state": "FL",
+      "zip": "328247560",
+      "npi": "1649913831",
+      "registry_last_updated": null,
+      "claimed_owner": null,
+      "claimed_firm": null,
+      "claimed_firm_type": null,
+      "source_urls": [
+        "https://npiregistry.cms.hhs.gov/provider-view/1649913831"
+      ],
+      "source": "registry",
+      "stratum": "unclaimed",
+      "sub_stratum": "unclaimed/registry"
+    },
+    {
+      "clinic_id": "0aca4eab-2627-4972-9fae-1e4da2293896",
+      "name": "Behavioral Innovations",
+      "address": "25414 Kingsland Boulevard, Suite 100",
+      "city": "Katy",
+      "state": "TX",
+      "zip": "77494",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Behavioral Innovations",
+      "claimed_firm": "Tenex Capital Management",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://behavioral-innovations.com/sitemap-0.xml"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "27c05198-712e-4853-9a8c-9b4bad1f6bcb",
+      "name": "VOCATIONAL DEVELOPMENT GROUP, LLC",
+      "address": "12735 GRAN BAY PKWY W STE 204",
+      "city": "JACKSONVILLE",
+      "state": "FL",
+      "zip": "322584499",
+      "npi": "1164195137",
+      "registry_last_updated": "2021-07-27",
+      "claimed_owner": "Vocational Development Group",
+      "claimed_firm": "Elysium Management",
+      "claimed_firm_type": "family_office",
+      "source_urls": [
+        "https://inbloomautism.com/aba-therapy-learning-centers/",
+        "https://download.cms.gov/nppes/NPPES_Data_Dissemination_June_2026_V2.zip"
+      ],
+      "source": "registry",
+      "stratum": "non_pe",
+      "sub_stratum": "non_pe/registry"
+    },
+    {
+      "clinic_id": "7eeccee0-995a-4294-86e2-48d715a41958",
+      "name": "ACES ABA - Phillips Ranch",
+      "address": "21 Rancho Camino Dr., STE. 101-104",
+      "city": "Pomona",
+      "state": "CA",
+      "zip": "91766",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "ACES 2020",
+      "claimed_firm": "General Atlantic",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.acesaba.com/locations/phillips-ranch"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "357321c9-aa19-4299-8700-7cf87c7bacb2",
+      "name": "Little Leaves Behavioral Services",
+      "address": "7150 Columbia Gateway Drive",
+      "city": "Columbia",
+      "state": "MD",
+      "zip": "21046",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Little Leaves Behavioral Services",
+      "claimed_firm": "Gryphon Investors",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://learnbehavioral.com/wp-admin/admin-ajax.php?action=store_search&lat=39.8&lng=-98.5&max_results=500&search_radius=5000&autoload=1"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "b2f77af9-cf1e-48ae-9776-f4568dbc2c03",
+      "name": "MISSION AUTISM CLINICS LLC",
+      "address": "1081 Oak St Ste 3",
+      "city": "Pittston",
+      "state": "PA",
+      "zip": "186403716",
+      "npi": "1538790720",
+      "registry_last_updated": "2024-08-30",
+      "claimed_owner": "Mission Autism Clinics",
+      "claimed_firm": "Zenyth Partners",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://download.cms.gov/nppes/NPPES_Data_Dissemination_June_2026_V2.zip"
+      ],
+      "source": "registry",
+      "stratum": "pe",
+      "sub_stratum": "pe/registry"
+    },
+    {
+      "clinic_id": "7c33ac42-56af-4250-94ed-d3c09a78853b",
+      "name": "Behavioral Innovations",
+      "address": "900 West 34th Street, Suite 500",
+      "city": "Houston",
+      "state": "TX",
+      "zip": "77018",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Behavioral Innovations",
+      "claimed_firm": "Tenex Capital Management",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://behavioral-innovations.com/sitemap-0.xml"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "unclaimed:1558057968",
+      "name": "GUARDIAN ANGEL BEHAVIORAL SERVICES INC",
+      "address": "4866 SW 142ND PL",
+      "city": "MIAMI",
+      "state": "FL",
+      "zip": "331754331",
+      "npi": "1558057968",
+      "registry_last_updated": null,
+      "claimed_owner": null,
+      "claimed_firm": null,
+      "claimed_firm_type": null,
+      "source_urls": [
+        "https://npiregistry.cms.hhs.gov/provider-view/1558057968"
+      ],
+      "source": "registry",
+      "stratum": "unclaimed",
+      "sub_stratum": "unclaimed/registry"
+    },
+    {
+      "clinic_id": "a90146c2-0657-4f1b-a551-f38506b5c1f6",
+      "name": "Behavioral Innovations",
+      "address": "8633 Eldridge Pkwy",
+      "city": "Houston",
+      "state": "TX",
+      "zip": "77083",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Behavioral Innovations",
+      "claimed_firm": "Tenex Capital Management",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://behavioral-innovations.com/sitemap-0.xml"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "13ef0984-a577-4262-979e-c275166528ab",
+      "name": "Behavioral Concepts",
+      "address": "277 Mountain Street East",
+      "city": "Worcester",
+      "state": "MA",
+      "zip": "01606",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Behavioral Concepts",
+      "claimed_firm": "Gryphon Investors",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://learnbehavioral.com/wp-admin/admin-ajax.php?action=store_search&lat=39.8&lng=-98.5&max_results=500&search_radius=5000&autoload=1"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "9bdf00f6-9e9c-4312-83ef-2dcaf6b0890e",
+      "name": "Action Behavior Centers - Keller",
+      "address": "4541 Heritage Trace Pkwy, Suite 1333",
+      "city": "Keller",
+      "state": "TX",
+      "zip": "76244",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Action Behavior Centers",
+      "claimed_firm": "Charlesbank",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.actionbehavior.com/location/texas/keller"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "876bc76b-6018-40f2-b289-c7146dfc0506",
+      "name": "ACTION BEHAVIOR CENTERS, LLC",
+      "address": "19284 COTTONWOOD DR STE 101",
+      "city": "PARKER",
+      "state": "CO",
+      "zip": "801383881",
+      "npi": "1538822606",
+      "registry_last_updated": "2022-08-31",
+      "claimed_owner": "Action Behavior Centers",
+      "claimed_firm": "Charlesbank",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.actionbehavior.com/location/colorado/parker",
+        "https://npiregistry.cms.hhs.gov/api/?version=2.1&organization_name=action+behavior*&enumeration_type=NPI-2&country_code=US"
+      ],
+      "source": "registry",
+      "stratum": "pe",
+      "sub_stratum": "pe/registry"
+    },
+    {
+      "clinic_id": "487a9b74-ff5f-4f5f-be87-01f772715784",
+      "name": "Action Behavior Centers - The Academy At Allen",
+      "address": "919 Medical Dr, Suite 1100",
+      "city": "Allen",
+      "state": "TX",
+      "zip": "75013",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Action Behavior Centers",
+      "claimed_firm": "Charlesbank",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.actionbehavior.com/location/texas/the-academy-at-allen"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "2de0697f-0d0e-4313-8d3a-af5336174eff",
+      "name": "BlueSprig - Matthews",
+      "address": "2407 Plantation Center Drive Suite 100",
+      "city": "Matthews",
+      "state": "NC",
+      "zip": "28105",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Blue Sprig",
+      "claimed_firm": "KKR",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.bluesprigautism.com/centers/north-carolina/bluesprig-matthews/",
+        "https://www.bluesprigautism.com/wp-json/wp/v2/center?per_page=100"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "e3647ea0-a047-4266-8eb9-06440185e079",
+      "name": "Alternative Behavior Strategies",
+      "address": "2900 Spring Forest Rd. Suite 101",
+      "city": "Raleigh",
+      "state": "NC",
+      "zip": "27616",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Alternative Behavior Strategies",
+      "claimed_firm": "Petra Capital Partners",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.abskids.com/wp-json/wp/v2/locations?per_page=100"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "unclaimed:1932043510",
+      "name": "FUTURE SPARKS ABA",
+      "address": "13524 BROMWICH ST",
+      "city": "ARLETA",
+      "state": "CA",
+      "zip": "913315639",
+      "npi": "1932043510",
+      "registry_last_updated": null,
+      "claimed_owner": null,
+      "claimed_firm": null,
+      "claimed_firm_type": null,
+      "source_urls": [
+        "https://npiregistry.cms.hhs.gov/provider-view/1932043510"
+      ],
+      "source": "registry",
+      "stratum": "unclaimed",
+      "sub_stratum": "unclaimed/registry"
+    },
+    {
+      "clinic_id": "f6d04be9-ba80-4bf6-ae66-38c2d06c2b97",
+      "name": "Centria",
+      "address": "7155 W Campo Bello Drive Suite 135, Building D",
+      "city": "Glendale",
+      "state": "AZ",
+      "zip": "85308",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Centria",
+      "claimed_firm": "Thomas H. Lee Partners",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://centriahealthcare.com/wp-json/wp/v2/location?per_page=100"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "unclaimed:1407637929",
+      "name": "MINDFUL COACHING WITH SARA",
+      "address": "12359 164TH CT NE",
+      "city": "REDMOND",
+      "state": "WA",
+      "zip": "980522369",
+      "npi": "1407637929",
+      "registry_last_updated": null,
+      "claimed_owner": null,
+      "claimed_firm": null,
+      "claimed_firm_type": null,
+      "source_urls": [
+        "https://npiregistry.cms.hhs.gov/provider-view/1407637929"
+      ],
+      "source": "registry",
+      "stratum": "unclaimed",
+      "sub_stratum": "unclaimed/registry"
+    },
+    {
+      "clinic_id": "335ffbdc-6491-42e3-b0c1-50e149195b26",
+      "name": "ACES ABA - Van Nuys",
+      "address": "16360 Roscoe Blvd, Suite 100",
+      "city": "Van Nuys",
+      "state": "CA",
+      "zip": "91460",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "ACES 2020",
+      "claimed_firm": "General Atlantic",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.acesaba.com/locations/van-nuys"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "cf60b0bb-6aad-43de-95f8-32813e9da2eb",
+      "name": "ACTION BEHAVIOR CENTERS, LLC",
+      "address": "2007 US Highway 181 Ste B",
+      "city": "Portland",
+      "state": "TX",
+      "zip": "783744183",
+      "npi": "1841654050",
+      "registry_last_updated": "2025-09-24",
+      "claimed_owner": "Action Behavior Centers",
+      "claimed_firm": "Charlesbank",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.actionbehavior.com/location/texas/corpus-christi-portland",
+        "https://download.cms.gov/nppes/NPPES_Data_Dissemination_June_2026_V2.zip"
+      ],
+      "source": "registry",
+      "stratum": "pe",
+      "sub_stratum": "pe/registry"
+    },
+    {
+      "clinic_id": "9f8a442b-d5a0-4cee-83ce-a1dda4bf5b79",
+      "name": "Action Behavior Centers - Egypt",
+      "address": "10020 Research Forest Drive",
+      "city": "The Woodlands",
+      "state": "TX",
+      "zip": "77354",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Action Behavior Centers",
+      "claimed_firm": "Charlesbank",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.actionbehavior.com/location/texas/egypt"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "ae8ff117-3797-48b3-b15b-f0cfaac35cd7",
+      "name": "ALTERNATIVE BEHAVIOR STRATEGIES, LLC",
+      "address": "2820 Camino Del Rio S Ste 100",
+      "city": "San Diego",
+      "state": "CA",
+      "zip": "921083822",
+      "npi": "1962765693",
+      "registry_last_updated": "2026-02-23",
+      "claimed_owner": "Alternative Behavior Strategies",
+      "claimed_firm": "Petra Capital Partners",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.abskids.com/wp-json/wp/v2/locations?per_page=100",
+        "https://download.cms.gov/nppes/NPPES_Data_Dissemination_June_2026_V2.zip"
+      ],
+      "source": "registry",
+      "stratum": "pe",
+      "sub_stratum": "pe/registry"
+    },
+    {
+      "clinic_id": "eabaefd5-a6a3-4cf5-a33b-3529c65fa018",
+      "name": "Action Behavior Centers - Manor Shadowglen",
+      "address": "14008 Shadow Glen Boulevard STE 204",
+      "city": "Manor",
+      "state": "TX",
+      "zip": "78653",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Action Behavior Centers",
+      "claimed_firm": "Charlesbank",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.actionbehavior.com/location/texas/manor-shadowglen"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    },
+    {
+      "clinic_id": "8f22520b-51ea-4a96-86c7-fac2903b5b53",
+      "name": "BLUE SPRIG PEDIATRICS, INC",
+      "address": "102 S Tejon St Ste 1100",
+      "city": "Colorado Springs",
+      "state": "CO",
+      "zip": "809032253",
+      "npi": "1881101780",
+      "registry_last_updated": "2026-03-03",
+      "claimed_owner": "Blue Sprig",
+      "claimed_firm": "KKR",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://download.cms.gov/nppes/NPPES_Data_Dissemination_June_2026_V2.zip"
+      ],
+      "source": "registry",
+      "stratum": "pe",
+      "sub_stratum": "pe/registry"
+    },
+    {
+      "clinic_id": "62c79722-2b40-4b1f-88dd-bdaee31a92ec",
+      "name": "CENTRIA HEALTHCARE LLC",
+      "address": "2101 WASHINGTON BLVD",
+      "city": "BALTIMORE",
+      "state": "MD",
+      "zip": "212301751",
+      "npi": "1144116583",
+      "registry_last_updated": "2026-01-23",
+      "claimed_owner": "Centria",
+      "claimed_firm": "Thomas H. Lee Partners",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://npiregistry.cms.hhs.gov/api/?version=2.1&organization_name=centria*&enumeration_type=NPI-2&country_code=US",
+        "https://centriahealthcare.com/wp-json/wp/v2/location?per_page=100"
+      ],
+      "source": "registry",
+      "stratum": "pe",
+      "sub_stratum": "pe/registry"
+    },
+    {
+      "clinic_id": "6807103a-2a74-41cd-a668-2a0a2c8ef102",
+      "name": "Action Behavior Centers - Fort Worth Chisholm Trail",
+      "address": "7250 Hawkins View Dr",
+      "city": "Fort Worth",
+      "state": "TX",
+      "zip": "76132",
+      "npi": null,
+      "registry_last_updated": null,
+      "claimed_owner": "Action Behavior Centers",
+      "claimed_firm": "Charlesbank",
+      "claimed_firm_type": "private_equity",
+      "source_urls": [
+        "https://www.actionbehavior.com/location/texas/fort-worth-chisholm-trail"
+      ],
+      "source": "directory",
+      "stratum": "pe",
+      "sub_stratum": "pe/directory"
+    }
+  ]
+}

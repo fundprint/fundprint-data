@@ -33,12 +33,13 @@ logger = logging.getLogger(__name__)
 # The dashboard pins exactly one dataset_version per deploy. Bump this in step
 # with the Hugging Face release the snapshot is cut from.
 DATASET_VERSION = "2026.07-beta"
-# Bumped with the site-counting correction: one site is one clinic even when two
-# of a parent firm's brands are registered at it. The floors are unchanged; the
-# definition of a countable site is not, which is a methodology change under
-# section 12. The pin must move in the same commit as the numbers, or a reader who
-# follows it lands on a document describing different ones.
-METHODOLOGY_VERSION = "2026.07-bluesprig-v1"
+# Bumped with the platform coverage denominator (section 8d): coverage is now a
+# published fraction, 21 of 32 known PE-backed platforms, measured against an
+# outside list rather than one of our own. No clinic or share figure moved, but a
+# new published measure is a methodology change under section 12. The pin must move
+# in the same commit as the numbers, or a reader who follows it lands on a document
+# describing different ones.
+METHODOLOGY_VERSION = "2026.07-coverage-v1"
 
 
 # source_record_id -> (url, type), loaded once. The snapshot resolves provenance
@@ -447,6 +448,19 @@ def build_snapshot(conn) -> dict:
     except FileNotFoundError:
         logger.warning("no market file at %s; snapshot will carry no share", market_path)
 
+    # The platform coverage denominator, built by build_platform_denominator.py
+    # against PESP's published appendix. Optional for the same reason as market:
+    # if it has not been built, the dashboard shows the slot as pending rather
+    # than inventing a coverage fraction.
+    coverage = None
+    coverage_path = (
+        Path(__file__).resolve().parent.parent / "data" / "platforms" / "coverage.json"
+    )
+    try:
+        coverage = json.loads(coverage_path.read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        logger.warning("no coverage file at %s; snapshot will carry no denominator", coverage_path)
+
     snapshot = {
         "meta": {
             "dataset_version": DATASET_VERSION,
@@ -474,6 +488,7 @@ def build_snapshot(conn) -> dict:
             "confidence": confidence_counts,
         },
         "market": market,
+        "coverage": coverage,
         "acquirers": acquirers,
         "brands": brands,
         "states": states,

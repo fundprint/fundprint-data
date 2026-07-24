@@ -1,0 +1,787 @@
+{
+  "generated_at": "2026-07-24T16:03:08.269760+00:00",
+  "provenance": {
+    "source_url": "https://pestakeholder.org/wp-content/uploads/2026/04/PESP_Report_PE-in-ABA_2026.pdf",
+    "source_record_id": "bd5b160d-18c9-4bd3-a698-0f64ac888c1c",
+    "content_hash": "27c7e9594e8b20d972e2ab0b63a03b5915d55fb9bbdb623d4c54dd7be034fc92",
+    "bytes": 4674829,
+    "as_of": "2026-04",
+    "appendix": "Appendix: Private equity-backed ABA providers"
+  },
+  "coverage": {
+    "covered": 21,
+    "in_scope": 32,
+    "not_started": 8,
+    "blocked": 3,
+    "excluded": 11,
+    "total_listed": 43,
+    "in_pesp_appendix": 34,
+    "covered_absent_from_pesp": 4,
+    "unpublished_facilities": 504,
+    "published_clinics_at_covered_platforms": 1755
+  },
+  "platforms": [
+    {
+      "name": "Action Behavior Centers",
+      "investors": [
+        "Charlesbank Capital Partners",
+        "Antares Capital"
+      ],
+      "status": "covered",
+      "note": "Read from ABC's own directory. Our 412 and PESP's 403 are the closest independent agreement in the table.",
+      "in_pesp": true,
+      "pesp_facilities": 403,
+      "other_brands": [],
+      "fundprint_owners": [
+        "Action Behavior Centers"
+      ],
+      "fundprint_clinics": 412,
+      "source_url": null
+    },
+    {
+      "name": "BlueSprig Pediatrics",
+      "investors": [
+        "KKR"
+      ],
+      "status": "covered",
+      "note": "One directory, five brands. PESP names seven more sub-brands than bluesprigautism.com currently lists as centers; worth checking in D3.",
+      "in_pesp": true,
+      "pesp_facilities": 155,
+      "other_brands": [
+        "Florida Autism Center",
+        "Trumpet Behavioral Health",
+        "Therapeutic Pathways",
+        "The Behavior Center",
+        "Lone Star ABA",
+        "Social Skills Playhouse",
+        "The Shape of Behavior",
+        "Thrive",
+        "Verbal Behavior Consulting",
+        "Tangible Differences Learning Center",
+        "West Texas Autism Center"
+      ],
+      "fundprint_owners": [
+        "Blue Sprig",
+        "Florida Autism Center",
+        "Trumpet Behavioral Health",
+        "Therapeutic Pathways"
+      ],
+      "fundprint_clinics": 197,
+      "source_url": null
+    },
+    {
+      "name": "LEARN Behavioral",
+      "investors": [
+        "Gryphon Investors",
+        "PineBridge Investments"
+      ],
+      "status": "covered",
+      "note": "Eleven brands under one WP Store Locator. PESP lists a Creative Learning Center brand we do not carry.",
+      "in_pesp": true,
+      "pesp_facilities": 133,
+      "other_brands": [
+        "Creative Learning Center"
+      ],
+      "fundprint_owners": [
+        "Autism Spectrum Therapies",
+        "Total Spectrum Autism Services",
+        "Wisconsin Early Autism Project",
+        "Behavioral Concepts",
+        "Little Leaves Behavioral Services",
+        "Behavior Analysis Center for Autism",
+        "Trellis Services",
+        "SPARKS ABA",
+        "Priorities ABA",
+        "Tandem Therapy Services",
+        "Behavioral Development and Educational Services"
+      ],
+      "fundprint_clinics": 151,
+      "source_url": null
+    },
+    {
+      "name": "Behavioral Innovations",
+      "investors": [
+        "Tenex Capital Management",
+        "Yukon Partners"
+      ],
+      "status": "covered",
+      "note": "Texas-heavy. The federal registry sees four of these; the gap is the lead example in the undercount argument.",
+      "in_pesp": true,
+      "pesp_facilities": 127,
+      "other_brands": [],
+      "fundprint_owners": [
+        "Behavioral Innovations",
+        "Monarch Behavioral Therapy"
+      ],
+      "fundprint_clinics": 139,
+      "source_url": null
+    },
+    {
+      "name": "Hopebridge",
+      "investors": [
+        "Arsenal Capital Partners"
+      ],
+      "status": "covered",
+      "note": "We publish 101, the number Hopebridge's own directory lists. PESP's 112 includes 'opening soon' sites, which we exclude as not yet operating.",
+      "in_pesp": true,
+      "pesp_facilities": 112,
+      "other_brands": [
+        "Autism in Motion"
+      ],
+      "fundprint_owners": [
+        "Hopebridge"
+      ],
+      "fundprint_clinics": 101,
+      "source_url": null
+    },
+    {
+      "name": "Proud Moments ABA",
+      "investors": [
+        "Nautic Partners"
+      ],
+      "status": "covered",
+      "note": "",
+      "in_pesp": true,
+      "pesp_facilities": 98,
+      "other_brands": [],
+      "fundprint_owners": [
+        "Proud Moments"
+      ],
+      "fundprint_clinics": 128,
+      "source_url": null
+    },
+    {
+      "name": "ABS Kids",
+      "investors": [
+        "Petra Capital Partners",
+        "Altos Health",
+        "Morgan Stanley Expansion Capital"
+      ],
+      "status": "covered",
+      "note": "Registry legal name is Alternative Behavior Strategies. Diagnostic-only sites excluded as out of scope.",
+      "in_pesp": true,
+      "pesp_facilities": 87,
+      "other_brands": [],
+      "fundprint_owners": [
+        "Alternative Behavior Strategies"
+      ],
+      "fundprint_clinics": 74,
+      "source_url": null
+    },
+    {
+      "name": "Acorn Health",
+      "investors": [
+        "Ontario Teachers' Pension Plan"
+      ],
+      "status": "covered",
+      "note": "Exact agreement: 70 and 70. A pension fund, not private equity, and labelled as such.",
+      "in_pesp": true,
+      "pesp_facilities": 70,
+      "other_brands": [
+        "Concord Foundations Network"
+      ],
+      "fundprint_owners": [
+        "Acorn Health"
+      ],
+      "fundprint_clinics": 70,
+      "source_url": null
+    },
+    {
+      "name": "Autism Learning Partners",
+      "investors": [
+        "FFL Partners"
+      ],
+      "status": "covered",
+      "note": "We publish 45 centers with street addresses. PESP's 64 likely includes in-home service areas, which carry no clinic.",
+      "in_pesp": true,
+      "pesp_facilities": 64,
+      "other_brands": [],
+      "fundprint_owners": [
+        "Autism Learning Partners"
+      ],
+      "fundprint_clinics": 45,
+      "source_url": null
+    },
+    {
+      "name": "Centria Healthcare",
+      "investors": [
+        "Thomas H. Lee Partners",
+        "Michigan Economic Development"
+      ],
+      "status": "covered",
+      "note": "Exact agreement: 64 and 64, reached from opposite directions after the registry's residential rows were replaced by the owner's list.",
+      "in_pesp": true,
+      "pesp_facilities": 64,
+      "other_brands": [
+        "Applied Behavioral Associates"
+      ],
+      "fundprint_owners": [
+        "Centria"
+      ],
+      "fundprint_clinics": 64,
+      "source_url": null
+    },
+    {
+      "name": "ACES ABA",
+      "investors": [
+        "General Atlantic"
+      ],
+      "status": "covered",
+      "note": "",
+      "in_pesp": true,
+      "pesp_facilities": 59,
+      "other_brands": [],
+      "fundprint_owners": [
+        "ACES 2020"
+      ],
+      "fundprint_clinics": 75,
+      "source_url": null
+    },
+    {
+      "name": "Helping Hands Family",
+      "investors": [
+        "Zenyth Partners"
+      ],
+      "status": "covered",
+      "note": "",
+      "in_pesp": true,
+      "pesp_facilities": 52,
+      "other_brands": [
+        "Mission Autism Clinics"
+      ],
+      "fundprint_owners": [
+        "Helping Hands Family",
+        "Mission Autism Clinics"
+      ],
+      "fundprint_clinics": 58,
+      "source_url": null
+    },
+    {
+      "name": "Behavior Frontiers",
+      "investors": [
+        "NexPhase Capital",
+        "Churchill Asset Management"
+      ],
+      "status": "covered",
+      "note": "We publish 54 against PESP's 28. Reading the owner's directory roughly doubled it.",
+      "in_pesp": true,
+      "pesp_facilities": 28,
+      "other_brands": [],
+      "fundprint_owners": [
+        "Behavior Frontiers"
+      ],
+      "fundprint_clinics": 54,
+      "source_url": null
+    },
+    {
+      "name": "InBloom Autism Services",
+      "investors": [
+        "Elysium Management"
+      ],
+      "status": "covered",
+      "note": "Family office, not private equity. Registry legal name is Vocational Development Group.",
+      "in_pesp": true,
+      "pesp_facilities": 27,
+      "other_brands": [],
+      "fundprint_owners": [
+        "Vocational Development Group"
+      ],
+      "fundprint_clinics": 28,
+      "source_url": null
+    },
+    {
+      "name": "Center for Social Dynamics",
+      "investors": [
+        "Goldman Sachs Asset Management",
+        "CD Private Equity",
+        "NMS Capital"
+      ],
+      "status": "covered",
+      "note": "PESP names four sub-brands we do not carry. A D3 target.",
+      "in_pesp": true,
+      "pesp_facilities": 22,
+      "other_brands": [
+        "Behavior Change Institute",
+        "JF Behavioral Services",
+        "Ed Support Services",
+        "Rocky Mountain Applied Behavior Analysts",
+        "South Sound Behavior Therapy",
+        "Behavior & Development Center"
+      ],
+      "fundprint_owners": [
+        "Center for Social Dynamics",
+        "Behavior Change Institute"
+      ],
+      "fundprint_clinics": 20,
+      "source_url": null
+    },
+    {
+      "name": "Key Autism Services",
+      "investors": [
+        "Cane Investment Partners",
+        "SierraStone Capital"
+      ],
+      "status": "covered",
+      "note": "Published with 0 clinics: in-home model. PESP counts 22 facilities; these are one registered office per state, not therapy centers.",
+      "in_pesp": true,
+      "pesp_facilities": 22,
+      "other_brands": [],
+      "fundprint_owners": [
+        "Key Autism Services"
+      ],
+      "fundprint_clinics": 0,
+      "source_url": null
+    },
+    {
+      "name": "Kind Behavioral Health",
+      "investors": [
+        "WSC & Company",
+        "Highland Creek Partners",
+        "Pacific Lake Partners",
+        "Trilogy Search Partners"
+      ],
+      "status": "covered",
+      "note": "Search-fund owned, not private equity. Registry legal name is Carolina Center for Autism Services.",
+      "in_pesp": true,
+      "pesp_facilities": 20,
+      "other_brands": [],
+      "fundprint_owners": [
+        "Carolina Center for Autism Services"
+      ],
+      "fundprint_clinics": 24,
+      "source_url": null
+    },
+    {
+      "name": "Caravel Autism Health",
+      "investors": [
+        "GTCR"
+      ],
+      "status": "covered",
+      "note": "79 clinics, absent from a table of the largest PE-backed ABA providers. Larger than eleven platforms PESP does list.",
+      "in_pesp": false,
+      "pesp_facilities": null,
+      "other_brands": [],
+      "fundprint_owners": [
+        "Caravel Autism Health"
+      ],
+      "fundprint_clinics": 79,
+      "source_url": null
+    },
+    {
+      "name": "Catalyst Behavior Solutions",
+      "investors": [
+        "Pharos Capital Group"
+      ],
+      "status": "covered",
+      "note": "24 clinics, absent from PESP. Rebranded from Behavior Care Specialists, which is the name the registry still carries.",
+      "in_pesp": false,
+      "pesp_facilities": null,
+      "other_brands": [],
+      "fundprint_owners": [
+        "Behavior Care Specialists"
+      ],
+      "fundprint_clinics": 24,
+      "source_url": null
+    },
+    {
+      "name": "Woven Care",
+      "investors": [
+        "Anacapa Partners"
+      ],
+      "status": "covered",
+      "note": "12 clinics, absent from PESP. Search fund, not private equity. Registry legal name is Buck Jack LLC, the acquisition vehicle.",
+      "in_pesp": false,
+      "pesp_facilities": null,
+      "other_brands": [],
+      "fundprint_owners": [
+        "Buck Jack"
+      ],
+      "fundprint_clinics": 12,
+      "source_url": null
+    },
+    {
+      "name": "Butterfly Effects",
+      "investors": [
+        "Moran Capital Partners"
+      ],
+      "status": "covered",
+      "note": "Published with 0 clinics: in-home model, and its registry rows were apartments. Ownership published, footprint correctly empty.",
+      "in_pesp": false,
+      "pesp_facilities": null,
+      "other_brands": [],
+      "fundprint_owners": [
+        "Butterfly Effects"
+      ],
+      "fundprint_clinics": 0,
+      "source_url": null
+    },
+    {
+      "name": "The TreeTop ABA",
+      "investors": [
+        "Betterment Capital"
+      ],
+      "status": "not_started",
+      "note": "The largest single gap: 114 facilities across 11 states, none of them published. Highest-value expansion target in the dataset.",
+      "in_pesp": true,
+      "pesp_facilities": 114,
+      "other_brands": [
+        "Discovery ABA"
+      ],
+      "fundprint_owners": [],
+      "fundprint_clinics": null,
+      "source_url": null
+    },
+    {
+      "name": "Center for Autism & Related Disorders",
+      "investors": [
+        "Audax Private Equity",
+        "Pantogran"
+      ],
+      "status": "not_started",
+      "note": "We carry CARD only as history: the Blackstone buyout and 2023 bankruptcy, with 0 live clinics. It now operates under a Pantogran-led group with Audax. The current footprint is unpublished.",
+      "in_pesp": true,
+      "pesp_facilities": 105,
+      "other_brands": [],
+      "fundprint_owners": [],
+      "fundprint_clinics": null,
+      "source_url": null
+    },
+    {
+      "name": "Cultivate Behavioral Health & Education",
+      "investors": [
+        "Imperial Capital Group"
+      ],
+      "status": "not_started",
+      "note": "65 facilities across 11 states, entirely unpublished.",
+      "in_pesp": true,
+      "pesp_facilities": 65,
+      "other_brands": [],
+      "fundprint_owners": [],
+      "fundprint_clinics": null,
+      "source_url": null
+    },
+    {
+      "name": "VersiCare Group",
+      "investors": [
+        "Seven Hills Capital",
+        "Tenth Street Capital"
+      ],
+      "status": "not_started",
+      "note": "58 facilities across FL, MI, KY, TN. Unpublished.",
+      "in_pesp": true,
+      "pesp_facilities": 58,
+      "other_brands": [],
+      "fundprint_owners": [],
+      "fundprint_clinics": null,
+      "source_url": null
+    },
+    {
+      "name": "Lighthouse Autism Center",
+      "investors": [
+        "Barings",
+        "Cerberus Capital Management"
+      ],
+      "status": "not_started",
+      "note": "50 centers across the Midwest. Unpublished.",
+      "in_pesp": true,
+      "pesp_facilities": 50,
+      "other_brands": [
+        "A Step Ahead Pediatric Therapy",
+        "Access Behavior Analysis"
+      ],
+      "fundprint_owners": [],
+      "fundprint_clinics": null,
+      "source_url": null
+    },
+    {
+      "name": "Already Autism Health",
+      "investors": [
+        "ACE & Company",
+        "Triton Pacific Capital Partners"
+      ],
+      "status": "not_started",
+      "note": "33 facilities across seven southeastern states. Unpublished.",
+      "in_pesp": true,
+      "pesp_facilities": 33,
+      "other_brands": [],
+      "fundprint_owners": [],
+      "fundprint_clinics": null,
+      "source_url": null
+    },
+    {
+      "name": "360 Behavioral Health",
+      "investors": [
+        "DW Healthcare Partners"
+      ],
+      "status": "not_started",
+      "note": "30 California facilities. Unpublished.",
+      "in_pesp": true,
+      "pesp_facilities": 30,
+      "other_brands": [
+        "Passport to Adaptive Living"
+      ],
+      "fundprint_owners": [],
+      "fundprint_clinics": null,
+      "source_url": null
+    },
+    {
+      "name": "Kyo",
+      "investors": [
+        "Norwest Venture Partners"
+      ],
+      "status": "not_started",
+      "note": "Previously held back because the Norwest investment dated to 2019 and nothing since 2021 restated it. PESP's April 2026 appendix lists Norwest as a current investor, which clears that objection.",
+      "in_pesp": true,
+      "pesp_facilities": 26,
+      "other_brands": [
+        "Gateway Learning Group",
+        "Songbird"
+      ],
+      "fundprint_owners": [],
+      "fundprint_clinics": null,
+      "source_url": null
+    },
+    {
+      "name": "Autism Care Partners",
+      "investors": [
+        "Coppermine Capital"
+      ],
+      "status": "blocked",
+      "note": "Ownership is confirmed and PESP corroborates it. Blocked on the registry legal entity name, without which its clinics cannot be matched.",
+      "in_pesp": true,
+      "pesp_facilities": 23,
+      "other_brands": [
+        "Puddingstone Place",
+        "Autism Bridges"
+      ],
+      "fundprint_owners": [],
+      "fundprint_clinics": null,
+      "source_url": null
+    },
+    {
+      "name": "ABA Connect",
+      "investors": [
+        "MBF Healthcare Partners"
+      ],
+      "status": "blocked",
+      "note": "Blocked on provenance, not on truth. Its only ownership source is a Businesswire release that returns 403 even to curl, and a claim we cannot content-hash does not ship.",
+      "in_pesp": false,
+      "pesp_facilities": null,
+      "other_brands": [],
+      "fundprint_owners": [],
+      "fundprint_clinics": null,
+      "source_url": "https://www.mbfhealthcare.com/portfolio/"
+    },
+    {
+      "name": "Patterns Behavioral Services",
+      "investors": [
+        "Webster Equity Partners"
+      ],
+      "status": "blocked",
+      "note": "Blocked on inference depth. Establishing current ownership takes three hops and no single current source names it outright.",
+      "in_pesp": false,
+      "pesp_facilities": null,
+      "other_brands": [],
+      "fundprint_owners": [],
+      "fundprint_clinics": null,
+      "source_url": "https://www.websterequitypartners.com/portfolio/"
+    },
+    {
+      "name": "ChanceLight",
+      "investors": [
+        "The Halifax Group"
+      ],
+      "status": "mixed_scope",
+      "note": "Alternative and special education schools. Its sites are schools, not ABA therapy centers.",
+      "in_pesp": true,
+      "pesp_facilities": 97,
+      "other_brands": [
+        "Ombudsman Educational Services",
+        "Spectrum Center",
+        "Atlantis Academy",
+        "Inspire"
+      ],
+      "fundprint_owners": [],
+      "fundprint_clinics": null,
+      "source_url": null
+    },
+    {
+      "name": "Sevita",
+      "investors": [
+        "Centerbridge Partners",
+        "Aeterna Capital Partners",
+        "Equity Investment Group",
+        "Duchossois Capital Management",
+        "Finback Investment Partners"
+      ],
+      "status": "mixed_scope",
+      "note": "A 40,000-employee diversified home and community health provider. Only its named ABA brands could ever be in scope.",
+      "in_pesp": true,
+      "pesp_facilities": 34,
+      "other_brands": [
+        "BrightSpring Health Services",
+        "Futures Behavioral Therapy Center",
+        "Pediatric Therapy Partners"
+      ],
+      "fundprint_owners": [],
+      "fundprint_clinics": null,
+      "source_url": null
+    },
+    {
+      "name": "The Stepping Stones Group",
+      "investors": [
+        "Leonard Green & Partners",
+        "Crescent Capital Group",
+        "Five Arrows"
+      ],
+      "status": "mixed_scope",
+      "note": "Primarily a school therapy staffing agency across 30-plus brands. Staffing contracts are not clinics.",
+      "in_pesp": true,
+      "pesp_facilities": 32,
+      "other_brands": [
+        "Invo HealthCare",
+        "New England ABA",
+        "Southcoast Autism Center"
+      ],
+      "fundprint_owners": [],
+      "fundprint_clinics": null,
+      "source_url": null
+    },
+    {
+      "name": "New Story",
+      "investors": [
+        "Audax Private Equity"
+      ],
+      "status": "mixed_scope",
+      "note": "Special education schools with one ABA brand attached.",
+      "in_pesp": true,
+      "pesp_facilities": 59,
+      "other_brands": [
+        "River Rock Academy",
+        "Applied Behavioral Services"
+      ],
+      "fundprint_owners": [],
+      "fundprint_clinics": null,
+      "source_url": null
+    },
+    {
+      "name": "Ivy Rehab Network",
+      "investors": [
+        "Waud Capital Partners",
+        "ACE & Company"
+      ],
+      "status": "mixed_scope",
+      "note": "Physical and pediatric therapy network with ABA sub-brands. Only those brands would be in scope.",
+      "in_pesp": true,
+      "pesp_facilities": 36,
+      "other_brands": [
+        "Coastal Behavior Consulting",
+        "Ivy Rehab for Kids",
+        "ABC Pediatric Therapy Network",
+        "Coastline Therapy Group",
+        "Little Steps Pediatric Therapy"
+      ],
+      "fundprint_owners": [],
+      "fundprint_clinics": null,
+      "source_url": null
+    },
+    {
+      "name": "FullBloom",
+      "investors": [
+        "Vistria Group"
+      ],
+      "status": "mixed_scope",
+      "note": "In-school services. PESP lists no facility count for it either.",
+      "in_pesp": true,
+      "pesp_facilities": null,
+      "other_brands": [
+        "Catapult Learning"
+      ],
+      "fundprint_owners": [],
+      "fundprint_clinics": null,
+      "source_url": null
+    },
+    {
+      "name": "Alora Behavioral Health",
+      "investors": [
+        "Enhanced Healthcare Partners",
+        "Riverside Credit Solutions"
+      ],
+      "status": "out_of_scope",
+      "note": "PESP lists it as 'In home'. An in-home provider operates no clinics, the same rule under which we publish Key Autism and Butterfly Effects with a footprint of zero.",
+      "in_pesp": true,
+      "pesp_facilities": null,
+      "other_brands": [
+        "Howard Chudler & Associates"
+      ],
+      "fundprint_owners": [],
+      "fundprint_clinics": null,
+      "source_url": null
+    },
+    {
+      "name": "Cortica",
+      "investors": [
+        "CVS Health Ventures",
+        "Deerfield Management",
+        "Morgan Health",
+        "RA Capital Management",
+        "Questa Capital"
+      ],
+      "status": "out_of_scope",
+      "note": "Fifteen venture and strategic minority investors, no controlling institutional owner. Our methodology requires a controlling interest, so we exclude it. PESP includes it; this is a definitional disagreement, not an error on either side.",
+      "in_pesp": true,
+      "pesp_facilities": 25,
+      "other_brands": [
+        "Springtide Child Development",
+        "Melmed Center"
+      ],
+      "fundprint_owners": [],
+      "fundprint_clinics": null,
+      "source_url": null
+    },
+    {
+      "name": "My Favorite Therapists",
+      "investors": [
+        "5th Century Partners"
+      ],
+      "status": "out_of_scope",
+      "note": "Minority stake, founders retain control.",
+      "in_pesp": false,
+      "pesp_facilities": null,
+      "other_brands": [],
+      "fundprint_owners": [],
+      "fundprint_clinics": null,
+      "source_url": null
+    },
+    {
+      "name": "Able Kids",
+      "investors": [
+        "MKH Capital Partners"
+      ],
+      "status": "out_of_scope",
+      "note": "Minority stake, founders retain control.",
+      "in_pesp": false,
+      "pesp_facilities": null,
+      "other_brands": [],
+      "fundprint_owners": [],
+      "fundprint_clinics": null,
+      "source_url": null
+    },
+    {
+      "name": "Forta",
+      "investors": [
+        "Insight Partners"
+      ],
+      "status": "out_of_scope",
+      "note": "Venture minority stake, founders retain control.",
+      "in_pesp": false,
+      "pesp_facilities": null,
+      "other_brands": [
+        "Montera"
+      ],
+      "fundprint_owners": [],
+      "fundprint_clinics": null,
+      "source_url": null
+    }
+  ]
+}
