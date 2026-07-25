@@ -33,13 +33,13 @@ logger = logging.getLogger(__name__)
 # The dashboard pins exactly one dataset_version per deploy. Bump this in step
 # with the Hugging Face release the snapshot is cut from.
 DATASET_VERSION = "2026.07-beta"
-# Bumped with the second estimate in the reconciliation (section 8e): the dataset
-# now reconciles against two published counts, in two different units, which is what
-# turns "we find more" into "the censuses sort by what they count". No clinic, owner or share
-# figure moved, but a new published measure is a methodology change under section 12.
+# Bumped with the state files (section 8f): the dataset now publishes government
+# audit findings for Medicaid ABA spending beside the tracked ownership footprint in
+# the same state, with an explicit statement that no audit attributes anything to
+# ownership. New published external claims are a methodology change under section 12.
 # The pin must move in the same commit as the numbers, or a reader who follows it
 # lands on a document describing different ones.
-METHODOLOGY_VERSION = "2026.07-reconciliation-v2"
+METHODOLOGY_VERSION = "2026.07-statefile-v1"
 
 
 # source_record_id -> (url, type), loaded once. The snapshot resolves provenance
@@ -479,6 +479,17 @@ def build_snapshot(conn) -> dict:
             reconciliation_path,
         )
 
+    # The per-state files, built by build_state_files.py: the tracked ownership
+    # footprint next to what the government auditors found. Optional like the rest.
+    state_files = None
+    state_files_path = (
+        Path(__file__).resolve().parent.parent / "data" / "states" / "state_files.json"
+    )
+    try:
+        state_files = json.loads(state_files_path.read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        logger.warning("no state file at %s; snapshot will carry no audits", state_files_path)
+
     snapshot = {
         "meta": {
             "dataset_version": DATASET_VERSION,
@@ -508,6 +519,7 @@ def build_snapshot(conn) -> dict:
         "market": market,
         "coverage": coverage,
         "reconciliation": reconciliation,
+        "state_files": state_files,
         "acquirers": acquirers,
         "brands": brands,
         "states": states,

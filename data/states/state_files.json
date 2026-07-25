@@ -1,0 +1,311 @@
+{
+  "generated_at": "2026-07-25T19:41:55.927710+00:00",
+  "totals": {
+    "audits": 4,
+    "states": [
+      "CO",
+      "IN",
+      "ME",
+      "WI"
+    ],
+    "improper": 197900000,
+    "potentially_improper": 206842978,
+    "federal_refund": 83549438,
+    "federal_audits": 4,
+    "blocked": 1,
+    "attributing_to_ownership": 0,
+    "pe_clinics_in_audited_states": 156,
+    "audited_states_with_no_pe": [
+      "ME"
+    ]
+  },
+  "states": [
+    {
+      "state": "CO",
+      "state_name": "Colorado",
+      "status": "published",
+      "audit": {
+        "issuer": "U.S. Department of Health and Human Services, Office of Inspector General",
+        "title": "Colorado Made at Least $77.8 Million in Improper Fee-for-Service Medicaid Payments for Applied Behavior Analysis Provided to Children",
+        "report_number": "A-09-24-02004",
+        "issued": "2026-02-25",
+        "period": "2022-2023",
+        "source_url": "https://oig.hhs.gov/reports/all/2026/colorado-made-at-least-778-million-in-improper-fee-for-service-medicaid-payments-for-applied-behavior-analysis-provided-to-children/",
+        "findings": [
+          "Every one of the 100 sampled enrollee-months contained at least one improper or potentially improper claim line.",
+          "Payments for care delivered by behavioral technicians who were not credentialed as required.",
+          "Billing for time that may not qualify as ABA therapy, including recreation, day care, custodial care, meals, breaks and naps.",
+          "Session notes that did not support the billed CPT codes."
+        ],
+        "attributes_to_ownership": false,
+        "improper": 77800000,
+        "potentially_improper": 112542978,
+        "federal_refund": 42649438,
+        "spend_growth": [
+          {
+            "year": "2019",
+            "dollars": 60100000
+          },
+          {
+            "year": "2023",
+            "dollars": 163500000
+          }
+        ],
+        "source_record_id": "15dd17a3-bb83-4ec5-8bcf-930d8dafd8b9",
+        "content_hash": "4f510f85d01b7163ab3c1a19ca2268de67fb248d6f5c7c2ac54cd88522a22c6b"
+      },
+      "note": "The largest finding in the series, in the state with our largest tracked private-equity footprint outside Texas.",
+      "footprint": {
+        "pe_clinics": 67,
+        "owners": [
+          {
+            "brand": "Action Behavior Centers",
+            "firm": "Charlesbank",
+            "clinics": 40
+          },
+          {
+            "brand": "Trumpet Behavioral Health",
+            "firm": "KKR",
+            "clinics": 10
+          },
+          {
+            "brand": "Behavioral Innovations",
+            "firm": "Tenex Capital Management",
+            "clinics": 8
+          },
+          {
+            "brand": "Blue Sprig",
+            "firm": "KKR",
+            "clinics": 3
+          },
+          {
+            "brand": "Monarch Behavioral Therapy",
+            "firm": "Tenex Capital Management",
+            "clinics": 3
+          },
+          {
+            "brand": "ACES 2020",
+            "firm": "General Atlantic",
+            "clinics": 2
+          },
+          {
+            "brand": "Autism Learning Partners",
+            "firm": "FFL Partners",
+            "clinics": 1
+          }
+        ],
+        "registry_visible_pe_sites": 54,
+        "aba_sites": 688,
+        "pe_share": 7.8
+      }
+    },
+    {
+      "state": "IN",
+      "state_name": "Indiana",
+      "status": "published",
+      "audit": {
+        "issuer": "U.S. Department of Health and Human Services, Office of Inspector General",
+        "title": "Indiana Made at Least $56 Million in Improper Fee-for-Service Medicaid Payments for Applied Behavior Analysis Provided to Children Diagnosed With Autism",
+        "report_number": "A-09-22-02002",
+        "issued": "2024-09-01",
+        "period": "2019-2020",
+        "source_url": "https://oig.hhs.gov/reports/all/2024/indiana-made-at-least-56-million-in-improper-fee-for-service-medicaid-payments-for-applied-behavior-analysis-provided-to-children-diagnosed-with-autism/",
+        "findings": [
+          "Every one of the 100 sampled enrollee-months contained at least one improper or potentially improper claim line."
+        ],
+        "attributes_to_ownership": false,
+        "improper": 56000000,
+        "potentially_improper": null,
+        "federal_refund": null,
+        "spend_growth": null,
+        "source_record_id": "a3a48b6d-21b5-4857-8024-8ae929bf4358",
+        "content_hash": "3a02094221f58ed6c35501c51d121e2e7895cacf800dcff65c6151d8a23f568a"
+      },
+      "note": "The first in the series, and the report that established the sampling design the later audits reuse.",
+      "footprint": {
+        "pe_clinics": 41,
+        "owners": [
+          {
+            "brand": "Hopebridge",
+            "firm": "Arsenal Capital Partners",
+            "clinics": 21
+          },
+          {
+            "brand": "Behavior Analysis Center for Autism",
+            "firm": "Gryphon Investors",
+            "clinics": 10
+          },
+          {
+            "brand": "Centria",
+            "firm": "Thomas H. Lee Partners",
+            "clinics": 5
+          },
+          {
+            "brand": "Caravel Autism Health",
+            "firm": "GTCR",
+            "clinics": 2
+          },
+          {
+            "brand": "Action Behavior Centers",
+            "firm": "Charlesbank",
+            "clinics": 2
+          },
+          {
+            "brand": "Total Spectrum Autism Services",
+            "firm": "Gryphon Investors",
+            "clinics": 1
+          }
+        ],
+        "registry_visible_pe_sites": 11,
+        "aba_sites": 397,
+        "pe_share": 2.8
+      }
+    },
+    {
+      "state": "ME",
+      "state_name": "Maine",
+      "status": "published",
+      "audit": {
+        "issuer": "U.S. Department of Health and Human Services, Office of Inspector General",
+        "title": "HHS-OIG Audit Finds Maine Made At Least $45.6 Million in Improper Medicaid Payments for Autism Services",
+        "report_number": null,
+        "issued": "2026-01-22",
+        "period": "2019-2023",
+        "source_url": "https://oig.hhs.gov/newsroom/news-releases-articles/hhs-oig-audit-finds-maine-made-at-least-456-million-in-improper-medicaid-payments-for-autism-services/",
+        "findings": [
+          "Children received services without the required comprehensive assessment, or with assessments missing required signatures.",
+          "Session documentation lacked service descriptions, goals addressed, or data collected."
+        ],
+        "attributes_to_ownership": false,
+        "improper": 45600000,
+        "potentially_improper": null,
+        "federal_refund": 28700000,
+        "spend_growth": [
+          {
+            "year": "2019",
+            "dollars": 52200000
+          },
+          {
+            "year": "2023",
+            "dollars": 80600000
+          }
+        ],
+        "source_record_id": "037a83e4-fb1d-43cb-8de5-012b0751baf0",
+        "content_hash": "36e06ec6e61f9ef6082dfcf1091d0ddc13a8d42ceab488467a377f641268bc3f"
+      },
+      "note": "THE CONTROL CASE. The second-largest finding in the series sits in a state where Fundprint tracks zero private-equity-owned clinics. It is published for exactly that reason: it is the state that most clearly shows these audits are not measuring private-equity ownership.",
+      "footprint": {
+        "pe_clinics": 0,
+        "owners": [],
+        "registry_visible_pe_sites": 0,
+        "aba_sites": 34,
+        "pe_share": 0.0
+      }
+    },
+    {
+      "state": "WI",
+      "state_name": "Wisconsin",
+      "status": "published",
+      "audit": {
+        "issuer": "U.S. Department of Health and Human Services, Office of Inspector General",
+        "title": "Wisconsin Made at Least $18.5 Million in Improper Fee-For-Service Medicaid Payments for Applied Behavior Analysis Provided to Children Diagnosed With Autism",
+        "report_number": null,
+        "issued": "2025-07-01",
+        "period": "2021-2022",
+        "source_url": "https://oig.hhs.gov/reports/all/2025/wisconsin-made-at-least-185-million-in-improper-fee-for-service-medicaid-payments-for-applied-behavior-analysis-provided-to-children-diagnosed-with-autism/",
+        "findings": [
+          "Every one of the 100 sampled enrollee-months contained at least one improper or potentially improper claim line.",
+          "OIG recommended the state give ABA facilities additional guidance on documenting ABA and perform periodic statewide post-payment review."
+        ],
+        "attributes_to_ownership": false,
+        "improper": 18500000,
+        "potentially_improper": 94300000,
+        "federal_refund": 12200000,
+        "spend_growth": [
+          {
+            "year": "2018",
+            "dollars": 39900000
+          },
+          {
+            "year": "2022",
+            "dollars": 53700000
+          }
+        ],
+        "source_record_id": "23d811d9-afd4-48c1-840e-e502d4740eae",
+        "content_hash": "83b406f9c60ba6a44587738afb5196b3aa9369a0f90bb47171d298db3902544c"
+      },
+      "note": "The sharpest ownership-visibility case in the dataset: 48 tracked private-equity-owned centres, of which the federal registry sees 2.",
+      "footprint": {
+        "pe_clinics": 48,
+        "owners": [
+          {
+            "brand": "Caravel Autism Health",
+            "firm": "GTCR",
+            "clinics": 27
+          },
+          {
+            "brand": "Wisconsin Early Autism Project",
+            "firm": "Gryphon Investors",
+            "clinics": 18
+          },
+          {
+            "brand": "Total Spectrum Autism Services",
+            "firm": "Gryphon Investors",
+            "clinics": 3
+          }
+        ],
+        "registry_visible_pe_sites": 2,
+        "aba_sites": 102,
+        "pe_share": 2.0
+      }
+    },
+    {
+      "state": "MA",
+      "state_name": "Massachusetts",
+      "status": "blocked",
+      "audit": {
+        "issuer": "Massachusetts Office of the Inspector General, Healthcare Division",
+        "title": "MassHealth's Applied Behavior Analysis Program: Service Providers (2024 Annual Report)",
+        "report_number": null,
+        "issued": "2024-03-01",
+        "period": "not stated on the release",
+        "source_url": "https://www.mass.gov/news/inspector-general-estimates-masshealth-overpaid-up-to-173-million-to-service-providers-for-children-with-autism",
+        "findings": [
+          "$16,761,445 of the total was billed for services that did not meet the required 10-to-1 supervision ratio for paraprofessional staff.",
+          "Roughly $440,000 in claims that 'impossibly billed' 24 hours of continuous service."
+        ],
+        "attributes_to_ownership": false
+      },
+      "note": "A state inspector general, not the federal OIG. The $16.7M figure carried in earlier drafts of our own plan is the supervision-ratio component of a total estimated at up to $17.3M. Both are correct and they are not alternatives.",
+      "footprint": {
+        "pe_clinics": 26,
+        "owners": [
+          {
+            "brand": "Behavioral Concepts",
+            "firm": "Gryphon Investors",
+            "clinics": 19
+          },
+          {
+            "brand": "Autism Learning Partners",
+            "firm": "FFL Partners",
+            "clinics": 5
+          },
+          {
+            "brand": "Behavior Frontiers",
+            "firm": "NexPhase Capital",
+            "clinics": 1
+          },
+          {
+            "brand": "Behavioral Development and Educational Services",
+            "firm": "Gryphon Investors",
+            "clinics": 1
+          }
+        ],
+        "registry_visible_pe_sites": 5,
+        "aba_sites": 412,
+        "pe_share": 1.2
+      },
+      "blocked_reason": "mass.gov returns HTTP 403 to every request, including from curl and including its own robots.txt, so the report cannot be fetched or content-hashed. The 2025 annual report filed with the legislature is fetchable but does not carry the ABA findings. The finding is well documented in local press; a claim we cannot snapshot still does not ship as a figure."
+    }
+  ]
+}
