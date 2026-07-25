@@ -314,6 +314,12 @@ def main() -> int:
     owner_sites: dict[str, set] = defaultdict(set)
     firm_of = {}
     for owner, firm, ftype, street, zipc in published_sites:
+        # Seed the owner before any `continue`, so an operator the registry cannot
+        # see AT ALL still reports a row of zero rather than vanishing from the
+        # per-owner table. A zero is the strongest evidence the reconciliation has;
+        # dropping it would leave only the operators that make the registry look good.
+        owner_sites[owner]
+        firm_of[owner] = (firm, ftype)
         st = normalize_street(street or "")
         if not st or is_admin_address(owner, street or ""):
             continue
@@ -328,7 +334,6 @@ def main() -> int:
                 continue
             archive_key = next(iter(candidates))
         owner_sites[owner].add(archive_key)
-        firm_of[owner] = (firm, ftype)
 
     tracked_universe: set = set().union(*owner_sites.values()) if owner_sites else set()
     tracked_sites = len(tracked_universe)
@@ -337,6 +342,25 @@ def main() -> int:
     ]
     pe_universe: set = set().union(*pe_owner_sets) if pe_owner_sets else set()
     pe_sites = len(pe_universe)
+
+    # Per-owner registry visibility, for the reconciliation (METHODOLOGY 8e).
+    # This is NOT "how many rows we sourced from the registry": when a directory row
+    # and a registry row collide on site_key the linker keeps one, so provenance
+    # undercounts what the registry can actually see. This uses the same
+    # building-level visibility test as the national numerator, so the per-owner
+    # rows and the 2.8% share can never drift apart.
+    by_owner = sorted(
+        (
+            {
+                "owner": owner,
+                "firm": firm_of[owner][0],
+                "firm_type": firm_of[owner][1],
+                "registry_visible_sites": len(sites),
+            }
+            for owner, sites in owner_sites.items()
+        ),
+        key=lambda r: (-r["registry_visible_sites"], r["owner"]),
+    )
 
     # The operator-size distribution. This is the honest replacement for the old
     # chain threshold: it states the shape of the market and lets the reader pick
@@ -408,6 +432,7 @@ def main() -> int:
         "numerator": {
             "tracked_sites": tracked_sites,
             "private_equity_sites": pe_sites,
+            "by_owner": by_owner,
         },
         "share": {
             "tracked_of_all_sites": round(100 * tracked_sites / all_sites, 1),

@@ -33,13 +33,13 @@ logger = logging.getLogger(__name__)
 # The dashboard pins exactly one dataset_version per deploy. Bump this in step
 # with the Hugging Face release the snapshot is cut from.
 DATASET_VERSION = "2026.07-beta"
-# Bumped with the platform coverage denominator (section 8d): coverage is now a
-# published fraction, 21 of 32 known PE-backed platforms, measured against an
-# outside list rather than one of our own. No clinic or share figure moved, but a
-# new published measure is a methodology change under section 12. The pin must move
-# in the same commit as the numbers, or a reader who follows it lands on a document
-# describing different ones.
-METHODOLOGY_VERSION = "2026.07-coverage-v1"
+# Bumped with the reconciliation against the published estimate (section 8e): the
+# dataset now states its disagreement with the peer-reviewed count, decomposed, and
+# publishes per-owner registry visibility to explain it. No clinic, owner or share
+# figure moved, but a new published measure is a methodology change under section 12.
+# The pin must move in the same commit as the numbers, or a reader who follows it
+# lands on a document describing different ones.
+METHODOLOGY_VERSION = "2026.07-reconciliation-v1"
 
 
 # source_record_id -> (url, type), loaded once. The snapshot resolves provenance
@@ -461,6 +461,24 @@ def build_snapshot(conn) -> dict:
     except FileNotFoundError:
         logger.warning("no coverage file at %s; snapshot will carry no denominator", coverage_path)
 
+    # The reconciliation against the published peer-reviewed estimate, built by
+    # build_reconciliation.py. Optional on the same terms: with no file the page
+    # is simply absent, which is better than a comparison drawn from memory.
+    reconciliation = None
+    reconciliation_path = (
+        Path(__file__).resolve().parent.parent
+        / "data"
+        / "reconciliation"
+        / "reconciliation.json"
+    )
+    try:
+        reconciliation = json.loads(reconciliation_path.read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        logger.warning(
+            "no reconciliation file at %s; snapshot will carry no comparison",
+            reconciliation_path,
+        )
+
     snapshot = {
         "meta": {
             "dataset_version": DATASET_VERSION,
@@ -489,6 +507,7 @@ def build_snapshot(conn) -> dict:
         },
         "market": market,
         "coverage": coverage,
+        "reconciliation": reconciliation,
         "acquirers": acquirers,
         "brands": brands,
         "states": states,

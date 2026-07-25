@@ -1,0 +1,399 @@
+{
+  "generated_at": "2026-07-25T18:15:28.706646+00:00",
+  "estimate": {
+    "key": "brown_2026",
+    "title": "Private Equity in Autism Services",
+    "authors": "Arnold DR, Reddy M, Cantor J, McBain RK, Yu H, Whaley CM, Singh Y",
+    "venue": "JAMA Pediatrics",
+    "published": "2026-01-05",
+    "canonical_url": "https://jamanetwork.com/journals/jamapediatrics/fullarticle/2843100",
+    "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12771383/",
+    "unit": "ASD service delivery sites owned by private equity",
+    "as_of": "2024-12-31",
+    "sites": 574,
+    "acquisitions": 147,
+    "states": 42,
+    "method": "PitchBook acquisitions from 2015-01-01 to 2024-12-31 filtered on healthcare plus the keywords autism, autism treatment facilities and ABA therapy services, then manually verified and expanded in mid-2025 from press releases and company websites.",
+    "stated_limitations": "we are unable to show PE's percentage of all ASD service delivery sites, and we are likely undercounting PE acquisitions, the latter of which is generally true of studies that attempt to fully-track PE activity",
+    "notes": [
+      "Nearly 80% of the acquisitions (117 of 147) fell in 2018-2022.",
+      "16 states had one or no PE-owned sites.",
+      "The letter reports only its five largest states by site count, so a full per-state reconciliation is not possible from the published text."
+    ],
+    "source_record_id": "7bc93c38-f45b-4449-adf0-00ed1a6334a1",
+    "content_hash": "55a765905e3ee3190b737b9065121c1af0cc7d86b1145896f1d80fd35e0d22f6"
+  },
+  "fundprint": {
+    "pe_clinics": 1621,
+    "states": 42,
+    "registry_visible_pe_sites": 580,
+    "aba_sites": 21088,
+    "pe_share_of_all_sites": 2.8,
+    "archive_sha256": "e73068bbafb9ed72bb9303b36a1091ddce66f6e510a99fa1ca3339a04954cfea",
+    "as_of": "2026-07-25"
+  },
+  "headline": {
+    "ratio_all_sources": 2.82,
+    "ratio_registry_visible": 1.01,
+    "registry_visible_gap": 6,
+    "directory_only_pe_clinics": 1041,
+    "states_agree": true
+  },
+  "states": [
+    {
+      "state": "CA",
+      "external": 97,
+      "fundprint_pe": 148,
+      "ratio": 1.53
+    },
+    {
+      "state": "TX",
+      "external": 81,
+      "fundprint_pe": 379,
+      "ratio": 4.68
+    },
+    {
+      "state": "CO",
+      "external": 38,
+      "fundprint_pe": 67,
+      "ratio": 1.76
+    },
+    {
+      "state": "IL",
+      "external": 36,
+      "fundprint_pe": 52,
+      "ratio": 1.44
+    },
+    {
+      "state": "FL",
+      "external": 36,
+      "fundprint_pe": 80,
+      "ratio": 2.22
+    }
+  ],
+  "owner_spread": {
+    "owners": 26,
+    "min_ratio": 1.0,
+    "max_ratio": 21.3,
+    "invisible_owners": [
+      "Wisconsin Early Autism Project"
+    ]
+  },
+  "owners": [
+    {
+      "owner": "Action Behavior Centers",
+      "brand": "Action Behavior Centers",
+      "firm": "Charlesbank",
+      "firm_type": "private_equity",
+      "published": 412,
+      "registry_visible": 129,
+      "ratio": 3.2
+    },
+    {
+      "owner": "Behavioral Innovations",
+      "brand": "Behavioral Innovations",
+      "firm": "Tenex Capital Management",
+      "firm_type": "private_equity",
+      "published": 134,
+      "registry_visible": 19,
+      "ratio": 7.1
+    },
+    {
+      "owner": "Proud Moments",
+      "brand": "Proud Moments",
+      "firm": "Nautic Partners",
+      "firm_type": "private_equity",
+      "published": 128,
+      "registry_visible": 33,
+      "ratio": 3.9
+    },
+    {
+      "owner": "Hopebridge",
+      "brand": "Hopebridge",
+      "firm": "Arsenal Capital Partners",
+      "firm_type": "private_equity",
+      "published": 101,
+      "registry_visible": 62,
+      "ratio": 1.6
+    },
+    {
+      "owner": "Blue Sprig",
+      "brand": "Blue Sprig",
+      "firm": "KKR",
+      "firm_type": "private_equity",
+      "published": 83,
+      "registry_visible": 33,
+      "ratio": 2.5
+    },
+    {
+      "owner": "Caravel Autism Health",
+      "brand": "Caravel Autism Health",
+      "firm": "GTCR",
+      "firm_type": "private_equity",
+      "published": 79,
+      "registry_visible": 10,
+      "ratio": 7.9
+    },
+    {
+      "owner": "Florida Autism Center",
+      "brand": "Florida Autism Center",
+      "firm": "KKR",
+      "firm_type": "private_equity",
+      "published": 77,
+      "registry_visible": 71,
+      "ratio": 1.1
+    },
+    {
+      "owner": "ACES 2020",
+      "brand": "ACES 2020",
+      "firm": "General Atlantic",
+      "firm_type": "private_equity",
+      "published": 75,
+      "registry_visible": 19,
+      "ratio": 3.9
+    },
+    {
+      "owner": "Alternative Behavior Strategies",
+      "brand": "Alternative Behavior Strategies",
+      "firm": "Petra Capital Partners",
+      "firm_type": "private_equity",
+      "published": 74,
+      "registry_visible": 25,
+      "ratio": 3.0
+    },
+    {
+      "owner": "Acorn Health",
+      "brand": "Acorn Health",
+      "firm": "Ontario Teachers' Pension Plan",
+      "firm_type": "pension_fund",
+      "published": 70,
+      "registry_visible": 54,
+      "ratio": 1.3
+    },
+    {
+      "owner": "Centria",
+      "brand": "Centria",
+      "firm": "Thomas H. Lee Partners",
+      "firm_type": "private_equity",
+      "published": 64,
+      "registry_visible": 3,
+      "ratio": 21.3
+    },
+    {
+      "owner": "Behavior Frontiers",
+      "brand": "Behavior Frontiers",
+      "firm": "NexPhase Capital",
+      "firm_type": "private_equity",
+      "published": 54,
+      "registry_visible": 41,
+      "ratio": 1.3
+    },
+    {
+      "owner": "Helping Hands Family",
+      "brand": "Helping Hands Family",
+      "firm": "Zenyth Partners",
+      "firm_type": "private_equity",
+      "published": 53,
+      "registry_visible": 39,
+      "ratio": 1.4
+    },
+    {
+      "owner": "Autism Learning Partners",
+      "brand": "Autism Learning Partners",
+      "firm": "FFL Partners",
+      "firm_type": "private_equity",
+      "published": 45,
+      "registry_visible": 11,
+      "ratio": 4.1
+    },
+    {
+      "owner": "Autism Spectrum Therapies",
+      "brand": "Autism Spectrum Therapies",
+      "firm": "Gryphon Investors",
+      "firm_type": "private_equity",
+      "published": 35,
+      "registry_visible": 4,
+      "ratio": 8.8
+    },
+    {
+      "owner": "Trumpet Behavioral Health",
+      "brand": "Trumpet Behavioral Health",
+      "firm": "KKR",
+      "firm_type": "private_equity",
+      "published": 31,
+      "registry_visible": 16,
+      "ratio": 1.9
+    },
+    {
+      "owner": "Vocational Development Group",
+      "brand": "InBloom Autism Services",
+      "firm": "Elysium Management",
+      "firm_type": "family_office",
+      "published": 28,
+      "registry_visible": 18,
+      "ratio": 1.6
+    },
+    {
+      "owner": "Total Spectrum Autism Services",
+      "brand": "Total Spectrum Autism Services",
+      "firm": "Gryphon Investors",
+      "firm_type": "private_equity",
+      "published": 25,
+      "registry_visible": 2,
+      "ratio": 12.5
+    },
+    {
+      "owner": "Behavior Care Specialists",
+      "brand": "Behavior Care Specialists",
+      "firm": "Pharos Capital Group",
+      "firm_type": "private_equity",
+      "published": 24,
+      "registry_visible": 23,
+      "ratio": 1.0
+    },
+    {
+      "owner": "Carolina Center for Autism Services",
+      "brand": "Kind Behavioral Health",
+      "firm": "WSC & Company",
+      "firm_type": "other",
+      "published": 24,
+      "registry_visible": 18,
+      "ratio": 1.3
+    },
+    {
+      "owner": "Behavioral Concepts",
+      "brand": "Behavioral Concepts",
+      "firm": "Gryphon Investors",
+      "firm_type": "private_equity",
+      "published": 20,
+      "registry_visible": 3,
+      "ratio": 6.7
+    },
+    {
+      "owner": "Little Leaves Behavioral Services",
+      "brand": "Little Leaves Behavioral Services",
+      "firm": "Gryphon Investors",
+      "firm_type": "private_equity",
+      "published": 18,
+      "registry_visible": 5,
+      "ratio": 3.6
+    },
+    {
+      "owner": "Wisconsin Early Autism Project",
+      "brand": "Wisconsin Early Autism Project",
+      "firm": "Gryphon Investors",
+      "firm_type": "private_equity",
+      "published": 18,
+      "registry_visible": 0,
+      "ratio": null
+    },
+    {
+      "owner": "Behavior Change Institute",
+      "brand": "Behavior Change Institute",
+      "firm": "Goldman Sachs Alternatives",
+      "firm_type": "private_equity",
+      "published": 15,
+      "registry_visible": 15,
+      "ratio": 1.0
+    },
+    {
+      "owner": "Buck Jack",
+      "brand": "Woven Care",
+      "firm": "Anacapa Partners",
+      "firm_type": "other",
+      "published": 12,
+      "registry_visible": 12,
+      "ratio": 1.0
+    },
+    {
+      "owner": "Behavior Analysis Center for Autism",
+      "brand": "Behavior Analysis Center for Autism",
+      "firm": "Gryphon Investors",
+      "firm_type": "private_equity",
+      "published": 10,
+      "registry_visible": 1,
+      "ratio": 10.0
+    },
+    {
+      "owner": "Trellis Services",
+      "brand": "Trellis Services",
+      "firm": "Gryphon Investors",
+      "firm_type": "private_equity",
+      "published": 9,
+      "registry_visible": 2,
+      "ratio": 4.5
+    },
+    {
+      "owner": "SPARKS ABA",
+      "brand": "SPARKS ABA",
+      "firm": "Gryphon Investors",
+      "firm_type": "private_equity",
+      "published": 7,
+      "registry_visible": 1,
+      "ratio": 7.0
+    },
+    {
+      "owner": "Therapeutic Pathways",
+      "brand": "Therapeutic Pathways",
+      "firm": "KKR",
+      "firm_type": "private_equity",
+      "published": 6,
+      "registry_visible": 3,
+      "ratio": 2.0
+    },
+    {
+      "owner": "Center for Social Dynamics",
+      "brand": "Center for Social Dynamics",
+      "firm": "Goldman Sachs Alternatives",
+      "firm_type": "private_equity",
+      "published": 5,
+      "registry_visible": 5,
+      "ratio": 1.0
+    },
+    {
+      "owner": "Mission Autism Clinics",
+      "brand": "Mission Autism Clinics",
+      "firm": "Zenyth Partners",
+      "firm_type": "private_equity",
+      "published": 5,
+      "registry_visible": 5,
+      "ratio": 1.0
+    },
+    {
+      "owner": "Monarch Behavioral Therapy",
+      "brand": "Monarch Behavioral Therapy",
+      "firm": "Tenex Capital Management",
+      "firm_type": "private_equity",
+      "published": 5,
+      "registry_visible": 5,
+      "ratio": 1.0
+    },
+    {
+      "owner": "Priorities ABA",
+      "brand": "Priorities ABA",
+      "firm": "Gryphon Investors",
+      "firm_type": "private_equity",
+      "published": 4,
+      "registry_visible": 1,
+      "ratio": 4.0
+    },
+    {
+      "owner": "Tandem Therapy Services",
+      "brand": "Tandem Therapy Services",
+      "firm": "Gryphon Investors",
+      "firm_type": "private_equity",
+      "published": 4,
+      "registry_visible": 1,
+      "ratio": 4.0
+    },
+    {
+      "owner": "Behavioral Development and Educational Services",
+      "brand": "Behavioral Development and Educational Services",
+      "firm": "Gryphon Investors",
+      "firm_type": "private_equity",
+      "published": 1,
+      "registry_visible": 0,
+      "ratio": null
+    }
+  ]
+}
