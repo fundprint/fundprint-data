@@ -141,6 +141,19 @@ def _platform_comparison(coverage: dict) -> dict:
         key=lambda r: -r["pesp"],
     )
 
+    # PESP's own appendix, summed across every in-scope platform. This is the
+    # figure that stops the platform-level 1.08x being read as a deflation of the
+    # national 2.8x, which is exactly how a reader takes it otherwise: one is a
+    # precision check over 16 shared platforms, the other is a national gap.
+    # Added up, PESP implies MORE than we publish, not less, because it lists the
+    # 8 platforms we have not read. We sit between the two published sources.
+    in_scope = [
+        p
+        for p in coverage["platforms"]
+        if p["status"] in {"covered", "not_started", "blocked"}
+    ]
+    national = sum(p["pesp_facilities"] or 0 for p in in_scope)
+
     pesp_total = sum(p["pesp_facilities"] for p in measured)
     fp_total = sum(p["fundprint_clinics"] for p in measured)
     return {
@@ -159,6 +172,8 @@ def _platform_comparison(coverage: dict) -> dict:
         "exact": [
             p["name"] for p in measured if p["fundprint_clinics"] == p["pesp_facilities"]
         ],
+        "national_implied": national,
+        "national_platforms": len(in_scope),
         "definitional_only": [
             {"name": p["name"], "pesp": p["pesp_facilities"]} for p in definitional
         ],

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-25T18:42:56.269662+00:00",
+  "generated_at": "2026-07-25T19:05:39.846200+00:00",
   "estimate": {
     "key": "brown_2026",
     "title": "Private Equity in Autism Services",
@@ -20,8 +20,8 @@
       "16 states had one or no PE-owned sites.",
       "The letter reports only its five largest states by site count, so a full per-state reconciliation is not possible from the published text."
     ],
-    "source_record_id": "a4a0bb6b-b49a-4a53-89d5-47229843b016",
-    "content_hash": "4bd91f3a9d917a04b61a17cbf34427c2b54afb63ce505b058ccfe6edb55181da"
+    "source_record_id": "f7cabd86-f506-4a6d-94cf-279134c3266f",
+    "content_hash": "537d8cee7f230a640894664d7cf83f8fb105524a4f8326567a4d89800f99e46f"
   },
   "fundprint": {
     "pe_clinics": 1621,
@@ -85,6 +85,8 @@
       "Acorn Health",
       "Centria Healthcare"
     ],
+    "national_implied": 2047,
+    "national_platforms": 32,
     "definitional_only": [
       {
         "name": "Key Autism Services",
