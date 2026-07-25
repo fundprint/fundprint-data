@@ -16,12 +16,22 @@ The argument it assembles, in the order the note makes it:
    standoff. It bounds how much of the difference can be method noise.
 3. **The rest of the gap is a third source neither method uses**: the operator's
    own public location directory.
-4. **The registry's blind spot is not a constant.** Per operator it runs from
+4. **A second published estimate, counted in a different unit, agrees with us.**
+   PESP's April 2026 appendix counts *platforms* rather than deals, and lands
+   within 8% of our total over the 16 platforms both cover, with our figure
+   *lower* on 4 of them. So the censuses do not sort by rigor, they sort by unit:
+   deal-based and registry-based counting both see a company frozen at a moment
+   and cluster near 575, while platform-based and directory-based counting both
+   see it now and cluster near 1,600.
+5. **The registry's blind spot is not a constant.** Per operator it runs from
    1.0x (the registry sees essentially everything) to unbounded (a brand with 18
    centers and zero registry-visible sites). So no multiplier can correct a
    registry-based or deal-based count. You have to go and read the directories.
-   This is the actual methods contribution, and point 4 is why it matters more
-   than point 1.
+
+Points 4 and 5 are the contribution. Point 1 is only the headline, and a lone
+ratio against a single estimate is the weakest possible form of this argument:
+it is indistinguishable from a pipeline that simply inflates. Two estimates
+disagreeing in opposite directions is not.
 
 What it does NOT do, on purpose: attribute the gap to error on their part. The
 letter names its own two limitations, and this is an attempt to supply both. It
@@ -52,6 +62,7 @@ logger = logging.getLogger("reconciliation")
 ROOT = Path(__file__).resolve().parents[1]
 OUT_PATH = ROOT / "data" / "reconciliation" / "reconciliation.json"
 MARKET_PATH = ROOT / "data" / "market" / "aba_market.json"
+COVERAGE_PATH = ROOT / "data" / "platforms" / "coverage.json"
 SOURCE_TYPE = "external_estimate"
 MODULE_VERSION = "0.1.0"
 
@@ -82,6 +93,77 @@ def _snapshot_estimate(conn, est: external_estimates.ExternalEstimate) -> dict:
         logger.info("snapshotted %s as source_record %s", est.key, source_record_id)
 
     return {"source_record_id": source_record_id, "content_hash": content_hash}
+
+
+def _platform_comparison(coverage: dict) -> dict:
+    """The second estimate, counted in a different unit, from PESP's appendix.
+
+    This is the more informative of the two comparisons and it exists only
+    because PESP itemizes: it publishes a facility count per platform, so the
+    two can be diffed line by line, which the JAMA letter's aggregate cannot be.
+
+    The independence here is partial and must be described as such. We took
+    PESP's appendix as the coverage *denominator* (section 8d), so the list of
+    platforms is shared. The facility *counts* are not: ours were built from
+    directories and the registry without reference to PESP's numbers, and PESP's
+    come from PitchBook and LevinPro. Shared list, independent counts. Claiming
+    full independence would be false and a reviewer would find it in a minute.
+
+    Platforms where we publish zero against a positive PESP count are separated
+    out rather than dropped. They are a definitional disagreement, not a counting
+    one: an in-home operator runs no centres under our rules, and PESP counts its
+    registered offices. Folding that into the aggregate would let a scope rule
+    masquerade as measurement error.
+    """
+    pairs = [
+        p
+        for p in coverage["platforms"]
+        if p["status"] == "covered"
+        and p["in_pesp"]
+        and p["pesp_facilities"] is not None
+        and p["fundprint_clinics"] is not None
+    ]
+    definitional = [p for p in pairs if p["fundprint_clinics"] == 0]
+    measured = [p for p in pairs if p["fundprint_clinics"] > 0]
+
+    rows = sorted(
+        (
+            {
+                "name": p["name"],
+                "pesp": p["pesp_facilities"],
+                "fundprint": p["fundprint_clinics"],
+                "difference": p["fundprint_clinics"] - p["pesp_facilities"],
+                "ratio": round(p["fundprint_clinics"] / p["pesp_facilities"], 2),
+                "definitional": p["fundprint_clinics"] == 0,
+            }
+            for p in pairs
+        ),
+        key=lambda r: -r["pesp"],
+    )
+
+    pesp_total = sum(p["pesp_facilities"] for p in measured)
+    fp_total = sum(p["fundprint_clinics"] for p in measured)
+    return {
+        "source": "PESP appendix, April 2026",
+        "unit": "facilities at a private-equity-backed ABA platform",
+        "platforms": len(pairs),
+        "platforms_measured": len(measured),
+        "pesp_total": pesp_total,
+        "fundprint_total": fp_total,
+        "ratio": round(fp_total / pesp_total, 2) if pesp_total else None,
+        # The direction split is the point. A pipeline that only ever revised
+        # counts upward would be a machine for inflating numbers, and nobody
+        # should believe its aggregate. These are the receipts that it is not.
+        "higher": len([p for p in measured if p["fundprint_clinics"] > p["pesp_facilities"]]),
+        "lower": len([p for p in measured if p["fundprint_clinics"] < p["pesp_facilities"]]),
+        "exact": [
+            p["name"] for p in measured if p["fundprint_clinics"] == p["pesp_facilities"]
+        ],
+        "definitional_only": [
+            {"name": p["name"], "pesp": p["pesp_facilities"]} for p in definitional
+        ],
+        "rows": rows,
+    }
 
 
 def _pe_by_state(conn) -> dict[str, int]:
@@ -139,7 +221,7 @@ def _published_by_owner(conn) -> list[dict]:
     ]
 
 
-def build(conn, market: dict) -> dict:
+def build(conn, market: dict, coverage: dict) -> dict:
     est = external_estimates.BROWN_2026
     provenance = _snapshot_estimate(conn, est)
 
@@ -236,6 +318,7 @@ def build(conn, market: dict) -> dict:
             "states_agree": len(pe_by_state) == est.states,
         },
         "states": states,
+        "platform_comparison": _platform_comparison(coverage),
         "owner_spread": {
             "owners": len(material),
             "min_ratio": min(finite) if finite else None,
@@ -249,12 +332,14 @@ def build(conn, market: dict) -> dict:
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--market", default=str(MARKET_PATH))
+    ap.add_argument("--coverage", default=str(COVERAGE_PATH))
     ap.add_argument("--out", default=str(OUT_PATH))
     args = ap.parse_args()
 
     market = json.loads(Path(args.market).read_text(encoding="utf-8"))
+    coverage = json.loads(Path(args.coverage).read_text(encoding="utf-8"))
     with db.transaction() as conn:
-        doc = build(conn, market)
+        doc = build(conn, market, coverage)
 
     out = Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)
@@ -280,6 +365,18 @@ def main() -> int:
         spread["owners"],
         spread["min_ratio"],
         worst,
+    )
+    pc = doc["platform_comparison"]
+    logger.info(
+        "second estimate (PESP, platform unit): %d platforms, %d vs %d (%.2fx); "
+        "higher on %d, lower on %d, exact on %d",
+        pc["platforms_measured"],
+        pc["pesp_total"],
+        pc["fundprint_total"],
+        pc["ratio"],
+        pc["higher"],
+        pc["lower"],
+        len(pc["exact"]),
     )
     logger.info("wrote %s", out)
     return 0

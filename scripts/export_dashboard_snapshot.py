@@ -33,13 +33,13 @@ logger = logging.getLogger(__name__)
 # The dashboard pins exactly one dataset_version per deploy. Bump this in step
 # with the Hugging Face release the snapshot is cut from.
 DATASET_VERSION = "2026.07-beta"
-# Bumped with the reconciliation against the published estimate (section 8e): the
-# dataset now states its disagreement with the peer-reviewed count, decomposed, and
-# publishes per-owner registry visibility to explain it. No clinic, owner or share
+# Bumped with the second estimate in the reconciliation (section 8e): the dataset
+# now reconciles against two published counts, in two different units, which is what
+# turns "we find more" into "the censuses sort by what they count". No clinic, owner or share
 # figure moved, but a new published measure is a methodology change under section 12.
 # The pin must move in the same commit as the numbers, or a reader who follows it
 # lands on a document describing different ones.
-METHODOLOGY_VERSION = "2026.07-reconciliation-v1"
+METHODOLOGY_VERSION = "2026.07-reconciliation-v2"
 
 
 # source_record_id -> (url, type), loaded once. The snapshot resolves provenance

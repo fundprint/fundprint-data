@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-25T18:15:28.706646+00:00",
+  "generated_at": "2026-07-25T18:42:56.269662+00:00",
   "estimate": {
     "key": "brown_2026",
     "title": "Private Equity in Autism Services",
@@ -20,8 +20,8 @@
       "16 states had one or no PE-owned sites.",
       "The letter reports only its five largest states by site count, so a full per-state reconciliation is not possible from the published text."
     ],
-    "source_record_id": "7bc93c38-f45b-4449-adf0-00ed1a6334a1",
-    "content_hash": "55a765905e3ee3190b737b9065121c1af0cc7d86b1145896f1d80fd35e0d22f6"
+    "source_record_id": "a4a0bb6b-b49a-4a53-89d5-47229843b016",
+    "content_hash": "4bd91f3a9d917a04b61a17cbf34427c2b54afb63ce505b058ccfe6edb55181da"
   },
   "fundprint": {
     "pe_clinics": 1621,
@@ -71,6 +71,165 @@
       "ratio": 2.22
     }
   ],
+  "platform_comparison": {
+    "source": "PESP appendix, April 2026",
+    "unit": "facilities at a private-equity-backed ABA platform",
+    "platforms": 17,
+    "platforms_measured": 16,
+    "pesp_total": 1521,
+    "fundprint_total": 1640,
+    "ratio": 1.08,
+    "higher": 10,
+    "lower": 4,
+    "exact": [
+      "Acorn Health",
+      "Centria Healthcare"
+    ],
+    "definitional_only": [
+      {
+        "name": "Key Autism Services",
+        "pesp": 22
+      }
+    ],
+    "rows": [
+      {
+        "name": "Action Behavior Centers",
+        "pesp": 403,
+        "fundprint": 412,
+        "difference": 9,
+        "ratio": 1.02,
+        "definitional": false
+      },
+      {
+        "name": "BlueSprig Pediatrics",
+        "pesp": 155,
+        "fundprint": 197,
+        "difference": 42,
+        "ratio": 1.27,
+        "definitional": false
+      },
+      {
+        "name": "LEARN Behavioral",
+        "pesp": 133,
+        "fundprint": 151,
+        "difference": 18,
+        "ratio": 1.14,
+        "definitional": false
+      },
+      {
+        "name": "Behavioral Innovations",
+        "pesp": 127,
+        "fundprint": 139,
+        "difference": 12,
+        "ratio": 1.09,
+        "definitional": false
+      },
+      {
+        "name": "Hopebridge",
+        "pesp": 112,
+        "fundprint": 101,
+        "difference": -11,
+        "ratio": 0.9,
+        "definitional": false
+      },
+      {
+        "name": "Proud Moments ABA",
+        "pesp": 98,
+        "fundprint": 128,
+        "difference": 30,
+        "ratio": 1.31,
+        "definitional": false
+      },
+      {
+        "name": "ABS Kids",
+        "pesp": 87,
+        "fundprint": 74,
+        "difference": -13,
+        "ratio": 0.85,
+        "definitional": false
+      },
+      {
+        "name": "Acorn Health",
+        "pesp": 70,
+        "fundprint": 70,
+        "difference": 0,
+        "ratio": 1.0,
+        "definitional": false
+      },
+      {
+        "name": "Autism Learning Partners",
+        "pesp": 64,
+        "fundprint": 45,
+        "difference": -19,
+        "ratio": 0.7,
+        "definitional": false
+      },
+      {
+        "name": "Centria Healthcare",
+        "pesp": 64,
+        "fundprint": 64,
+        "difference": 0,
+        "ratio": 1.0,
+        "definitional": false
+      },
+      {
+        "name": "ACES ABA",
+        "pesp": 59,
+        "fundprint": 75,
+        "difference": 16,
+        "ratio": 1.27,
+        "definitional": false
+      },
+      {
+        "name": "Helping Hands Family",
+        "pesp": 52,
+        "fundprint": 58,
+        "difference": 6,
+        "ratio": 1.12,
+        "definitional": false
+      },
+      {
+        "name": "Behavior Frontiers",
+        "pesp": 28,
+        "fundprint": 54,
+        "difference": 26,
+        "ratio": 1.93,
+        "definitional": false
+      },
+      {
+        "name": "InBloom Autism Services",
+        "pesp": 27,
+        "fundprint": 28,
+        "difference": 1,
+        "ratio": 1.04,
+        "definitional": false
+      },
+      {
+        "name": "Center for Social Dynamics",
+        "pesp": 22,
+        "fundprint": 20,
+        "difference": -2,
+        "ratio": 0.91,
+        "definitional": false
+      },
+      {
+        "name": "Key Autism Services",
+        "pesp": 22,
+        "fundprint": 0,
+        "difference": -22,
+        "ratio": 0.0,
+        "definitional": true
+      },
+      {
+        "name": "Kind Behavioral Health",
+        "pesp": 20,
+        "fundprint": 24,
+        "difference": 4,
+        "ratio": 1.2,
+        "definitional": false
+      }
+    ]
+  },
   "owner_spread": {
     "owners": 26,
     "min_ratio": 1.0,
