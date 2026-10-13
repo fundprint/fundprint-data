@@ -2,6 +2,9 @@
 
 **Atharva Doke**
 
+Affiliation: [CONFIRM: e.g. "Independent researcher" or your school]
+Correspondence: atharva.doke737@gmail.com
+
 *Draft. Dataset version `2026.07-beta`, resolver version `0.1.0`, methodology
 version `2026.10-verification-v1`.*
 
@@ -821,7 +824,7 @@ Every number in this paper is regenerated from public inputs by public code.
   https://github.com/fundprint/fundprint-dashboard
 - **Registry archive:** the CMS NPPES monthly dissemination file, SHA-256
   `e73068bbafb9ed72bb9303b36a1091ddce66f6e510a99fa1ca3339a04954cfea`
-- **Archived dataset:** [DOI to be minted on Zenodo at submission]
+- **Archived dataset:** [DOI: reserve on Zenodo and paste here]
 
 Each source document behind a published claim is stored as a content-addressed
 snapshot and cited by hash, so a reader can confirm that the page a claim rests on
@@ -845,6 +848,42 @@ python scripts/score_verification.py data/verification/reviewed_3bf05f0a.csv \
     --sample samples/verify_3bf05f0a.json --out data/verification/verification.json
 python scripts/export_dashboard_snapshot.py
 ```
+
+---
+
+## Declarations
+
+**Competing interests.** [CONFIRM] The author declares no competing interests. The
+author holds no position in, and receives no compensation from, any company,
+sponsor or advocacy organization named in this paper.
+
+**Funding.** [CONFIRM] This work received no specific funding.
+
+**Ethics.** This study uses only publicly available records about organizations:
+a federal provider registry, companies' published location directories, public
+ownership announcements and published government audits. It involves no human
+participants and no individual-level or patient data, and so did not require
+ethics review.
+
+**Data availability.** The full dataset, the reviewed verification sample and
+every derived figure are openly available under CC BY 4.0 at
+https://github.com/fundprint/fundprint-data and archived at [DOI: reserve on
+Zenodo and paste here]. The registry archive is the free CMS NPPES monthly
+dissemination file, identified by SHA-256 in Section 7. Archived copies of
+third-party source documents are retained as evidence and are not redistributed
+under that license.
+
+**Code availability.** All code is openly available under the MIT License at
+https://github.com/fundprint/fundprint-data and
+https://github.com/fundprint/fundprint-dashboard. The methodology is versioned
+and published under CC BY 4.0 at
+https://github.com/fundprint/fundprint-methodology.
+
+**Author contributions.** A.D. conceived the study, built the data pipeline,
+performed the hand verification, analyzed the data and wrote the manuscript.
+
+**Use of AI tools.** [CONFIRM] Describe here any use of AI assistance in writing
+code or text, as medRxiv and most journals now require.
 
 ---
 
