@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-25T19:41:55.927710+00:00",
+  "generated_at": "2026-10-13T20:20:20.609078+00:00",
   "totals": {
     "audits": 4,
     "states": [
@@ -51,8 +51,8 @@
             "dollars": 163500000
           }
         ],
-        "source_record_id": "15dd17a3-bb83-4ec5-8bcf-930d8dafd8b9",
-        "content_hash": "4f510f85d01b7163ab3c1a19ca2268de67fb248d6f5c7c2ac54cd88522a22c6b"
+        "source_record_id": "98bd8b5f-39a9-4de4-b0d2-3ddd353e3dfb",
+        "content_hash": "691d2062f035354bd69bf77587c398bb4d4addccd92779b6c8ac5ebd88211bdb"
       },
       "note": "The largest finding in the series, in the state with our largest tracked private-equity footprint outside Texas.",
       "footprint": {
@@ -118,8 +118,8 @@
         "potentially_improper": null,
         "federal_refund": null,
         "spend_growth": null,
-        "source_record_id": "a3a48b6d-21b5-4857-8024-8ae929bf4358",
-        "content_hash": "3a02094221f58ed6c35501c51d121e2e7895cacf800dcff65c6151d8a23f568a"
+        "source_record_id": "e8bb9b44-f141-48b5-943e-67dadb3d2ae7",
+        "content_hash": "a6db62cf65a3d28f23aad440840875cfa21500d5c9b01fd1326c9dea9df0c5e5"
       },
       "note": "The first in the series, and the report that established the sampling design the later audits reuse.",
       "footprint": {
@@ -190,10 +190,10 @@
             "dollars": 80600000
           }
         ],
-        "source_record_id": "037a83e4-fb1d-43cb-8de5-012b0751baf0",
-        "content_hash": "36e06ec6e61f9ef6082dfcf1091d0ddc13a8d42ceab488467a377f641268bc3f"
+        "source_record_id": "0df68f7d-bbaa-4df9-8c1d-439181cdf46f",
+        "content_hash": "f2edc98230ffbbdc46fade5ea7c4c56fa90562903056af387f9dbae798ab5c09"
       },
-      "note": "THE CONTROL CASE. The second-largest finding in the series sits in a state where Fundprint tracks zero private-equity-owned clinics. It is published for exactly that reason: it is the state that most clearly shows these audits are not measuring private-equity ownership.",
+      "note": "THE CONTROL CASE. A $45.6M finding, larger than two of the other audited states, sits where Fundprint tracks zero private-equity-owned clinics. It is published for exactly that reason: it is the state that most clearly shows these audits are not measuring private-equity ownership.",
       "footprint": {
         "pe_clinics": 0,
         "owners": [],
@@ -231,8 +231,8 @@
             "dollars": 53700000
           }
         ],
-        "source_record_id": "23d811d9-afd4-48c1-840e-e502d4740eae",
-        "content_hash": "83b406f9c60ba6a44587738afb5196b3aa9369a0f90bb47171d298db3902544c"
+        "source_record_id": "89396709-3864-499e-b646-1ee3bad0a7bc",
+        "content_hash": "d0900898f7e4df16f1659c4e37035fc7aa60732f611763ab3b2596cc2771cad6"
       },
       "note": "The sharpest ownership-visibility case in the dataset: 48 tracked private-equity-owned centres, of which the federal registry sees 2.",
       "footprint": {

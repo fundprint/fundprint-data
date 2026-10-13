@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-25T19:05:39.846200+00:00",
+  "generated_at": "2026-10-13T20:20:15.653043+00:00",
   "estimate": {
     "key": "brown_2026",
     "title": "Private Equity in Autism Services",
@@ -20,8 +20,8 @@
       "16 states had one or no PE-owned sites.",
       "The letter reports only its five largest states by site count, so a full per-state reconciliation is not possible from the published text."
     ],
-    "source_record_id": "f7cabd86-f506-4a6d-94cf-279134c3266f",
-    "content_hash": "537d8cee7f230a640894664d7cf83f8fb105524a4f8326567a4d89800f99e46f"
+    "source_record_id": "0c88baad-fe8b-4180-81c7-297057044c8e",
+    "content_hash": "5c16ccf025eb930c56a762172f0d9a126db62c414ccad17ceb7f3138af59792c"
   },
   "fundprint": {
     "pe_clinics": 1621,
@@ -30,7 +30,7 @@
     "aba_sites": 21088,
     "pe_share_of_all_sites": 2.8,
     "archive_sha256": "e73068bbafb9ed72bb9303b36a1091ddce66f6e510a99fa1ca3339a04954cfea",
-    "as_of": "2026-07-25"
+    "as_of": "2026-10-13"
   },
   "headline": {
     "ratio_all_sources": 2.82,
@@ -77,7 +77,7 @@
     "platforms": 17,
     "platforms_measured": 16,
     "pesp_total": 1521,
-    "fundprint_total": 1640,
+    "fundprint_total": 1642,
     "ratio": 1.08,
     "higher": 10,
     "lower": 4,
@@ -201,9 +201,9 @@
       {
         "name": "InBloom Autism Services",
         "pesp": 27,
-        "fundprint": 28,
-        "difference": 1,
-        "ratio": 1.04,
+        "fundprint": 30,
+        "difference": 3,
+        "ratio": 1.11,
         "definitional": false
       },
       {
@@ -390,9 +390,9 @@
       "brand": "InBloom Autism Services",
       "firm": "Elysium Management",
       "firm_type": "family_office",
-      "published": 28,
-      "registry_visible": 18,
-      "ratio": 1.6
+      "published": 30,
+      "registry_visible": 22,
+      "ratio": 1.4
     },
     {
       "owner": "Total Spectrum Autism Services",

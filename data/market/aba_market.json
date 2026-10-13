@@ -4,7 +4,7 @@
     "source": "NPPES monthly bulk dissemination file",
     "archive": "monthly.zip",
     "archive_sha256": "e73068bbafb9ed72bb9303b36a1091ddce66f6e510a99fa1ca3339a04954cfea",
-    "computed_at": "2026-07-25T18:13:02.587866+00:00",
+    "computed_at": "2026-10-13T20:19:49.738521+00:00",
     "min_state_sites": 25,
     "note": "Numerator and denominator are computed in one pass over one universe with one site key, so the numerator is a strict subset of the denominator. Clinics Fundprint sources from an owner's own location directory are excluded from BOTH sides, because the registry cannot see them. The published clinic count is therefore larger than the numerator here and is not interchangeable with it. No chain threshold is applied anywhere: the operator-size distribution is published instead, so any cut is the reader's and is stated out loud."
   },
@@ -13,7 +13,7 @@
     "aba_sites": 21088
   },
   "numerator": {
-    "tracked_sites": 682,
+    "tracked_sites": 686,
     "private_equity_sites": 580,
     "by_owner": [
       {
@@ -77,6 +77,12 @@
         "registry_visible_sites": 23
       },
       {
+        "owner": "Vocational Development Group",
+        "firm": "Elysium Management",
+        "firm_type": "family_office",
+        "registry_visible_sites": 22
+      },
+      {
         "owner": "ACES 2020",
         "firm": "General Atlantic",
         "firm_type": "private_equity",
@@ -92,12 +98,6 @@
         "owner": "Carolina Center for Autism Services",
         "firm": "WSC & Company",
         "firm_type": "other",
-        "registry_visible_sites": 18
-      },
-      {
-        "owner": "Vocational Development Group",
-        "firm": "Elysium Management",
-        "firm_type": "family_office",
         "registry_visible_sites": 18
       },
       {
@@ -229,7 +229,7 @@
     ]
   },
   "share": {
-    "tracked_of_all_sites": 3.2,
+    "tracked_of_all_sites": 3.3,
     "private_equity_of_all_sites": 2.8
   },
   "size_distribution": [
@@ -287,10 +287,10 @@
     {
       "state": "CO",
       "aba_sites": 688,
-      "tracked_sites": 67,
+      "tracked_sites": 68,
       "private_equity_sites": 54,
       "private_equity_share": 7.8,
-      "tracked_share": 9.7
+      "tracked_share": 9.9
     },
     {
       "state": "PA",
@@ -463,7 +463,7 @@
     {
       "state": "FL",
       "aba_sites": 5360,
-      "tracked_sites": 85,
+      "tracked_sites": 87,
       "private_equity_sites": 66,
       "private_equity_share": 1.2,
       "tracked_share": 1.6
@@ -527,10 +527,10 @@
     {
       "state": "CT",
       "aba_sites": 217,
-      "tracked_sites": 4,
+      "tracked_sites": 5,
       "private_equity_sites": 1,
       "private_equity_share": 0.5,
-      "tracked_share": 1.8
+      "tracked_share": 2.3
     },
     {
       "state": "DE",
@@ -662,7 +662,7 @@
     }
   ],
   "context": {
-    "published_clinics": 1755,
+    "published_clinics": 1757,
     "why_larger": "The published clinic count also includes centers read from owners' own public location directories, which the registry does not list."
   }
 }

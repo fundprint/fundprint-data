@@ -621,10 +621,18 @@ def _center_from_br_block(owner: str, block: str) -> RosterCenter | None:
 # brand families know is InBloom. Its /wp-json/ is robots-disallowed, but the one
 # public /aba-therapy-learning-centers/ page carries every Learning Center as a
 # card: an <h6> title, then the address as either "STREET <br> City, ST ZIP" or,
-# on a few cards, the street and locality in two separate <p> tags. So rather than
-# split on <br>, take the text between each <h6> and the next heading or button and
-# peel the "City, ST ZIP" off the end; the remainder is the street. Stages under the
-# legal name so the linker attaches it to the existing owner_entity.
+# on a few cards, the street and locality in two separate <p> tags. Either way the
+# MARKUP marks where the street ends, so split on it: the locality must be a line
+# of its own, and everything before it is the street.
+#
+# Do not strip the tags first and peel "City, ST ZIP" off the flattened text. With
+# no comma before the city ("421 Windchime Place Colorado Springs"), a city pattern
+# that accepts spaces swallows the street name and leaves the street as "421". That
+# shipped: 8 of 30 centres had a wrong street or a suite in the city, and the
+# garbled keys then quarantined the registry rows that had the address right. A
+# card whose locality is not on its own line is refused, not guessed.
+#
+# Stages under the legal name so the linker attaches it to the existing owner_entity.
 INBLOOM_OWNER = "Vocational Development Group"
 INBLOOM_URL = "https://inbloomautism.com/aba-therapy-learning-centers/"
 _INBLOOM_CARD_RE = re.compile(
@@ -632,9 +640,21 @@ _INBLOOM_CARD_RE = re.compile(
     r"(?=<h6|<a class=\"fusion-button|<div class=centerBtn|More About This Learning Center)",
     re.S,
 )
-_INBLOOM_TAIL_RE = re.compile(
-    r"^(.*?)[,\s]+([A-Za-z .'\-]+),\s*([A-Z]{2})\s+(\d{5})(?:-\d{4})?$"
+_INBLOOM_LINE_BREAK_RE = re.compile(r"<br\s*/?>|</?p[^>]*>|</?div[^>]*>", re.I)
+# "Waukesha, WI , 53188" is a real card; tolerate the stray comma before the ZIP.
+_INBLOOM_LOCALITY_RE = re.compile(
+    r"^([A-Za-z .'\-]+),\s*([A-Z]{2})\s*,?\s*(\d{5})(?:-\d{4})?$"
 )
+
+
+def _inbloom_lines(block: str) -> list[str]:
+    lines = []
+    for part in _INBLOOM_LINE_BREAK_RE.split(block):
+        text = re.sub(r"\s+", " ", html_lib.unescape(_TAG_RE.sub(" ", part)))
+        text = text.strip().rstrip(",").strip()
+        if text:
+            lines.append(text)
+    return lines
 
 
 def parse_inbloom_roster(content: bytes) -> list[RosterCenter]:
@@ -642,21 +662,23 @@ def parse_inbloom_roster(content: bytes) -> list[RosterCenter]:
     html = content.decode("utf-8", "replace")
     out: list[RosterCenter] = []
     for _name, block in _INBLOOM_CARD_RE.findall(html):
-        text = re.sub(r"\s+", " ", html_lib.unescape(_TAG_RE.sub(" ", block)))
-        text = text.strip().rstrip(",").strip()
-        m = _INBLOOM_TAIL_RE.match(text)
-        if not m:
+        lines = _inbloom_lines(block)
+        idx = next(
+            (i for i, line in enumerate(lines) if _INBLOOM_LOCALITY_RE.match(line)), None
+        )
+        if not idx:  # no locality line, or nothing before it to be the street
             continue
-        street = m.group(1).strip().rstrip(",").strip()
+        m = _INBLOOM_LOCALITY_RE.match(lines[idx])
+        street = ", ".join(lines[:idx])
         if not any(ch.isdigit() for ch in street):
             continue
         out.append(
             RosterCenter(
                 owner_name=INBLOOM_OWNER,
                 address_line1=street,
-                city=m.group(2).strip(),
-                state=m.group(3),
-                zip=m.group(4),
+                city=m.group(1).strip(),
+                state=m.group(2),
+                zip=m.group(3),
             )
         )
     return out

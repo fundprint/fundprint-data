@@ -86,7 +86,7 @@ brittle scraping of rendered prose.
 
 This family is the single largest methodological difference between this work and
 a deal-based or registry-based census, and it accounts for the majority of the
-published dataset: **1,573 of 1,755 clinics are attested by an owner's own
+published dataset: **1,575 of 1,757 clinics are attested by an owner's own
 current directory or roster; 182 rest on the registry alone.**
 
 A directory must be read at the leaf page. An earlier release recorded Autism
@@ -442,11 +442,11 @@ reproduce the grade rather than trust it.
 
 ## 4. Results
 
-*To be drafted. Inputs are final and stated here for continuity: 1,755 clinics
+*To be drafted. Inputs are final and stated here for continuity: 1,757 clinics
 across 19 owner entities and 42 states, of which 1,621 are private-equity-owned
-and 134 are held by a pension fund, a family office and two search funds;
-1,573 owner-verified and 182 registry-only; a registry universe of 17,569 ABA
-organizations operating 21,088 sites; 682 tracked sites (3.2%) and 580
+and 136 are held by a pension fund, a family office and two search funds;
+1,575 owner-verified and 182 registry-only; a registry universe of 17,569 ABA
+organizations operating 21,088 sites; 686 tracked sites (3.3%) and 580
 private-equity sites (2.8%) on a registry basis; the operator-size distribution;
 the per-state concentration table; and the reconciliation against both published
 estimates.*

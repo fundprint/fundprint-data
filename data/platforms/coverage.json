@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-24T16:13:34.567848+00:00",
+  "generated_at": "2026-10-13T20:20:12.786731+00:00",
   "provenance": {
     "source_url": "https://pestakeholder.org/wp-content/uploads/2026/04/PESP_Report_PE-in-ABA_2026.pdf",
     "source_record_id": "bd5b160d-18c9-4bd3-a698-0f64ac888c1c",
@@ -18,7 +18,7 @@
     "in_pesp_appendix": 34,
     "covered_absent_from_pesp": 4,
     "unpublished_facilities": 504,
-    "published_clinics_at_covered_platforms": 1755
+    "published_clinics_at_covered_platforms": 1757
   },
   "platforms": [
     {
@@ -286,7 +286,7 @@
       "fundprint_owners": [
         "Vocational Development Group"
       ],
-      "fundprint_clinics": 28,
+      "fundprint_clinics": 30,
       "source_url": null
     },
     {

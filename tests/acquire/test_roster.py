@@ -293,6 +293,37 @@ class TestParseInbloom:
         assert by_city["Wallingford"].zip == "06492"
         assert all(c.owner_name == INBLOOM_OWNER for c in centers)
 
+    def test_no_comma_before_the_city_keeps_the_street_whole(self):
+        # The shipped bug: flattening the card and peeling "City, ST ZIP" off the
+        # end let the city swallow the street name, giving street "421" and city
+        # "Windchime Place Colorado Springs". The <br> is where the street ends.
+        page = (
+            '<h6>Rockrimmon Learning Center</h6><p>421 Windchime Place<br> '
+            "Colorado Springs, CO 80919</p><div class=centerBtn></div>"
+            '<h6>Mequon Learning Center</h6><p>6140 West Executive Dr, Suite B<br> '
+            "Mequon, WI 53092</p><div class=centerBtn></div>"
+        )
+        by_city = {c.city: c for c in parse_inbloom_roster(page.encode())}
+        assert by_city["Colorado Springs"].address_line1 == "421 Windchime Place"
+        assert by_city["Mequon"].address_line1 == "6140 West Executive Dr, Suite B"
+
+    def test_stray_comma_before_zip(self):
+        page = (
+            "<h6>Waukesha Learning Center</h6><p>N19 W24075 Riverwood Dr, Suite 110,</p>"
+            "<p>Waukesha, WI , 53188</p><div class=centerBtn></div>"
+        )
+        (c,) = parse_inbloom_roster(page.encode())
+        assert (c.address_line1, c.city, c.zip) == (
+            "N19 W24075 Riverwood Dr, Suite 110", "Waukesha", "53188")
+
+    def test_locality_not_on_its_own_line_is_refused(self):
+        # With no markup boundary the split would be a guess; refuse it.
+        page = (
+            "<h6>X Learning Center</h6><p>421 Windchime Place Colorado Springs, CO 80919"
+            "</p><div class=centerBtn></div>"
+        )
+        assert parse_inbloom_roster(page.encode()) == []
+
     def test_a_card_without_a_house_number_is_dropped(self):
         # "Opening in 2027" is not a street; a card with no digits in the street is
         # not an address and must not become a clinic.
