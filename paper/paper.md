@@ -1,12 +1,11 @@
 # Deal-based censuses undercount private equity ownership of autism therapy: a reproducible, site-level national estimate
 
-**Atharva Doke**
+| **Atharva Doke**
+| Affiliation: [CONFIRM: e.g. "Independent researcher" or your school]
+| Correspondence: atharva.doke737@gmail.com
 
-Affiliation: [CONFIRM: e.g. "Independent researcher" or your school]
-Correspondence: atharva.doke737@gmail.com
-
-*Draft. Dataset version `2026.07-beta`, resolver version `0.1.0`, methodology
-version `2026.10-verification-v1`.*
+*Draft. Dataset version 2026.07-beta, resolver version 0.1.0, methodology
+version 2026.10-verification-v1.*
 
 ---
 
@@ -822,8 +821,8 @@ Every number in this paper is regenerated from public inputs by public code.
   (this paper corresponds to `2026.10-verification-v1`)
 - **Public dataset and dashboard:** https://whofundsmytherapist.com, built from
   https://github.com/fundprint/fundprint-dashboard
-- **Registry archive:** the CMS NPPES monthly dissemination file, SHA-256
-  `e73068bbafb9ed72bb9303b36a1091ddce66f6e510a99fa1ca3339a04954cfea`
+- **Registry archive:** the CMS NPPES monthly dissemination file, whose SHA-256
+  is given in Section 2.1
 - **Archived dataset:** [DOI: reserve on Zenodo and paste here]
 
 Each source document behind a published claim is stored as a content-addressed
@@ -838,7 +837,8 @@ The full regeneration sequence, from archive to published figures, is:
 python scripts/run_acquire_nppes_bulk.py --archive monthly.zip
 python scripts/run_acquire_roster.py
 python scripts/run_acquire_curated.py
-python scripts/run_validate.py --resolver-version 0.1.0 --methodology-version 2026.06-floors-v0
+python scripts/run_validate.py --resolver-version 0.1.0 \
+    --methodology-version 2026.06-floors-v0
 python scripts/create_dashboard_views.py
 python scripts/compute_market_share.py --archive monthly.zip
 python scripts/build_platform_denominator.py
