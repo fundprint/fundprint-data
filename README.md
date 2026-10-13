@@ -26,3 +26,8 @@ pytest
 ```
 
 The methodology governing what counts as "PE-backed" lives in `fundprint-methodology`. The dashboard that reads this dataset lives in `fundprint-dashboard`. See `docs/cross-repo.md` for how the three repos coordinate.
+
+## License
+
+The code is licensed under the [MIT License](./LICENSE). The data is licensed under
+[CC BY 4.0](./LICENSE-DATA): reuse it freely, with attribution.
