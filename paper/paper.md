@@ -3,7 +3,7 @@
 **Atharva Doke**
 
 *Draft. Dataset version `2026.07-beta`, resolver version `0.1.0`, methodology
-version `2026.07-statefile-v1`.*
+version `2026.10-verification-v1`.*
 
 ---
 

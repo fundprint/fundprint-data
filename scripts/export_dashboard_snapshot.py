@@ -39,7 +39,7 @@ DATASET_VERSION = "2026.07-beta"
 # ownership. New published external claims are a methodology change under section 12.
 # The pin must move in the same commit as the numbers, or a reader who follows it
 # lands on a document describing different ones.
-METHODOLOGY_VERSION = "2026.07-statefile-v1"
+METHODOLOGY_VERSION = "2026.10-verification-v1"
 
 
 # source_record_id -> (url, type), loaded once. The snapshot resolves provenance
@@ -490,6 +490,18 @@ def build_snapshot(conn) -> dict:
     except FileNotFoundError:
         logger.warning("no state file at %s; snapshot will carry no audits", state_files_path)
 
+    # The hand-verification result, written by score_verification.py --out. Optional
+    # like the rest: with no file the site keeps the slot marked as in progress
+    # rather than showing a rate nobody measured.
+    verification = None
+    verification_path = (
+        Path(__file__).resolve().parent.parent / "data" / "verification" / "verification.json"
+    )
+    try:
+        verification = json.loads(verification_path.read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        logger.warning("no verification file at %s; snapshot will carry no rate", verification_path)
+
     snapshot = {
         "meta": {
             "dataset_version": DATASET_VERSION,
@@ -520,6 +532,7 @@ def build_snapshot(conn) -> dict:
         "coverage": coverage,
         "reconciliation": reconciliation,
         "state_files": state_files,
+        "verification": verification,
         "acquirers": acquirers,
         "brands": brands,
         "states": states,

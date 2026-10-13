@@ -26,6 +26,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import json
 import math
 import sys
 from collections import defaultdict
@@ -122,12 +123,81 @@ def _check_collisions(moved: list[dict]) -> None:
         print("    existing row, so these are misplaced clinics, not double counts.")
 
 
+def _correct(r: dict) -> bool:
+    return r["exists"] == "yes" and r["owner"] == "yes" and r["firm"] == "yes"
+
+
+def _rate(k: int, n: int) -> dict:
+    lo, hi = wilson(k, n)
+    return {
+        "k": k,
+        "n": n,
+        "rate": round(100 * k / n, 1) if n else None,
+        "ci95": [round(100 * lo, 1), round(100 * hi, 1)],
+    }
+
+
+def summarize(rows: list[dict], sample: dict | None = None) -> dict:
+    """The publishable result, as data. Pure; the dashboard and methodology read it.
+
+    The HEADLINE is the private-equity stratum alone, not the pooled rate. The draw
+    sampled each source in proportion within a stratum but deliberately oversampled
+    `non_pe` (20 of 150 draws for ~8% of clinics) to test the owner-type label, so a
+    pooled rate leans on that stratum. PE is the claim the project makes, and its
+    rate needs no reweighting. The pooled rate is published beside it, labelled.
+    """
+    labelled = [r for r in rows if r.get("exists")]
+    claimed = [r for r in labelled if r["stratum"] != "unclaimed"]
+    unclaimed = [r for r in labelled if r["stratum"] == "unclaimed"]
+    pe = [r for r in claimed if r["stratum"] == "pe"]
+
+    by_sub: dict[str, list[dict]] = defaultdict(list)
+    for r in claimed:
+        by_sub[r["sub_stratum"]].append(r)
+
+    return {
+        "sample_id": (sample or {}).get("run_id"),
+        "seed": (sample or {}).get("seed"),
+        "drawn_at": (sample or {}).get("drawn_at"),
+        "drawn": len(rows),
+        # The review stopped short of the full draw. The draw was shuffled before
+        # review, so the reviewed rows are themselves a random subset of it.
+        "reviewed": len(labelled),
+        # Reviewer verdicts later overturned on the owner's own directory; each one
+        # carries its reason in the CSV notes, so the change is inspectable.
+        "adjudicated": sum(1 for r in labelled if r.get("notes", "").startswith("Adjudicated")),
+        "headline_pe": _rate(sum(_correct(r) for r in pe), len(pe)),
+        "all_published": _rate(sum(_correct(r) for r in claimed), len(claimed)),
+        "strata": [
+            {"stratum": s, **_rate(sum(_correct(r) for r in b), len(b))}
+            for s, b in sorted(by_sub.items())
+        ],
+        "cannot_tell": sum(1 for r in claimed if r["exists"] == "unclear"),
+        "ghosts": _rate(
+            sum(1 for r in claimed if r["exists"] in ("closed", "not_aba")), len(claimed)
+        ),
+        "wrong_address": _rate(
+            sum(1 for r in claimed if r["exists"] == "wrong_address"), len(claimed)
+        ),
+        "recall_missed_owners": _rate(
+            sum(1 for r in unclaimed if r.get("missed") == "yes"), len(unclaimed)
+        ),
+    }
+
+
 def main() -> int:
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("csv", type=Path)
+    p.add_argument("--sample", type=Path, help="The drawn sample JSON (records the seed).")
+    p.add_argument("--out", type=Path, help="Write the publishable summary JSON here.")
     args = p.parse_args()
 
     rows = list(csv.DictReader(args.csv.open(encoding="utf-8")))
+    if args.out:
+        sample = json.loads(args.sample.read_text(encoding="utf-8")) if args.sample else None
+        args.out.parent.mkdir(parents=True, exist_ok=True)
+        args.out.write_text(json.dumps(summarize(rows, sample), indent=2), encoding="utf-8")
+        print(f"wrote {args.out}")
     labelled = [r for r in rows if r.get("exists")]
     if not labelled:
         print("No labelled rows. Did you finish the review and export the CSV?")

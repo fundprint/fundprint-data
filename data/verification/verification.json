@@ -1,0 +1,96 @@
+{
+  "sample_id": "3bf05f0a",
+  "seed": 913063207,
+  "drawn_at": "2026-07-19T21:21:57.587677+00:00",
+  "drawn": 150,
+  "reviewed": 99,
+  "adjudicated": 2,
+  "headline_pe": {
+    "k": 66,
+    "n": 67,
+    "rate": 98.5,
+    "ci95": [
+      92.0,
+      99.7
+    ]
+  },
+  "all_published": {
+    "k": 83,
+    "n": 84,
+    "rate": 98.8,
+    "ci95": [
+      93.6,
+      99.8
+    ]
+  },
+  "strata": [
+    {
+      "stratum": "non_pe/directory",
+      "k": 6,
+      "n": 6,
+      "rate": 100.0,
+      "ci95": [
+        61.0,
+        100.0
+      ]
+    },
+    {
+      "stratum": "non_pe/registry",
+      "k": 11,
+      "n": 11,
+      "rate": 100.0,
+      "ci95": [
+        74.1,
+        100.0
+      ]
+    },
+    {
+      "stratum": "pe/directory",
+      "k": 48,
+      "n": 48,
+      "rate": 100.0,
+      "ci95": [
+        92.6,
+        100.0
+      ]
+    },
+    {
+      "stratum": "pe/registry",
+      "k": 18,
+      "n": 19,
+      "rate": 94.7,
+      "ci95": [
+        75.4,
+        99.1
+      ]
+    }
+  ],
+  "cannot_tell": 1,
+  "ghosts": {
+    "k": 0,
+    "n": 84,
+    "rate": 0.0,
+    "ci95": [
+      0.0,
+      4.4
+    ]
+  },
+  "wrong_address": {
+    "k": 0,
+    "n": 84,
+    "rate": 0.0,
+    "ci95": [
+      0.0,
+      4.4
+    ]
+  },
+  "recall_missed_owners": {
+    "k": 0,
+    "n": 15,
+    "rate": 0.0,
+    "ci95": [
+      0.0,
+      20.4
+    ]
+  }
+}
