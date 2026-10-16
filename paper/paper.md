@@ -823,7 +823,7 @@ Every number in this paper is regenerated from public inputs by public code.
   https://github.com/fundprint/fundprint-dashboard
 - **Registry archive:** the CMS NPPES monthly dissemination file, whose SHA-256
   is given in Section 2.1
-- **Archived dataset:** [DOI: reserve on Zenodo and paste here]
+- **Archived dataset:** Zenodo, https://doi.org/10.5281/zenodo.23426864
 
 Each source document behind a published claim is stored as a content-addressed
 snapshot and cited by hash, so a reader can confirm that the page a claim rests on
@@ -867,8 +867,8 @@ ethics review.
 
 **Data availability.** The full dataset, the reviewed verification sample and
 every derived figure are openly available under CC BY 4.0 at
-https://github.com/fundprint/fundprint-data and archived at [DOI: reserve on
-Zenodo and paste here]. The registry archive is the free CMS NPPES monthly
+https://github.com/fundprint/fundprint-data and archived on Zenodo at
+https://doi.org/10.5281/zenodo.23426864. The registry archive is the free CMS NPPES monthly
 dissemination file, identified by SHA-256 in Section 7. Archived copies of
 third-party source documents are retained as evidence and are not redistributed
 under that license.

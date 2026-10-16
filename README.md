@@ -31,3 +31,7 @@ The methodology governing what counts as "PE-backed" lives in `fundprint-methodo
 
 The code is licensed under the [MIT License](./LICENSE). The data is licensed under
 [CC BY 4.0](./LICENSE-DATA): reuse it freely, with attribution.
+
+## Archived release
+
+Release `2026.10-verification-v1` is archived on Zenodo: https://doi.org/10.5281/zenodo.23426864
