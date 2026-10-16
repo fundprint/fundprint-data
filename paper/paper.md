@@ -882,6 +882,9 @@ https://github.com/fundprint/fundprint-methodology.
 **Author contributions.** A.D. conceived the study, built the data pipeline,
 performed the hand verification, analyzed the data and wrote the manuscript.
 
+**Use of AI tools.** AI tools were used to help write the code. All code was
+reviewed by the author.
+
 ---
 
 ## References
