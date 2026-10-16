@@ -1,10 +1,10 @@
 # Deal-based censuses undercount private equity ownership of autism therapy: a reproducible, site-level national estimate
 
 | **Atharva Doke**
-| Affiliation: [CONFIRM: e.g. "Independent researcher" or your school]
+| Independent researcher
 | Correspondence: atharva.doke737@gmail.com
 
-*Draft. Dataset version 2026.07-beta, resolver version 0.1.0, methodology
+*Preprint, October 2026. Dataset version 2026.07-beta, resolver version 0.1.0, methodology
 version 2026.10-verification-v1.*
 
 ---
@@ -853,11 +853,11 @@ python scripts/export_dashboard_snapshot.py
 
 ## Declarations
 
-**Competing interests.** [CONFIRM] The author declares no competing interests. The
+**Competing interests.** The author declares no competing interests. The
 author holds no position in, and receives no compensation from, any company,
 sponsor or advocacy organization named in this paper.
 
-**Funding.** [CONFIRM] This work received no specific funding.
+**Funding.** This work received no specific funding.
 
 **Ethics.** This study uses only publicly available records about organizations:
 a federal provider registry, companies' published location directories, public
@@ -881,9 +881,6 @@ https://github.com/fundprint/fundprint-methodology.
 
 **Author contributions.** A.D. conceived the study, built the data pipeline,
 performed the hand verification, analyzed the data and wrote the manuscript.
-
-**Use of AI tools.** [CONFIRM] Describe here any use of AI assistance in writing
-code or text, as medRxiv and most journals now require.
 
 ---
 
