@@ -24,3 +24,4 @@ hand_validation*.csv
 # a half-finished review is personal working state, not a record.
 verify_*.html
 review_verify_*.csv
+hf_release/
