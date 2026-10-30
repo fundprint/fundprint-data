@@ -46,6 +46,8 @@ Three findings the data supports:
 
 - **Download the release:** [doi.org/10.5281/zenodo.23426864](https://doi.org/10.5281/zenodo.23426864)
   (dataset, market shares, coverage, reconciliation, verification sample, code).
+- **Load it in Python:** [huggingface.co/datasets/gameloft737/fundprint](https://huggingface.co/datasets/gameloft737/fundprint)
+  (`load_dataset("gameloft737/fundprint")`: clinics, owners and firms as Parquet).
 - **Browse it:** [whofundsmytherapist.com](https://whofundsmytherapist.com), with a search by
   clinic, a map, and a page per audited state.
 - **The single file behind every number:** `snapshot.json` in the release (and in
